@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import logo from "../../assets/transparent-logo.svg";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import {
   RxDashboard,
   BsArrowRightCircle,
@@ -48,11 +48,7 @@ function SideBar(props: IProps) {
   ];
 
   return (
-    <div
-      className={`flex min-h-screen ${
-        isOpen ? "w-72" : "w-20"
-      } flex-col items-center bg-[#EAEAEA] duration-300`}
-    >
+    <div className={`flex min-h-screen ${isOpen ? "w-72" : "w-20"} flex-col items-center bg-[#EAEAEA] duration-300`}>
       <div className={"relative flex w-full cursor-pointer flex-col items-center py-11"}>
         <img src={logo} alt="Logo web" className={`${isOpen ? "w-48" : "w-14"} duration-300`} />
         <BsArrowRightCircle

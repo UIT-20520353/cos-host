@@ -1,9 +1,7 @@
-import React from 'react';
+import React from "react";
 
 function ManageContest() {
-  return (
-    <div>ManageContest</div>
-  );
+  return <div>ManageContest</div>;
 }
 
 export default ManageContest;

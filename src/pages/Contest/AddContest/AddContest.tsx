@@ -1,9 +1,7 @@
-import React from 'react';
+import React from "react";
 
 function AddContest() {
-  return (
-    <div>Add contest</div>
-  );
+  return <div>Add contest</div>;
 }
 
 export default AddContest;
