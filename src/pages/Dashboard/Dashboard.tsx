@@ -1,5 +1,3 @@
-import React from "react";
-
 function Dashboard() {
   return (
     <div className={" h-[2500px] w-full"}>
