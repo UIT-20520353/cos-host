@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import Header from "../../components/Header";
 import Notification from "../../components/Notification";
+import Rankings from "../../components/Rankings";
 
 type INotification = {
   id: number;
@@ -8,6 +9,64 @@ type INotification = {
   nameHost: string;
   date: string;
 };
+
+type IData = {
+  rank: number;
+  name: string;
+  point: number | string;
+};
+
+type ITableHeader = {
+  col1: string;
+  col2: string;
+  col3: string;
+};
+
+const dataTeamRankings: IData[] = [
+  {
+    rank: 1,
+    name: "Đội này mạnh",
+    point: "1570"
+  },
+  {
+    rank: 2,
+    name: "UIT",
+    point: "1350"
+  },
+  {
+    rank: 3,
+    name: "3 người",
+    point: "1143"
+  },
+  {
+    rank: 4,
+    name: "BKU",
+    point: "1040"
+  },
+  {
+    rank: 5,
+    name: "UIT-2",
+    point: "950"
+  }
+];
+
+const dataContestRankings: IData[] = [
+  {
+    rank: 1,
+    name: "Beginner Free Contest 51",
+    point: 86
+  },
+  {
+    rank: 2,
+    name: "We code",
+    point: 56
+  },
+  {
+    rank: 3,
+    name: "Testing Round 49",
+    point: 50
+  }
+];
 
 const notifications: INotification[] = [
   {
@@ -36,6 +95,18 @@ const notifications: INotification[] = [
   }
 ];
 
+const teamRankingHeader: ITableHeader = {
+  col1: "Hạng",
+  col2: "Tên đội",
+  col3: "Điểm"
+};
+
+const contestRankingHeader: ITableHeader = {
+  col1: "Hạng",
+  col2: "Tên cuộc thi",
+  col3: "SỐ THÍ SINH"
+};
+
 function Dashboard() {
   useEffect(() => {
     document.title = "Trang chủ";
@@ -45,7 +116,7 @@ function Dashboard() {
     <div className={"w-full"}>
       <Header />
 
-      <div className={"mx-5 mt-8 flex flex-row items-start gap-x-5"}>
+      <div className={"mx-5 my-8 flex flex-row items-start gap-x-5"}>
         <div className={"flex-1 rounded-md border border-gray-200 bg-gray-100 shadow-md"}>
           <p className={"pl-3 pt-3 text-2xl font-bold"}>Thông báo</p>
 
@@ -61,92 +132,12 @@ function Dashboard() {
         </div>
 
         <div className={"flex w-[35%] flex-col items-center gap-y-5"}>
-          <div className={"w-full rounded-md border-gray-300 bg-gray-200 p-3 shadow-md"}>
-            <p className={"text-xl font-semibold text-blue-950"}>Bảng xếp hạng các đội</p>
-            {/*<table className={"table-auto text-left text-base"}>*/}
-            {/*  <thead className={"bg-gray-50 text-sm uppercase"}>*/}
-            {/*    <tr>*/}
-            {/*      <th scope={"col"} className={"px-6 py-3"}>*/}
-            {/*        Hạng*/}
-            {/*      </th>*/}
-            {/*      <th scope={"col"} className={"px-6 py-3"}>*/}
-            {/*        Tên đội*/}
-            {/*      </th>*/}
-            {/*      <th scope={"col"} className={"px-6 py-3"}>*/}
-            {/*        Điểm*/}
-            {/*      </th>*/}
-            {/*    </tr>*/}
-            {/*  </thead>*/}
-            {/*  <tbody>*/}
-            {/*    <tr>*/}
-            {/*      <th>1</th>*/}
-            {/*      <th>Đội này mạnh</th>*/}
-            {/*      <th>1250</th>*/}
-            {/*    </tr>*/}
-            {/*    <tr>*/}
-            {/*      <th>2</th>*/}
-            {/*      <th>4 chàng tai</th>*/}
-            {/*      <th>1023</th>*/}
-            {/*    </tr>*/}
-            {/*    <tr>*/}
-            {/*      <th>3</th>*/}
-            {/*      <th>UIT</th>*/}
-            {/*      <th>980</th>*/}
-            {/*    </tr>*/}
-            {/*  </tbody>*/}
-            {/*</table>*/}
-
-            <div className="relative overflow-x-auto">
-              <table className="w-full text-left text-sm text-gray-500 dark:text-gray-400">
-                <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
-                  <tr>
-                    <th scope="col" className="px-6 py-3">
-                      Product name
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Color
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Category
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Price
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="border-b bg-white dark:border-gray-700 dark:bg-gray-800">
-                    <th scope="row" className="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white">
-                      Apple MacBook Pro 17"
-                    </th>
-                    <td className="px-6 py-4">Silver</td>
-                    <td className="px-6 py-4">Laptop</td>
-                    <td className="px-6 py-4">$2999</td>
-                  </tr>
-                  <tr className="border-b bg-white dark:border-gray-700 dark:bg-gray-800">
-                    <th scope="row" className="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white">
-                      Microsoft Surface Pro
-                    </th>
-                    <td className="px-6 py-4">White</td>
-                    <td className="px-6 py-4">Laptop PC</td>
-                    <td className="px-6 py-4">$1999</td>
-                  </tr>
-                  <tr className="bg-white dark:bg-gray-800">
-                    <th scope="row" className="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white">
-                      Magic Mouse 2
-                    </th>
-                    <td className="px-6 py-4">Black</td>
-                    <td className="px-6 py-4">Accessories</td>
-                    <td className="px-6 py-4">$99</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <div className={"w-full rounded-md border-gray-300 bg-gray-200 p-3 shadow-md"}>
-            <p className={"text-xl font-semibold text-blue-950"}>Bảng xếp hạng các cuộc thi</p>
-          </div>
+          <Rankings tableTitle={"Bảng xếp hạng các đội"} tableData={dataTeamRankings} tableHeader={teamRankingHeader} />
+          <Rankings
+            tableTitle={"Bảng xếp hạng các cuộc thi"}
+            tableData={dataContestRankings}
+            tableHeader={contestRankingHeader}
+          />
         </div>
       </div>
     </div>
