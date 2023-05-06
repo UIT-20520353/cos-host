@@ -1,6 +1,5 @@
 function DatePicker() {
   const handleClick = () => {
-    const a = 1;
   };
 
   return (
