@@ -60,12 +60,12 @@ function AddContest() {
     document.title = "Tạo cuộc thi";
   }, []);
 
-  const [listQuestion, setListQuestion] = useState();
-  function handleDeleteQuestion() {
-    const newItem: JSX.Element = <li key={1}>Đây là một list item mới</li>;
-    document.getElementById('questions')?.appendChild(newItem);
-    console.log(newItem);
-  }
+  // const [listQuestion, setListQuestion] = useState();
+  // function handleDeleteQuestion() {
+  //   const newItem: JSX.Element = <li key={1}>Đây là một list item mới</li>;
+  //   document.getElementById('questions')?.appendChild(newItem);
+  //   console.log(newItem);
+  // }
 
   return (
     <div className={"w-full"}>
@@ -160,7 +160,7 @@ function AddContest() {
                 <BsTrash className={"h-5 w-5"} />
               </button>
             </div>
-            <ul id={'questions'}>
+            <ul id={"questions"}>
               <li key={"123"} className={"flex flex-row items-start gap-x-3"}>
                 <Question />
                 <div className={"my-3 flex w-20 flex-row items-center gap-x-2"}>
@@ -178,7 +178,7 @@ function AddContest() {
                       "flex h-10 w-10 items-center justify-center rounded-md border border-transparent bg-gray-200 hover:bg-gray-300"
                     }
                   >
-                    <BsTrash className={"h-5 w-5"} onClick={handleDeleteQuestion} />
+                    <BsTrash className={"h-5 w-5"} />
                   </button>
                 </div>
               </li>
