@@ -1,6 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Header from "../../../components/Header";
 import { AiOutlinePlus, BsTrash } from "react-icons/all";
+import Question from "../../../components/Question";
 
 type ITimeContest = {
   value: string;
@@ -58,6 +59,13 @@ function AddContest() {
   useEffect(() => {
     document.title = "Tạo cuộc thi";
   }, []);
+
+  const [listQuestion, setListQuestion] = useState();
+  function handleDeleteQuestion() {
+    const newItem: JSX.Element = <li key={1}>Đây là một list item mới</li>;
+    document.getElementById('questions')?.appendChild(newItem);
+    console.log(newItem);
+  }
 
   return (
     <div className={"w-full"}>
@@ -152,26 +160,29 @@ function AddContest() {
                 <BsTrash className={"h-5 w-5"} />
               </button>
             </div>
-            <div className={"mt-3"}>
-              <div className="mb-3">
-                <input
-                  type={"text"}
-                  id={"name-contest"}
-                  className={
-                    "block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
-                  }
-                  placeholder={"Tên bài tập"}
-                  required={true}
-                />
-              </div>
-              <div className="mb-3">
-                <textarea
-                  placeholder={"Đề bài"}
-                  rows={10}
-                  className="block w-full resize-none rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
-                />
-              </div>
-            </div>
+            <ul id={'questions'}>
+              <li key={"123"} className={"flex flex-row items-start gap-x-3"}>
+                <Question />
+                <div className={"my-3 flex w-20 flex-row items-center gap-x-2"}>
+                  <button
+                    type={"button"}
+                    className={
+                      "flex h-10 w-10 items-center justify-center rounded-md border border-transparent bg-gray-200 hover:bg-gray-300"
+                    }
+                  >
+                    <AiOutlinePlus className={"h-5 w-5"} />
+                  </button>
+                  <button
+                    type={"button"}
+                    className={
+                      "flex h-10 w-10 items-center justify-center rounded-md border border-transparent bg-gray-200 hover:bg-gray-300"
+                    }
+                  >
+                    <BsTrash className={"h-5 w-5"} onClick={handleDeleteQuestion} />
+                  </button>
+                </div>
+              </li>
+            </ul>
           </div>
         </form>
       </div>
