@@ -60,7 +60,7 @@ function AddContest() {
     document.title = "Tạo cuộc thi";
   }, []);
 
-  const [questions, setQuestions] = useState<Question[]>([]);
+  const [questions, setQuestions] = useState<(typeof Question)[]>([]);
 
   const handleClick = () => {
     setQuestions(
