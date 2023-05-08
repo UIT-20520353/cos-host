@@ -3,13 +3,14 @@ import { AiOutlinePlus, BsTrash } from "react-icons/all";
 type IProps = {
   id: string;
   key: string;
+  handleAdd: () => void;
   handleDelete: (id: string) => void;
 };
 
 function Question(props: IProps) {
   return (
-    <li id={props.id} className={"flex flex-row items-start gap-x-3"}>
-      <div className={"my-3 flex-1 rounded-lg border border-gray-300 bg-gray-200 p-4"}>
+    <li id={props.id} className={"flex flex-row items-start gap-x-3 mx-5 my-8 rounded-md border border-gray-200 bg-gray-100 shadow-md p-3"}>
+      <div className={"my-3 flex-1 p-4"}>
         <div className={"mb-4 flex flex-col items-start gap-y-2"}>
           <label htmlFor={"name-contest"} className={"text-sm font-medium"}>
             Tên bài thi
@@ -58,12 +59,13 @@ function Question(props: IProps) {
           />
         </div>
       </div>
-      <div className={"my-3 flex w-20 flex-row items-center gap-x-2"}>
+      <div className={"my-3 flex w-20 flex-col items-center gap-y-2"}>
         <button
           type={"button"}
           className={
             "flex h-10 w-10 items-center justify-center rounded-md border border-transparent bg-gray-200 hover:bg-gray-300"
           }
+          onClick={() => props.handleAdd()}
         >
           <AiOutlinePlus className={"h-5 w-5"} />
         </button>
@@ -72,8 +74,9 @@ function Question(props: IProps) {
           className={
             "flex h-10 w-10 items-center justify-center rounded-md border border-transparent bg-gray-200 hover:bg-gray-300"
           }
+          onClick={() => props.handleDelete(props.id)}
         >
-          <BsTrash className={"h-5 w-5"} onClick={() => props.handleDelete(props.id)} />
+          <BsTrash className={"h-5 w-5"} />
         </button>
       </div>
     </li>
