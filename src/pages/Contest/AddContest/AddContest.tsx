@@ -2,15 +2,10 @@ import { useEffect, useState } from "react";
 import Header from "../../../components/Header";
 import { AiOutlinePlus, BsTrash } from "react-icons/all";
 import Question from "../../../components/Question";
-import question from "../../../components/Question";
 
 type ITimeContest = {
   value: string;
   text: string;
-};
-
-type ITypeQuestion = {
-  id: string;
 };
 
 const listTimeContest: ITimeContest[] = [
@@ -58,12 +53,6 @@ const listTimeContest: ITimeContest[] = [
     value: "5.5",
     text: "5 giờ 30 phút"
   }
-];
-
-const listLi = [
-  <Question key={"1321"} id={"1321"} />,
-  <Question key={"4212"} id={"4212"} />,
-  <Question key={"4413"} id={"4413"} />
 ];
 
 function AddContest() {

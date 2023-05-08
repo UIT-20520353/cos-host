@@ -3,7 +3,7 @@ import { AiOutlinePlus, BsTrash } from "react-icons/all";
 type IProps = {
   id: string;
   handleDelete: (id: string) => void;
-}
+};
 
 function Question(props: IProps) {
   return (
@@ -72,7 +72,7 @@ function Question(props: IProps) {
             "flex h-10 w-10 items-center justify-center rounded-md border border-transparent bg-gray-200 hover:bg-gray-300"
           }
         >
-          <BsTrash className={"h-5 w-5"} onClick={() => props.handleDelete(props.id)}/>
+          <BsTrash className={"h-5 w-5"} onClick={() => props.handleDelete(props.id)} />
         </button>
       </div>
     </li>
