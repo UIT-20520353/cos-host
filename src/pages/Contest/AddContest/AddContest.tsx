@@ -2,10 +2,15 @@ import { useEffect, useState } from "react";
 import Header from "../../../components/Header";
 import { AiOutlinePlus, BsTrash } from "react-icons/all";
 import Question from "../../../components/Question";
+import question from "../../../components/Question";
 
 type ITimeContest = {
   value: string;
   text: string;
+};
+
+type ITypeQuestion = {
+  id: string;
 };
 
 const listTimeContest: ITimeContest[] = [
@@ -55,17 +60,34 @@ const listTimeContest: ITimeContest[] = [
   }
 ];
 
+const listLi = [
+  <Question key={"1321"} id={"1321"} />,
+  <Question key={"4212"} id={"4212"} />,
+  <Question key={"4413"} id={"4413"} />
+];
+
 function AddContest() {
   useEffect(() => {
     document.title = "Tạo cuộc thi";
   }, []);
 
-  // const [listQuestion, setListQuestion] = useState();
-  // function handleDeleteQuestion() {
-  //   const newItem: JSX.Element = <li key={1}>Đây là một list item mới</li>;
-  //   document.getElementById('questions')?.appendChild(newItem);
-  //   console.log(newItem);
-  // }
+  const [questions, setQuestions] = useState<Question[]>([]);
+
+  const handleClick = () => {
+    setQuestions(
+      questions.concat(
+        <Question
+          id={`question-${questions.length}`}
+          key={`question-${questions.length}`}
+          handleDelete={handleDeleteQuestion}
+        />
+      )
+    );
+  };
+
+  const handleDeleteQuestion = (id: string) => {
+    document.getElementById(id)?.remove();
+  };
 
   return (
     <div className={"w-full"}>
@@ -149,7 +171,7 @@ function AddContest() {
                   "flex h-10 w-10 items-center justify-center rounded-md border border-transparent bg-gray-200 hover:bg-gray-300"
                 }
               >
-                <AiOutlinePlus className={"h-5 w-5"} />
+                <AiOutlinePlus className={"h-5 w-5"} onClick={handleClick} />
               </button>
               <button
                 type={"button"}
@@ -160,29 +182,7 @@ function AddContest() {
                 <BsTrash className={"h-5 w-5"} />
               </button>
             </div>
-            <ul id={"questions"}>
-              <li key={"123"} className={"flex flex-row items-start gap-x-3"}>
-                <Question />
-                <div className={"my-3 flex w-20 flex-row items-center gap-x-2"}>
-                  <button
-                    type={"button"}
-                    className={
-                      "flex h-10 w-10 items-center justify-center rounded-md border border-transparent bg-gray-200 hover:bg-gray-300"
-                    }
-                  >
-                    <AiOutlinePlus className={"h-5 w-5"} />
-                  </button>
-                  <button
-                    type={"button"}
-                    className={
-                      "flex h-10 w-10 items-center justify-center rounded-md border border-transparent bg-gray-200 hover:bg-gray-300"
-                    }
-                  >
-                    <BsTrash className={"h-5 w-5"} />
-                  </button>
-                </div>
-              </li>
-            </ul>
+            <ul id={"questions"}>{questions}</ul>
           </div>
         </form>
       </div>
