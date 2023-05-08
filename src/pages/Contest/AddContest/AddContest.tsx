@@ -60,7 +60,7 @@ function AddContest() {
     document.title = "Tạo cuộc thi";
   }, []);
 
-  const [questions, setQuestions] = useState<(typeof Question)[]>([]);
+  const [questions, setQuestions] = useState<JSX.Element[]>([]);
 
   const handleClick = () => {
     setQuestions(
