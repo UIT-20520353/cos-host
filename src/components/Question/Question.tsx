@@ -2,6 +2,7 @@ import { AiOutlinePlus, BsTrash } from "react-icons/all";
 
 type IProps = {
   id: string;
+  key: string;
   handleDelete: (id: string) => void;
 };
 
