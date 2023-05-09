@@ -68,9 +68,9 @@ function AddContest() {
     setTotalQuestion((prevState) => prevState + 1);
   };
 
-  useEffect(() => {
-    console.log(questions);
-  }, [questions, totalQuestion]);
+  // useEffect(() => {
+  //   console.log(questions);
+  // }, [questions, totalQuestion]);
 
   const handleDeleteQuestion = (id: string) => {
     const result: string[] = questions.filter((question) => question !== id);
@@ -81,7 +81,7 @@ function AddContest() {
     <div className={"w-full"}>
       <Header />
 
-      <form>
+      <form className={""}>
         <div className={"mx-5 my-8 rounded-md border border-gray-200 bg-gray-100 shadow-md"}>
           <div className={"p-3"}>
             <p className={"p-3 pb-0 text-3xl font-semibold"}>Tạo cuộc thi</p>
@@ -184,6 +184,15 @@ function AddContest() {
             })}
           </ul>
         )}
+
+        <button
+          className={
+            "mb-8 ml-5 rounded-lg border border-gray-300 bg-gray-200 px-16 py-3 text-xl shadow-md hover:bg-gray-300"
+          }
+          type={"submit"}
+        >
+          Tạo cuộc thi
+        </button>
       </form>
     </div>
   );
