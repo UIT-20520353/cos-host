@@ -5,6 +5,7 @@ import Dashboard from "../Dashboard";
 import AddContest from "../Contest/AddContest";
 import ManageContest from "../Contest/ManageContest";
 import ManageTeam from "../Team";
+import DetailContest from "../Contest/DetailContest";
 
 function MainPage() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -19,7 +20,11 @@ function MainPage() {
         <Routes>
           <Route path={"/"} element={<Dashboard />} />
           <Route path={"/add-contest"} element={<AddContest />} />
-          <Route path={"/manage-contest"} element={<ManageContest />} />
+          <Route path={"/manage-contest"}>
+            <Route index={true} element={<ManageContest />} />
+            {/*<Route path={":id"} element={<DetailContest />} />*/}
+            <Route path={":id"} element={<AddContest />} />
+          </Route>
           <Route path={"/manage-team"} element={<ManageTeam />} />
         </Routes>
       </div>

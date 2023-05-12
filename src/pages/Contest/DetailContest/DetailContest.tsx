@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+// import { useParams } from "react-router-dom";
 import Header from "../../../components/Header";
 import { AiOutlinePlus } from "react-icons/all";
-import Question from "../../../components/Question";
+import { useState } from "react";
 
 type ITimeContest = {
   value: string;
@@ -55,11 +55,8 @@ const listTimeContest: ITimeContest[] = [
   }
 ];
 
-function AddContest() {
-  useEffect(() => {
-    document.title = "Tạo cuộc thi";
-  }, []);
-
+function DetailContest() {
+  // const { id } = useParams();
   const [totalQuestion, setTotalQuestion] = useState<number>(0);
   const [questions, setQuestions] = useState<string[]>(["initial"]);
 
@@ -68,23 +65,14 @@ function AddContest() {
     setTotalQuestion((prevState) => prevState + 1);
   };
 
-  // useEffect(() => {
-  //   console.log(questions);
-  // }, [questions, totalQuestion]);
-
-  const handleDeleteQuestion = (id: string) => {
-    const result: string[] = questions.filter((question) => question !== id);
-    setQuestions(result);
-  };
-
   return (
     <div className={"w-full"}>
       <Header />
 
-      <form className={""}>
+      <form>
         <div className={"mx-5 my-8 rounded-md border border-gray-200 bg-gray-100 shadow-md"}>
           <div className={"p-3"}>
-            <p className={"p-3 pb-0 text-3xl font-semibold"}>Tạo cuộc thi</p>
+            <p className={"p-3 pb-0 text-3xl font-semibold"}>Thông tin cuộc thi</p>
             <div className={"p-4 pb-0"}>
               <p className={"mb-3 text-lg font-medium"}>Thông tin cuộc thi</p>
               <div className="mb-3">
@@ -153,7 +141,6 @@ function AddContest() {
             </div>
             <div className={"p-4 pb-0"}>
               <p className={"text-lg font-medium"}>Đề thi</p>
-              {/*{questions.length === 0 && (*/}
               <div className={"mt-3 flex flex-row items-center gap-x-2"}>
                 <button
                   type={"button"}
@@ -165,37 +152,12 @@ function AddContest() {
                   <AiOutlinePlus className={"h-5 w-5"} />
                 </button>
               </div>
-              {/*)}*/}
             </div>
           </div>
         </div>
-        {questions.length !== 0 && (
-          <ul id={"questions"}>
-            {questions.map((questionId) => {
-              if (questionId !== "initial")
-                return (
-                  <Question
-                    id={questionId}
-                    key={questionId}
-                    handleAdd={handleAddQuestion}
-                    handleDelete={handleDeleteQuestion}
-                  />
-                );
-            })}
-          </ul>
-        )}
-
-        <button
-          className={
-            "mb-8 ml-5 rounded-lg border border-gray-300 bg-gray-200 px-16 py-3 text-xl font-semibold shadow-md hover:bg-gray-300"
-          }
-          type={"submit"}
-        >
-          Tạo cuộc thi
-        </button>
       </form>
     </div>
   );
 }
 
-export default AddContest;
+export default DetailContest;

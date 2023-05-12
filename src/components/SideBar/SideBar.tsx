@@ -51,7 +51,7 @@ function SideBar(props: IProps) {
       <div className={"sticky top-0 flex w-full cursor-pointer flex-col items-center py-11"}>
         <img src={logo} alt="Logo web" className={`${isOpen ? "w-48" : "w-14"} duration-300`} />
         <BsArrowRightCircle
-          className={`z-50 absolute z-50 rounded-full bg-[#fff] ${
+          className={`absolute z-50 z-50 rounded-full bg-[#fff] ${
             isOpen ? "-right-4 top-4 h-8 w-8" : "-right-3 top-3 h-6 w-6"
           } ${isOpen && "rotate-180"} duration-300`}
           onClick={() => toggleMenu()}

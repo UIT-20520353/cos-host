@@ -1,0 +1,51 @@
+import { BiTimeFive, MdDateRange, RiTeamFill } from "react-icons/all";
+import { NavLink } from "react-router-dom";
+
+type IProps = {
+  name: string;
+  amount: number;
+  date: string;
+  time: string;
+  id: string;
+};
+
+function OverviewContest(props: IProps) {
+  return (
+    <li key={props.id} id={props.id} className={"rounded-md border border-gray-200 bg-gray-100 p-3 shadow-md"}>
+      <p className={"mb-3 truncate text-lg font-medium"}>{props.name}</p>
+      <span className={"rounded-full bg-[#b7e4c7] px-4 py-2 text-sm font-semibold text-[#081c15]"}>Đang diễn ra</span>
+      <div className={"mt-4 flex flex-row items-center gap-x-2"}>
+        <RiTeamFill className={"inline-block h-5 w-5 opacity-50"} />
+        <span className={"text-sm text-gray-500"}>{props.amount} người tham gia</span>
+      </div>
+      <div className={"mt-4 flex flex-row items-center gap-x-2"}>
+        <MdDateRange className={"inline-block h-5 w-5 opacity-50"} />
+        <span className={"text-sm text-gray-500"}>{props.date}</span>
+      </div>
+      <div className={"mt-4 flex flex-row items-center gap-x-2"}>
+        <BiTimeFive className={"inline-block h-5 w-5 opacity-50"} />
+        <span className={"text-sm text-gray-500"}>{props.time}</span>
+      </div>
+      <div className={"mt-4 flex flex-row items-center gap-x-3"}>
+        <NavLink
+          className={
+            "rounded-lg bg-[#ade8f4] px-4 py-2 text-sm font-semibold text-[#03045e] duration-300 hover:bg-[#48cae4]"
+          }
+          to={`/manage-contest/${props.id}`}
+        >
+          Cập nhật
+        </NavLink>
+        <NavLink
+          className={
+            "rounded-lg bg-[#d8f3dc] px-4 py-2 text-sm font-semibold text-[#081c15] duration-300 hover:bg-[#74c69d]"
+          }
+          to={"/"}
+        >
+          Kết quả
+        </NavLink>
+      </div>
+    </li>
+  );
+}
+
+export default OverviewContest;
