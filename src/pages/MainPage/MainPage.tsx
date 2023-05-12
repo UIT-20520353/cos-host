@@ -5,7 +5,7 @@ import Dashboard from "../Dashboard";
 import AddContest from "../Contest/AddContest";
 import ManageContest from "../Contest/ManageContest";
 import ManageTeam from "../Team";
-import DetailContest from "../Contest/DetailContest";
+// import DetailContest from "../Contest/DetailContest";
 
 function MainPage() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
