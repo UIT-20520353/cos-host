@@ -29,7 +29,7 @@ function OverviewContest(props: IProps) {
       </span>
       <div className={"mt-4 flex flex-row items-center gap-x-2"}>
         <RiTeamFill className={"inline-block h-5 w-5 opacity-50"} />
-        <span className={"text-sm text-gray-500"}>{props.amount} người tham gia</span>
+        <span className={"text-sm text-gray-500"}>{props.amount} đội tham gia</span>
       </div>
       <div className={"mt-4 flex flex-row items-center gap-x-2"}>
         <MdDateRange className={"inline-block h-5 w-5 opacity-50"} />

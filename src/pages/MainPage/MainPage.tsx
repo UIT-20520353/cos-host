@@ -4,8 +4,9 @@ import SideBar from "../../components/SideBar";
 import Dashboard from "../Dashboard";
 import AddContest from "../Contest/AddContest";
 import ManageContest from "../Contest/ManageContest";
-import ManageTeam from "../Team";
-// import DetailContest from "../Contest/DetailContest";
+import ManageTeam from "../Team/ManageTeam";
+import DetailContest from "../Contest/DetailContest";
+import RegisteredTeams from "../Team/RegisteredTeams";
 
 function MainPage() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -22,10 +23,12 @@ function MainPage() {
           <Route path={"/add-contest"} element={<AddContest />} />
           <Route path={"/manage-contest"}>
             <Route index={true} element={<ManageContest />} />
-            {/*<Route path={":id"} element={<DetailContest />} />*/}
-            <Route path={":id"} element={<AddContest />} />
+            <Route path={":id"} element={<DetailContest />} />
           </Route>
-          <Route path={"/manage-team"} element={<ManageTeam />} />
+          <Route path={"/manage-team"}>
+            <Route index={true} element={<ManageTeam />} />
+            <Route path={":id"} element={<RegisteredTeams />} />
+          </Route>
         </Routes>
       </div>
     </div>

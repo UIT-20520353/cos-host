@@ -1,7 +1,7 @@
 // import { useParams } from "react-router-dom";
 import Header from "../../../components/Header";
 import { AiOutlinePlus } from "react-icons/all";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type ITimeContest = {
   value: string;
@@ -56,6 +56,10 @@ const listTimeContest: ITimeContest[] = [
 ];
 
 function DetailContest() {
+  useEffect(() => {
+    document.title = "Cập nhật thông tin cuộc thi";
+  }, []);
+
   // const { id } = useParams();
   const [totalQuestion, setTotalQuestion] = useState<number>(0);
   const [questions, setQuestions] = useState<string[]>(["initial"]);
@@ -72,7 +76,7 @@ function DetailContest() {
       <form>
         <div className={"mx-5 my-8 rounded-md border border-gray-200 bg-gray-100 shadow-md"}>
           <div className={"p-3"}>
-            <p className={"p-3 pb-0 text-3xl font-semibold"}>Thông tin cuộc thi</p>
+            <p className={"p-3 pb-0 text-3xl font-semibold"}>Cập nhật thông tin cuộc thi</p>
             <div className={"p-4 pb-0"}>
               <p className={"mb-3 text-lg font-medium"}>Thông tin cuộc thi</p>
               <div className="mb-3">
@@ -84,6 +88,7 @@ function DetailContest() {
                   }
                   placeholder={"Tên cuộc thi"}
                   required={true}
+                  defaultValue={"Beginner Free Contest 51"}
                 />
               </div>
               <div className="mb-4">
