@@ -52,7 +52,7 @@ function OverviewContest(props: IProps) {
           className={
             "rounded-lg bg-[#d8f3dc] px-4 py-2 text-sm font-semibold text-[#081c15] duration-300 hover:bg-[#74c69d]"
           }
-          to={"/"}
+          to={`/result-contest/${props.id}`}
         >
           Kết quả
         </NavLink>

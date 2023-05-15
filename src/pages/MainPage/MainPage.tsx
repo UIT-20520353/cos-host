@@ -7,6 +7,8 @@ import ManageContest from "../Contest/ManageContest";
 import ManageTeam from "../Team/ManageTeam";
 import DetailContest from "../Contest/DetailContest";
 import RegisteredTeams from "../Team/RegisteredTeams";
+import ResultContest from "../ResultContest";
+import TeamProfile from "../Team/TeamProfile";
 
 function MainPage() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -29,6 +31,8 @@ function MainPage() {
             <Route index={true} element={<ManageTeam />} />
             <Route path={":id"} element={<RegisteredTeams />} />
           </Route>
+          <Route path={"/result-contest/:id"} element={<ResultContest />} />
+          <Route path={"/team-profile/:id"} element={<TeamProfile />} />
         </Routes>
       </div>
     </div>

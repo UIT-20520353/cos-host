@@ -47,7 +47,7 @@ function SideBar(props: IProps) {
   ];
 
   return (
-    <div className={`flex min-h-screen ${isOpen ? "w-72" : "w-20"} flex-col items-center bg-[#EAEAEA] duration-300`}>
+    <div className={`flex min-h-screen ${isOpen ? "w-72" : "w-20"} min-w-20 flex-col items-center bg-[#EAEAEA] duration-300`}>
       <div className={"sticky top-0 flex w-full cursor-pointer flex-col items-center py-11"}>
         <img src={logo} alt="Logo web" className={`${isOpen ? "w-48" : "w-14"} duration-300`} />
         <BsArrowRightCircle

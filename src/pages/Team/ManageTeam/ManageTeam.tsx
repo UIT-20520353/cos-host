@@ -28,7 +28,7 @@ function ManageTeam() {
                 <span className={"text-sm text-gray-500"}>32 đội tham gia</span>
               </div>
             </div>
-            <div className={""}>
+            <div className={"mt-2"}>
               <NavLink
                 className={
                   "rounded-md bg-neutral-300 px-5 py-2.5 text-sm text-black hover:bg-neutral-400 hover:text-white"
@@ -51,7 +51,7 @@ function ManageTeam() {
                 <span className={"text-sm text-gray-500"}>25 đội tham gia</span>
               </div>
             </div>
-            <div className={""}>
+            <div className={"mt-2"}>
               <NavLink
                 className={
                   "rounded-md bg-neutral-300 px-5 py-2.5 text-sm text-black hover:bg-neutral-400 hover:text-white"

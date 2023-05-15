@@ -1,4 +1,5 @@
 import { FaUserAlt } from "react-icons/all";
+import { NavLink } from "react-router-dom";
 
 type IMember = {
   id: string;
@@ -40,9 +41,12 @@ function RegisteredTeam(props: IProps) {
       </div>
 
       <div className={"flex flex-col items-center gap-y-3"}>
-        <button className={"rounded-md bg-[#78c6a3] px-4 py-2 text-sm hover:bg-[#469d89] hover:text-white"}>
+        <NavLink
+          to={`/team-profile/${props.id}`}
+          className={"rounded-md bg-[#78c6a3] px-4 py-2 text-sm hover:bg-[#469d89] hover:text-white"}
+        >
           Chi tiết
-        </button>
+        </NavLink>
         <button className={"rounded-md bg-[#ff8fa3] px-4 py-2 text-sm hover:bg-[#c9184a] hover:text-white"}>
           Xóa đội
         </button>
