@@ -1,5 +1,5 @@
 import logo from "../../assets/transparent-logo.svg";
-import {NavLink, useNavigate} from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   RxDashboard,
   BsArrowRightCircle,
@@ -43,7 +43,7 @@ function SideBar(props: IProps) {
   ];
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
-    navigate("/");
+    navigate("/", { replace: true });
   };
 
   return (

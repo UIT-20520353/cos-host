@@ -36,7 +36,7 @@ function ManageTeam() {
                 className={
                   "rounded-md bg-neutral-300 px-5 py-2.5 text-sm text-black hover:bg-neutral-400 hover:text-white"
                 }
-                to={"/manage-team/question-1-1"}
+                to={"/admin/manage-team/question-1-1"}
               >
                 Chi tiết
               </NavLink>
@@ -62,7 +62,7 @@ function ManageTeam() {
                 className={
                   "rounded-md bg-neutral-300 px-5 py-2.5 text-sm text-black hover:bg-neutral-400 hover:text-white"
                 }
-                to={"/manage-team/question-1-1"}
+                to={"/admin/manage-team/question-1-1"}
               >
                 Chi tiết
               </NavLink>

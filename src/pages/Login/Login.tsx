@@ -1,17 +1,19 @@
-import { useRef } from "react";
+import React, { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
   const userName = useRef(null);
   const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // console.log(userName.current);
+  const handleSubmit = () => {
     console.log("Truoc " + localStorage.getItem("accessToken"));
-    localStorage.setItem("accessToken", "1");
+    localStorage.setItem("accessToken", "matkhau123");
     console.log("Sau " + localStorage.getItem("accessToken"));
     navigate("/admin/dashboard", { replace: true });
+  };
+
+  const clearStorage = () => {
+    localStorage.removeItem("accessToken");
   };
 
   return (
@@ -50,11 +52,20 @@ function Login() {
         <div className={"flex flex-col items-start gap-y-3"}>
           <button
             className={"w-full rounded-lg bg-[#0077b6] py-3 text-gray-100 hover:bg-[#0096c7] hover:text-white"}
-            onClick={handleSubmit}
+            onClick={(e) => {
+              e.preventDefault();
+              handleSubmit();
+            }}
           >
             Đăng nhập
           </button>
-          <span className={"cursor-pointer text-sm hover:font-bold hover:underline"}>Quên mật khẩu</span>
+          <button
+            type={"button"}
+            onClick={clearStorage}
+            className={"cursor-pointer text-sm hover:font-bold hover:underline"}
+          >
+            Quên mật khẩu
+          </button>
         </div>
       </form>
     </div>

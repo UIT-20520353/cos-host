@@ -12,7 +12,7 @@ function ResultContest() {
           <p className={"text-xl font-semibold"}>Bảng xếp hạng của cuộc thi {id}</p>
           <NavLink
             className={"rounded-md bg-gray-300 px-4 py-2 text-sm hover:bg-gray-800 hover:text-white"}
-            to={"/manage-contest"}
+            to={"/admin/manage-contest"}
           >
             Quay lại
           </NavLink>

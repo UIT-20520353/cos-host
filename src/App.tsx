@@ -10,7 +10,7 @@ function App() {
         <Route path={"/"} element={<Login />} />
         <Route
           path={"/admin/*"}
-          element={localStorage.getItem("accessToken") === "1" ? <MainPage /> : <Navigate to={"/"} replace={true} />}
+          element={localStorage.getItem("accessToken") === "matkhau123" ? <MainPage /> : <Navigate to={"/"} replace={true} />}
         />
       </Routes>
     </div>

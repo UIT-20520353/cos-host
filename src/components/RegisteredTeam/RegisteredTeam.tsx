@@ -42,7 +42,7 @@ function RegisteredTeam(props: IProps) {
 
       <div className={"flex flex-col items-center gap-y-3"}>
         <NavLink
-          to={`/team-profile/${props.id}`}
+          to={`/admin/team-profile/${props.id}`}
           className={"rounded-md bg-[#78c6a3] px-4 py-2 text-sm hover:bg-[#469d89] hover:text-white"}
         >
           Chi tiết

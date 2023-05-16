@@ -46,7 +46,7 @@ function OverviewContest(props: IProps) {
             className={
               "rounded-lg bg-transparent px-4 py-2 text-sm font-semibold text-[#03045e] duration-300 hover:bg-[#48cae4]"
             }
-            to={`/manage-contest/${props.id}`}
+            to={`/admin/manage-contest/${props.id}`}
           >
             Cập nhật
           </NavLink>
@@ -54,7 +54,7 @@ function OverviewContest(props: IProps) {
             className={
               "rounded-lg bg-white px-4 py-2 text-sm font-semibold text-black duration-300 hover:bg-black hover:text-white"
             }
-            to={`/result-contest/${props.id}`}
+            to={`/admin/result-contest/${props.id}`}
           >
             Kết quả
           </NavLink>
