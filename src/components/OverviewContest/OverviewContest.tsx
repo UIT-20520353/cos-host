@@ -7,6 +7,7 @@ type IProps = {
   date: string;
   time: string;
   id: string;
+  isShowAction: boolean;
 };
 
 function OverviewContest(props: IProps) {
@@ -39,24 +40,26 @@ function OverviewContest(props: IProps) {
         <BiTimeFive className={"inline-block h-5 w-5 opacity-50"} />
         <span className={"text-sm text-gray-500"}>{props.time}</span>
       </div>
-      <div className={"mt-4 flex flex-row items-center gap-x-3"}>
-        <NavLink
-          className={
-            "rounded-lg bg-[#ade8f4] px-4 py-2 text-sm font-semibold text-[#03045e] duration-300 hover:bg-[#48cae4]"
-          }
-          to={`/manage-contest/${props.id}`}
-        >
-          Cập nhật
-        </NavLink>
-        <NavLink
-          className={
-            "rounded-lg bg-[#d8f3dc] px-4 py-2 text-sm font-semibold text-[#081c15] duration-300 hover:bg-[#74c69d]"
-          }
-          to={`/result-contest/${props.id}`}
-        >
-          Kết quả
-        </NavLink>
-      </div>
+      {props.isShowAction && (
+        <div className={"mt-4 flex flex-row items-center gap-x-3"}>
+          <NavLink
+            className={
+              "rounded-lg bg-transparent px-4 py-2 text-sm font-semibold text-[#03045e] duration-300 hover:bg-[#48cae4]"
+            }
+            to={`/manage-contest/${props.id}`}
+          >
+            Cập nhật
+          </NavLink>
+          <NavLink
+            className={
+              "rounded-lg bg-white px-4 py-2 text-sm font-semibold text-black duration-300 hover:bg-black hover:text-white"
+            }
+            to={`/result-contest/${props.id}`}
+          >
+            Kết quả
+          </NavLink>
+        </div>
+      )}
     </li>
   );
 }

@@ -1,5 +1,5 @@
 import logo from "../../assets/transparent-logo.svg";
-import { NavLink } from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
 import {
   RxDashboard,
   BsArrowRightCircle,
@@ -14,40 +14,44 @@ type IProps = {
   toggleMenu: () => void;
 };
 
-const icons = [RxDashboard, IoCreateOutline, MdContentPaste, AiOutlineTeam, IoIosLogOut];
+const icons = [RxDashboard, IoCreateOutline, MdContentPaste, AiOutlineTeam];
 
 function SideBar(props: IProps) {
+  const navigate = useNavigate();
   const { isOpen, toggleMenu } = props;
   const menus: { id: number; title: string; address: string }[] = [
     {
       id: 1,
       title: "Trang chủ",
-      address: "/"
+      address: "/admin/dashboard"
     },
     {
       id: 2,
       title: "Tạo cuộc thi",
-      address: "add-contest"
+      address: "/admin/add-contest"
     },
     {
       id: 3,
       title: "Quản lý cuộc thi",
-      address: "manage-contest"
+      address: "/admin/manage-contest"
     },
     {
       id: 4,
       title: "Quản lý đội thi",
-      address: "manage-team"
-    },
-    {
-      id: 5,
-      title: "Đăng xuất",
-      address: "/logout"
+      address: "/admin/manage-team"
     }
   ];
+  const handleLogout = () => {
+    localStorage.removeItem("accessToken");
+    navigate("/");
+  };
 
   return (
-    <div className={`flex min-h-screen ${isOpen ? "w-72" : "w-20"} min-w-20 flex-col items-center bg-[#EAEAEA] duration-300`}>
+    <div
+      className={`flex min-h-screen ${
+        isOpen ? "w-72" : "w-20"
+      } min-w-20 flex-col items-center bg-[#EAEAEA] duration-300`}
+    >
       <div className={"sticky top-0 flex w-full cursor-pointer flex-col items-center py-11"}>
         <img src={logo} alt="Logo web" className={`${isOpen ? "w-48" : "w-14"} duration-300`} />
         <BsArrowRightCircle
@@ -76,6 +80,15 @@ function SideBar(props: IProps) {
             </NavLink>
           );
         })}
+        <button
+          className={
+            "mt-2 flex w-4/5 cursor-pointer flex-row items-center gap-x-2 rounded-lg bg-[#EAEAEA] p-2 text-lg hover:bg-[#fff] hover:shadow-md"
+          }
+          onClick={handleLogout}
+        >
+          <IoIosLogOut className={`mx-3 inline-block h-6 w-6`} />
+          <span className={`origin-left duration-200 ${!isOpen && "hidden text-xs"} truncate`}>Đăng xuất</span>
+        </button>
       </div>
     </div>
   );

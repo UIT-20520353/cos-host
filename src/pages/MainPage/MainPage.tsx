@@ -21,7 +21,7 @@ function MainPage() {
       <SideBar isOpen={isOpen} toggleMenu={toggleMenu} />
       <div className={"flex-1 bg-[#fff]"}>
         <Routes>
-          <Route path={"/"} element={<Dashboard />} />
+          <Route path={"/dashboard"} element={<Dashboard />} />
           <Route path={"/add-contest"} element={<AddContest />} />
           <Route path={"/manage-contest"}>
             <Route index={true} element={<ManageContest />} />

@@ -1,5 +1,6 @@
 import Header from "../../../components/Header";
 import RegisteredTeam from "../../../components/RegisteredTeam";
+import { NavLink } from "react-router-dom";
 
 type IMember = {
   id: string;
@@ -23,7 +24,16 @@ function RegisteredTeams() {
       <Header />
 
       <div className={"mx-12 my-10"}>
-        <p className={"text-xl font-semibold"}>Danh sách các đội đã đăng ký tham gia</p>
+        <div className={"flex flex-row items-start justify-between"}>
+          <p className={"text-xl font-semibold"}>Danh sách các đội đã đăng ký tham gia</p>
+          <NavLink
+            className={"rounded-md bg-gray-300 px-4 py-2 text-sm hover:bg-gray-800 hover:text-white"}
+            to={"/manage-team"}
+          >
+            Quay lại
+          </NavLink>
+        </div>
+
         <ul className={"mt-6 grid grid-cols-3 gap-5"}>
           <RegisteredTeam id={"team-1-2"} key={"team-1-2"} nameTeam={"Đội này mạnh"} members={members} />
           <RegisteredTeam

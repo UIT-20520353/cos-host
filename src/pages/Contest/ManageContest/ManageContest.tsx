@@ -55,6 +55,7 @@ function ManageContest() {
                 time={contest.time}
                 key={contest.id}
                 id={contest.id}
+                isShowAction={true}
               />
             );
           })}
