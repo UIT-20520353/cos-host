@@ -1,15 +1,26 @@
-import { useRef } from "react";
+import { FormEvent, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { userLogin } from "./login.reducer";
+
+type IAccount = {
+  username: string;
+  password: string;
+};
 
 function Login() {
   const userName = useRef(null);
   const navigate = useNavigate();
+  const [account, setAccount] = useState<IAccount>({ username: "", password: "" });
+  const dispatch = useDispatch();
 
-  const handleSubmit = () => {
-    console.log("Truoc " + localStorage.getItem("accessToken"));
-    localStorage.setItem("accessToken", "matkhau123");
-    console.log("Sau " + localStorage.getItem("accessToken"));
-    navigate("/admin/dashboard", { replace: true });
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (account.username === "thisinh" && account.password === "123") {
+      dispatch(userLogin({ id: "user-1-1", name: "Xuân Vương" }));
+      navigate("/admin/dashboard", { replace: true });
+    } else alert("đăng nhập không thành công");
+    // console.log(account);
   };
 
   const clearStorage = () => {
@@ -18,7 +29,7 @@ function Login() {
 
   return (
     <div className={"flex h-screen w-full items-center justify-center bg-gray-100"}>
-      <form className={"grid w-1/2 grid-rows-4 gap-3 rounded-md bg-gray-200 p-3 shadow-md"}>
+      <form className={"grid w-1/2 grid-rows-4 gap-3 rounded-md bg-gray-200 p-3 shadow-md"} onSubmit={handleSubmit}>
         <div className={"flex items-center justify-center"}>
           <p className={"text-3xl font-semibold"}>Đăng nhập</p>
         </div>
@@ -34,6 +45,8 @@ function Login() {
             }
             type="text"
             required={true}
+            value={account.username}
+            onChange={(event) => setAccount((prevState) => ({ ...prevState, username: event.target.value }))}
           />
         </div>
         <div className={""}>
@@ -47,15 +60,17 @@ function Login() {
             }
             type="password"
             required={true}
+            value={account.password}
+            onChange={(event) => setAccount((prevState) => ({ ...prevState, password: event.target.value }))}
           />
         </div>
         <div className={"flex flex-col items-start gap-y-3"}>
           <button
             className={"w-full rounded-lg bg-[#0077b6] py-3 text-gray-100 hover:bg-[#0096c7] hover:text-white"}
-            onClick={(e) => {
-              e.preventDefault();
-              handleSubmit();
-            }}
+            // onClick={(e) => {
+            //   e.preventDefault();
+            //   handleSubmit();
+            // }}
           >
             Đăng nhập
           </button>

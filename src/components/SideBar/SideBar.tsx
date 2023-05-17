@@ -8,6 +8,8 @@ import {
   AiOutlineTeam,
   IoIosLogOut
 } from "react-icons/all";
+import { useDispatch } from "react-redux";
+import { userLogout } from "../../pages/Login/login.reducer";
 
 type IProps = {
   isOpen: boolean;
@@ -18,6 +20,8 @@ const icons = [RxDashboard, IoCreateOutline, MdContentPaste, AiOutlineTeam];
 
 function SideBar(props: IProps) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const { isOpen, toggleMenu } = props;
   const menus: { id: number; title: string; address: string }[] = [
     {
@@ -42,7 +46,7 @@ function SideBar(props: IProps) {
     }
   ];
   const handleLogout = () => {
-    localStorage.removeItem("accessToken");
+    dispatch(userLogout);
     navigate("/", { replace: true });
   };
 
