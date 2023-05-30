@@ -1,6 +1,10 @@
 import { FaSearch, VscAccount } from "react-icons/all";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
 
 function Header() {
+  const user = useSelector((state: RootState) => state.user);
+
   return (
     <div
       className={
@@ -9,7 +13,7 @@ function Header() {
     >
       <FaSearch className={"h-8 w-8 cursor-pointer"} />
       <div className={"flex cursor-pointer flex-row items-center"}>
-        <span className={"text-lg font-bold"}>Xuân Vương</span>
+        <span className={"text-lg font-bold"}>{user.name}</span>
         <VscAccount className={"ml-5 h-8 w-8"} />
       </div>
     </div>

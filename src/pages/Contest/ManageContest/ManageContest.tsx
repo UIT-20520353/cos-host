@@ -1,42 +1,19 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Header from "../../../components/Header";
 import OverviewContest from "../../../components/OverviewContest";
-
-type IContest = {
-  id: string;
-  name: string;
-  amount: number;
-  date: string;
-  time: string;
-};
-
-const listContest: IContest[] = [
-  {
-    id: "question-1-2",
-    name: "Beginner Free Contest 51",
-    amount: 32,
-    date: "15/04/2023",
-    time: "10:00 am"
-  },
-  {
-    id: "question-2-3",
-    name: "Testing Round 49",
-    amount: 25,
-    date: "06/05/2023",
-    time: "02:00 pm"
-  },
-  {
-    id: "question-4-3",
-    name: "Thi học sinh giỏi tin học cấp quốc gia",
-    amount: 50,
-    date: "30/04/2023",
-    time: "05:00 am"
-  }
-];
+import { getMyContests } from "../../../query/api/contest-service";
+import { IContest } from "../../../types/contest.type";
+// import Swal from "sweetalert2";
 
 function ManageContest() {
+  const [myContests, setMyContests] = useState<IContest[]>([]);
+
   useEffect(() => {
     document.title = "Quản lý cuộc thi";
+    getMyContests().then((data) => {
+      console.log(data);
+      setMyContests(data);
+    });
   }, []);
 
   return (
@@ -46,15 +23,15 @@ function ManageContest() {
       <div className={"mx-12 my-10"}>
         <p className={"text-xl font-semibold"}>Danh sách cuộc thi của bạn</p>
         <ul className={"mt-6 grid grid-cols-2 gap-5"}>
-          {listContest.map((contest) => {
+          {myContests.map((contest) => {
             return (
               <OverviewContest
                 name={contest.name}
-                amount={contest.amount}
-                date={contest.date}
-                time={contest.time}
-                key={contest.id}
-                id={contest.id}
+                amount={6}
+                date={contest.date_begin}
+                time={contest.time_begin}
+                key={`contest-${contest.id}`}
+                id={`contest-${contest.id}`}
                 isShowAction={true}
               />
             );

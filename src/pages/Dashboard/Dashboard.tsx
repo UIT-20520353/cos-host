@@ -22,34 +22,6 @@ type ITableHeader = {
   col3: string;
 };
 
-const dataTeamRankings: IData[] = [
-  {
-    rank: 1,
-    name: "Đội này mạnh",
-    point: "1570"
-  },
-  {
-    rank: 2,
-    name: "UIT",
-    point: "1350"
-  },
-  {
-    rank: 3,
-    name: "3 người",
-    point: "1143"
-  },
-  {
-    rank: 4,
-    name: "BKU",
-    point: "1040"
-  },
-  {
-    rank: 5,
-    name: "UIT-2",
-    point: "950"
-  }
-];
-
 const dataContestRankings: IData[] = [
   {
     rank: 1,
@@ -95,12 +67,6 @@ const notifications: INotification[] = [
   }
 ];
 
-const teamRankingHeader: ITableHeader = {
-  col1: "Hạng",
-  col2: "Tên đội",
-  col3: "Điểm"
-};
-
 const contestRankingHeader: ITableHeader = {
   col1: "Hạng",
   col2: "Tên cuộc thi",
@@ -132,7 +98,6 @@ function Dashboard() {
         </div>
 
         <div className={"flex w-[35%] flex-col items-center gap-y-5"}>
-          <Rankings tableTitle={"Bảng xếp hạng các đội"} tableData={dataTeamRankings} tableHeader={teamRankingHeader} />
           <Rankings
             tableTitle={"Bảng xếp hạng các cuộc thi"}
             tableData={dataContestRankings}

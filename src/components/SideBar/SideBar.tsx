@@ -27,27 +27,29 @@ function SideBar(props: IProps) {
     {
       id: 1,
       title: "Trang chủ",
-      address: "/admin/dashboard"
+      address: "/"
     },
     {
       id: 2,
       title: "Tạo cuộc thi",
-      address: "/admin/add-contest"
+      address: "/add-contest"
     },
     {
       id: 3,
       title: "Quản lý cuộc thi",
-      address: "/admin/manage-contest"
+      address: "/manage-contest"
     },
     {
       id: 4,
       title: "Quản lý đội thi",
-      address: "/admin/manage-team"
+      address: "/manage-team"
     }
   ];
   const handleLogout = () => {
-    dispatch(userLogout);
-    navigate("/", { replace: true });
+    dispatch(userLogout({ id: "", name: "" }));
+    sessionStorage.removeItem("id");
+    sessionStorage.removeItem("name");
+    navigate("/");
   };
 
   return (

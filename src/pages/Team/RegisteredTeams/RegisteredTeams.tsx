@@ -28,7 +28,7 @@ function RegisteredTeams() {
           <p className={"text-xl font-semibold"}>Danh sách các đội đã đăng ký tham gia</p>
           <NavLink
             className={"rounded-md bg-gray-300 px-4 py-2 text-sm hover:bg-gray-800 hover:text-white"}
-            to={"/admin/manage-team"}
+            to={"/manage-team"}
           >
             Quay lại
           </NavLink>

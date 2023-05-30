@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
-import Header from "../../../components/Header";
-import { AiOutlinePlus } from "react-icons/all";
-import Question from "../../../components/Question";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { IContest } from "../../../types/contest.type";
+import { insertContest } from "../../../query/api/contest-service";
+import Swal from "sweetalert2";
 
 type ITimeContest = {
   value: string;
@@ -10,79 +11,97 @@ type ITimeContest = {
 
 const listTimeContest: ITimeContest[] = [
   {
-    value: "0.5",
+    value: "30 phút",
     text: "30 phút"
   },
   {
-    value: "1",
+    value: "1 giờ",
     text: "1 giờ"
   },
   {
-    value: "1.5",
+    value: "1 giờ 30 phút",
     text: "1 giờ 30 phút"
   },
   {
-    value: "2",
+    value: "2 giờ",
     text: "2 giờ"
   },
   {
-    value: "2.5",
+    value: "2 giờ 30 phút",
     text: "2 giờ 30 phút"
   },
   {
-    value: "3",
+    value: "3 giờ",
     text: "3 giờ"
   },
   {
-    value: "3.5",
+    value: "3 giờ 30 phút",
     text: "3 giờ 30 phút"
   },
   {
-    value: "4",
+    value: "4 giờ",
     text: "4 giờ"
   },
   {
-    value: "4.5",
+    value: "4 giờ 30 phút",
     text: "4 giờ 30 phút"
   },
   {
-    value: "5",
+    value: "5 giờ",
     text: "5 giờ"
   },
   {
-    value: "5.5",
+    value: "5 giờ 30 phút",
     text: "5 giờ 30 phút"
   }
 ];
 
-function AddContest() {
+type IProps = {
+  closeAddContestForm: () => void;
+};
+
+function AddContest(props: IProps) {
   useEffect(() => {
     document.title = "Tạo cuộc thi";
   }, []);
 
-  const [totalQuestion, setTotalQuestion] = useState<number>(0);
-  const [questions, setQuestions] = useState<string[]>(["initial"]);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset
+  } = useForm();
 
-  const handleAddQuestion = () => {
-    setQuestions(questions.concat(`question-${totalQuestion}-${questions.length}`));
-    setTotalQuestion((prevState) => prevState + 1);
-  };
-
-  // useEffect(() => {
-  //   console.log(questions);
-  // }, [questions, totalQuestion]);
-
-  const handleDeleteQuestion = (id: string) => {
-    const result: string[] = questions.filter((question) => question !== id);
-    setQuestions(result);
+  const onSubmit = (data: IContest) => {
+    Swal.fire({
+      title: "Tạo cuộc thi",
+      text: "Tạo cuộc thi mới với các thông tin đã nhập?",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Lưu",
+      cancelButtonText: "Hủy",
+      allowOutsideClick: false
+    }).then((result) => {
+      if (result.isConfirmed) {
+        data.host_id = sessionStorage.getItem("id");
+        insertContest(data).then((value) => console.log(value));
+        Swal.fire({
+          position: "center",
+          timer: 5000,
+          icon: "success",
+          showConfirmButton: true,
+          title: "Tạo cuộc thi thành công"
+        });
+        reset();
+      }
+    });
   };
 
   return (
     <div className={"w-full"}>
-      <Header />
-
-      <form className={""}>
-        <div className={"mx-5 my-8 rounded-md border border-gray-200 bg-gray-100 shadow-md"}>
+      <form onSubmit={handleSubmit(onSubmit)} className={""}>
+        <div className={"mt-8 rounded-md border border-gray-200 bg-gray-100 shadow-md"}>
           <div className={"p-3"}>
             <p className={"p-3 pb-0 text-3xl font-semibold"}>Tạo cuộc thi</p>
             <div className={"p-4 pb-0"}>
@@ -90,55 +109,64 @@ function AddContest() {
               <div className="mb-3">
                 <input
                   type={"text"}
-                  id={"name-contest"}
+                  id={"name_contest"}
                   className={
                     "block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                   }
                   placeholder={"Tên cuộc thi"}
-                  required={true}
+                  {...register("name", { required: "Tên cuộc thi không được bỏ trống" })}
+                  autoComplete={"off"}
                 />
+                {errors.name && <span className={"text-xs text-red-600"}>{errors.name.message}</span>}
               </div>
               <div className="mb-4">
                 <textarea
                   placeholder={"Mô tả ngắn gọn về cuộc thi"}
                   rows={5}
                   className="block w-full resize-none rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                  {...register("description")}
+                  autoComplete={"off"}
                 />
               </div>
-              <div className={"mb-3 flex flex-row items-center justify-between gap-x-6"}>
+              <div className={"mb-3 grid grid-cols-3 gap-x-6"}>
                 <div className={"inline-block flex-1"}>
-                  <label className={"mb-2 block text-sm font-medium text-gray-900"} htmlFor={"pickDate"}>
+                  <label className={"mb-2 block text-sm font-medium text-gray-900"} htmlFor={"date_begin"}>
                     Ngày bắt đầu
                   </label>
                   <input
-                    id={"pickDate"}
+                    id={"date_begin"}
                     type={"date"}
                     className={
                       "inline-block w-full resize-none rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                     }
+                    {...register("date_begin", { required: "Ngày bắt đầu không được bỏ trống" })}
                   />
+                  {errors.date_begin && <span className={"text-xs text-red-600"}>{errors.date_begin.message}</span>}
                 </div>
                 <div className={"inline-block flex-1"}>
-                  <label className={"mb-2 block text-sm font-medium text-gray-900"} htmlFor={"pickTime"}>
+                  <label className={"mb-2 block text-sm font-medium text-gray-900"} htmlFor={"time_begin"}>
                     Giớ bắt đầu
                   </label>
                   <input
-                    id={"pickTime"}
+                    id={"time_begin"}
                     type="time"
                     className={
                       "inline-block w-full resize-none rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                     }
+                    {...register("time_begin", { required: "Giờ bắt đầu không được bỏ trống" })}
                   />
+                  {errors.time_begin && <span className={"text-xs text-red-600"}>{errors.time_begin.message}</span>}
                 </div>
                 <div className={"inline-block flex-1"}>
-                  <label htmlFor={"timeContest"} className={"mb-2 block text-sm font-medium text-gray-900"}>
+                  <label htmlFor={"duration"} className={"mb-2 block text-sm font-medium text-gray-900"}>
                     Thời gian thi
                   </label>
                   <select
-                    id={"timeContest"}
+                    id={"duration"}
                     className={
                       "block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                     }
+                    {...register("duration", { required: true })}
                   >
                     {listTimeContest.map((item) => {
                       return (
@@ -151,48 +179,27 @@ function AddContest() {
                 </div>
               </div>
             </div>
-            <div className={"p-4 pb-0"}>
-              <p className={"text-lg font-medium"}>Đề thi</p>
-              {/*{questions.length === 0 && (*/}
-              <div className={"mt-3 flex flex-row items-center gap-x-2"}>
-                <button
-                  type={"button"}
-                  className={
-                    "flex h-10 w-10 items-center justify-center rounded-md border border-transparent bg-gray-200 hover:bg-gray-300"
-                  }
-                  onClick={() => handleAddQuestion()}
-                >
-                  <AiOutlinePlus className={"h-5 w-5"} />
-                </button>
-              </div>
-              {/*)}*/}
+            <div className={"mt-10 flex flex-row items-center gap-x-3"}>
+              <button
+                className={
+                  "w-40 rounded-lg bg-[#023e8a] py-3 text-base font-semibold text-white duration-200 hover:opacity-80"
+                }
+                type={"submit"}
+              >
+                Lưu
+              </button>
+              <button
+                className={
+                  "w-40 rounded-lg bg-[#d00000] py-3 text-base font-semibold text-white duration-200 hover:opacity-70"
+                }
+                type={"button"}
+                onClick={props.closeAddContestForm}
+              >
+                Hủy
+              </button>
             </div>
           </div>
         </div>
-        {questions.length !== 0 && (
-          <ul id={"questions"}>
-            {questions.map((questionId) => {
-              if (questionId !== "initial")
-                return (
-                  <Question
-                    id={questionId}
-                    key={questionId}
-                    handleAdd={handleAddQuestion}
-                    handleDelete={handleDeleteQuestion}
-                  />
-                );
-            })}
-          </ul>
-        )}
-
-        <button
-          className={
-            "mb-8 ml-5 rounded-lg border border-gray-300 bg-gray-200 px-16 py-3 text-xl font-semibold shadow-md hover:bg-gray-300"
-          }
-          type={"submit"}
-        >
-          Tạo cuộc thi
-        </button>
       </form>
     </div>
   );

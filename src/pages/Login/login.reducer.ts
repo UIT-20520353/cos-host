@@ -11,12 +11,14 @@ export const userLogout = createAction<IUser>("user/logout");
 
 const userReducer = createReducer(initialState, (builder) => {
   builder.addCase(userLogin, (state, action) => {
-    const date = action.payload;
-    state.id = date.id;
-    state.name = date.name;
+    const data = action.payload;
+    state.id = data.id;
+    state.name = data.name;
   });
-  builder.addCase(userLogout, (state) => {
-    (state.id = ""), (state.name = "");
+  builder.addCase(userLogout, (state, action) => {
+    const data = action.payload;
+    state.id = data.id;
+    state.name = data.name;
   });
 });
 
