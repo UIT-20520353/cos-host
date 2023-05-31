@@ -84,7 +84,7 @@ function AddContest(props: IProps) {
       allowOutsideClick: false
     }).then((result) => {
       if (result.isConfirmed) {
-        data.host_id = sessionStorage.getItem("id");
+        data.host_id = sessionStorage.getItem("id") ?? "";
         insertContest(data).then((value) => console.log(value));
         Swal.fire({
           position: "center",

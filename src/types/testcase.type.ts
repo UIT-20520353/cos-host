@@ -4,4 +4,5 @@ export type ITestcase = {
   output: string;
   score: bigint;
   problem_id: string;
+  contest_id: string;
 };
