@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { ITestcase } from "../../types/testcase.type";
 import { useEffect, useState } from "react";
 import { IContest } from "../../types/contest.type";
@@ -14,7 +14,7 @@ function AddTestcase(props: IProps) {
     handleSubmit,
     formState: { errors },
     reset
-  } = useForm();
+  } = useForm<ITestcase>();
   const [contests, setContests] = useState<IContest[]>([]);
   // const [contestId, setContestId] = useState<string>("");
 
@@ -22,7 +22,7 @@ function AddTestcase(props: IProps) {
     getMyContests().then((data) => setContests(data));
   }, []);
 
-  const onSubmit = (data: ITestcase) => {
+  const onSubmit: SubmitHandler<ITestcase> = (data) => {
     console.log(data);
     reset();
   };

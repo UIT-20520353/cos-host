@@ -5,7 +5,7 @@ import { PostgrestResponse } from "@supabase/supabase-js";
 
 export const insertContest = async (contest: IContest) => {
   try {
-    const { data, error }: PostgrestResponse<IContest> = await supabase
+    const { data, error } = await supabase
       .from("contests")
       .insert({
         id: contest.id,
@@ -34,7 +34,8 @@ export async function getMyContests() {
     const { data, error }: PostgrestResponse<IContest> = await supabase
       .from("contests")
       .select("*")
-      .eq("host_id", sessionStorage.getItem("id"));
+      .eq("host_id", sessionStorage.getItem("id"))
+      .then((response) => response as PostgrestResponse<IContest>);
     Swal.close();
     if (error) throw error;
     else return data;

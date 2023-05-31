@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import {SubmitHandler, useForm} from "react-hook-form";
 import { IContest } from "../../../types/contest.type";
 import { insertContest } from "../../../query/api/contest-service";
 import Swal from "sweetalert2";
@@ -70,9 +70,9 @@ function AddContest(props: IProps) {
     handleSubmit,
     formState: { errors },
     reset
-  } = useForm();
+  } = useForm<IContest>();
 
-  const onSubmit = (data: IContest) => {
+  const onSubmit: SubmitHandler<IContest> = (data) => {
     Swal.fire({
       title: "Tạo cuộc thi",
       text: "Tạo cuộc thi mới với các thông tin đã nhập?",

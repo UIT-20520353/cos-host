@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { IProblem } from "../../../types/problem.type";
 import { IContest } from "../../../types/contest.type";
 import { useEffect, useState } from "react";
@@ -14,14 +14,14 @@ function AddProblem(props: IProps) {
     handleSubmit,
     formState: { errors },
     reset
-  } = useForm();
+  } = useForm<IProblem>();
   const [contests, setContests] = useState<IContest[]>([]);
 
   useEffect(() => {
     getMyContests().then((data) => setContests(data));
   }, []);
 
-  const onSubmit = (data: IProblem) => {
+  const onSubmit: SubmitHandler<IProblem> = (data) => {
     console.log(data);
     reset();
   };
