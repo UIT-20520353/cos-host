@@ -6,7 +6,7 @@ export const insertProblem = async (problem: IProblem, contest_id: string) => {
     const { data, error } = await supabase
       .from("contests")
       .insert({
-        name: problem.nameProblem,
+        name: problem.name,
         detail: problem.detail,
         example_input: problem.example_input,
         example_output: problem.example_output,

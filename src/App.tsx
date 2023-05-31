@@ -20,7 +20,7 @@ function App() {
 
   useEffect(() => {
     if (sessionStorage.getItem("id")) {
-      dispatch(userLogin({ id: sessionStorage.getItem("id"), name: sessionStorage.getItem("name") }));
+      dispatch(userLogin({ id: sessionStorage.getItem("id") ?? "", name: sessionStorage.getItem("name") ?? "" }));
     }
   }, []);
 

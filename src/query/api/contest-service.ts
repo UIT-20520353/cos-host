@@ -27,7 +27,7 @@ export const insertContest = async (contest: IContest) => {
   }
 };
 
-export const getMyContests = async () => {
+export async function getMyContests(): Promise<IContest[]> {
   try {
     Swal.showLoading();
     const { data, error } = await supabase.from("contests").select("*").eq("host_id", sessionStorage.getItem("id"));
@@ -38,4 +38,4 @@ export const getMyContests = async () => {
     console.error("Lỗi khi lấy cuộc thi của tôi:", error);
     Swal.close();
   }
-};
+}
