@@ -30,7 +30,15 @@ export const insertContest = async (contest: IContest) => {
 
 export async function getMyContests() {
   try {
-    Swal.showLoading();
+    // Swal.showLoading();
+    Swal.fire({
+      title: "Đang lấy dữ liệu",
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      didOpen() {
+        Swal.showLoading();
+      }
+    });
     const { data, error }: PostgrestResponse<IContest> = await supabase
       .from("contests")
       .select("*")
