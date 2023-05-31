@@ -28,7 +28,7 @@ function Login() {
   }, []);
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
-    let login: IAccount;
+    let login: IAccount | undefined;
     if (!accounts) {
       Swal.fire({ position: "center", title: "Lỗi mạng", timer: 2000, icon: "error", showConfirmButton: true });
       return;
