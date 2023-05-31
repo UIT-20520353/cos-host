@@ -1,10 +1,11 @@
 import supabase from "./supabase";
 import { IContest } from "../../types/contest.type";
 import Swal from "sweetalert2";
+import { PostgrestResponse } from "@supabase/supabase-js";
 
 export const insertContest = async (contest: IContest) => {
   try {
-    const { data, error } = await supabase
+    const { data, error }: PostgrestResponse<IContest> = await supabase
       .from("contests")
       .insert({
         id: contest.id,
@@ -27,10 +28,13 @@ export const insertContest = async (contest: IContest) => {
   }
 };
 
-export async function getMyContests(): Promise<IContest[]> {
+export async function getMyContests() {
   try {
     Swal.showLoading();
-    const { data, error } = await supabase.from("contests").select("*").eq("host_id", sessionStorage.getItem("id"));
+    const { data, error }: PostgrestResponse<IContest> = await supabase
+      .from("contests")
+      .select("*")
+      .eq("host_id", sessionStorage.getItem("id"));
     Swal.close();
     if (error) throw error;
     else return data;
