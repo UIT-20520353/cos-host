@@ -24,7 +24,7 @@ function Login() {
   } = useForm<FormValues>();
 
   useEffect(() => {
-    getAccountList().then((data) => setAccounts(data));
+    getAccountList().then((data) => setAccounts(data ?? []));
   }, []);
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {

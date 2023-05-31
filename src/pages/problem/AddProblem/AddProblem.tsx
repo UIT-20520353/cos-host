@@ -18,7 +18,7 @@ function AddProblem(props: IProps) {
   const [contests, setContests] = useState<IContest[]>([]);
 
   useEffect(() => {
-    getMyContests().then((data) => setContests(data));
+    getMyContests().then((data) => setContests(data ?? []));
   }, []);
 
   const onSubmit: SubmitHandler<IProblem> = (data) => {

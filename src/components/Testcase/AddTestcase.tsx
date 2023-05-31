@@ -19,7 +19,7 @@ function AddTestcase(props: IProps) {
   // const [contestId, setContestId] = useState<string>("");
 
   useEffect(() => {
-    getMyContests().then((data) => setContests(data));
+    getMyContests().then((data) => setContests(data ?? []));
   }, []);
 
   const onSubmit: SubmitHandler<ITestcase> = (data) => {

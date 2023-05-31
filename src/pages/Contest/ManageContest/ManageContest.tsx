@@ -12,7 +12,7 @@ function ManageContest() {
     document.title = "Quản lý cuộc thi";
     getMyContests().then((data) => {
       console.log(data);
-      setMyContests(data);
+      setMyContests(data ?? []);
     });
   }, []);
 
