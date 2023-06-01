@@ -27,7 +27,7 @@ function DetailContest() {
     const temp = id?.toString().split("-");
     const contestId = parseInt(temp[1]);
     getContestById(contestId).then((data) => {
-      setContest(data[0] ?? initialContest);
+      if (data) setContest(data[0] ?? initialContest);
     });
   }, []);
 
