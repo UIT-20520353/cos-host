@@ -70,7 +70,7 @@ function OverviewContest(props: IProps) {
       case "5 giờ 30 phút":
         return new Date(year, month, day, hour + 5, minute + 30, second);
       default:
-        return;
+        return new Date();
     }
   };
 
