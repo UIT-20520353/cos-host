@@ -1,4 +1,5 @@
 export type IProblem = {
+  id: string;
   name: string;
   detail: string;
   example_input: string;

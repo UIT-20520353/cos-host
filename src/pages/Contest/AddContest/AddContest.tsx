@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import {SubmitHandler, useForm} from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { IContest } from "../../../types/contest.type";
 import { insertContest } from "../../../query/api/contest-service";
 import Swal from "sweetalert2";
@@ -121,6 +121,7 @@ function AddContest(props: IProps) {
               </div>
               <div className="mb-4">
                 <textarea
+                  id={"contest_description"}
                   placeholder={"Mô tả ngắn gọn về cuộc thi"}
                   rows={5}
                   className="block w-full resize-none rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
@@ -130,42 +131,39 @@ function AddContest(props: IProps) {
               </div>
               <div className={"mb-3 grid grid-cols-3 gap-x-6"}>
                 <div className={"inline-block flex-1"}>
-                  <label className={"mb-2 block text-sm font-medium text-gray-900"} htmlFor={"date_begin"}>
-                    Ngày bắt đầu
-                  </label>
+                  <span className={"mb-2 block text-sm font-medium text-gray-900"}>Ngày bắt đầu</span>
                   <input
-                    id={"date_begin"}
+                    id={"contest_date_begin"}
                     type={"date"}
                     className={
                       "inline-block w-full resize-none rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                     }
                     {...register("date_begin", { required: "Ngày bắt đầu không được bỏ trống" })}
+                    autoComplete={"off"}
                   />
                   {errors.date_begin && <span className={"text-xs text-red-600"}>{errors.date_begin.message}</span>}
                 </div>
                 <div className={"inline-block flex-1"}>
-                  <label className={"mb-2 block text-sm font-medium text-gray-900"} htmlFor={"time_begin"}>
-                    Giớ bắt đầu
-                  </label>
+                  <span className={"mb-2 block text-sm font-medium text-gray-900"}>Giớ bắt đầu</span>
                   <input
-                    id={"time_begin"}
+                    id={"contest_time_begin"}
                     type="time"
                     className={
                       "inline-block w-full resize-none rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                     }
                     {...register("time_begin", { required: "Giờ bắt đầu không được bỏ trống" })}
+                    autoComplete={"off"}
                   />
                   {errors.time_begin && <span className={"text-xs text-red-600"}>{errors.time_begin.message}</span>}
                 </div>
                 <div className={"inline-block flex-1"}>
-                  <label htmlFor={"duration"} className={"mb-2 block text-sm font-medium text-gray-900"}>
-                    Thời gian thi
-                  </label>
+                  <span className={"mb-2 block text-sm font-medium text-gray-900"}>Thời gian thi</span>
                   <select
-                    id={"duration"}
+                    id={"contest_duration"}
                     className={
                       "block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                     }
+                    autoComplete={"off"}
                     {...register("duration", { required: true })}
                   >
                     {listTimeContest.map((item) => {

@@ -23,19 +23,22 @@ function ManageContest() {
       <div className={"mx-12 my-10"}>
         <p className={"text-xl font-semibold"}>Danh sách cuộc thi của bạn</p>
         <ul className={"mt-6 grid grid-cols-2 gap-5"}>
-          {myContests.map((contest) => {
-            return (
-              <OverviewContest
-                name={contest.name}
-                amount={6}
-                date={contest.date_begin}
-                time={contest.time_begin}
-                key={`contest-${contest.id}`}
-                id={`contest-${contest.id}`}
-                isShowAction={true}
-              />
-            );
-          })}
+          {myContests.length !== 0 &&
+            myContests.map((contest) => {
+              return (
+                <OverviewContest
+                  name={contest.name}
+                  amount={6}
+                  date={contest.date_begin}
+                  time={contest.time_begin}
+                  key={`contest-${contest.id}`}
+                  id={`contest-${contest.id}`}
+                  isShowAction={true}
+                  duration={contest.duration}
+                />
+              );
+            })}
+          {myContests.length === 0 && <p className={"text-base font-medium"}>Bạn chưa có cuộc thi</p>}
         </ul>
       </div>
     </div>

@@ -30,7 +30,6 @@ export const insertContest = async (contest: IContest) => {
 
 export async function getMyContests() {
   try {
-    // Swal.showLoading();
     Swal.fire({
       title: "Đang lấy dữ liệu",
       allowOutsideClick: false,

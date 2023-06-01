@@ -1,8 +1,11 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { ITestcase } from "../../types/testcase.type";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { IContest } from "../../types/contest.type";
 import { getMyContests } from "../../query/api/contest-service";
+import { IProblem } from "../../types/problem.type";
+import { getProblems } from "../../query/api/problem-service";
+import Swal from "sweetalert2";
 
 type IProps = {
   closeAddTestcaseForm: () => void;
@@ -16,16 +19,52 @@ function AddTestcase(props: IProps) {
     reset
   } = useForm<ITestcase>();
   const [contests, setContests] = useState<IContest[]>([]);
-  // const [contestId, setContestId] = useState<string>("");
+  const [problems, setProblems] = useState<IProblem[]>([]);
+  const [contestId, setContestId] = useState<string>("");
 
   useEffect(() => {
-    getMyContests().then((data) => setContests(data ?? []));
+    getMyContests().then((data) => {
+      setContests(data ?? []);
+      if (data) {
+        setContestId(data[0].id ?? "");
+      }
+    });
   }, []);
 
   const onSubmit: SubmitHandler<ITestcase> = (data) => {
-    console.log(data);
-    reset();
+    Swal.fire({
+      title: "Tạo đề thi",
+      text: "Tạo đề thi mới với các thông tin đã nhập?",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Lưu",
+      cancelButtonText: "Hủy",
+      allowOutsideClick: false
+    }).then((result) => {
+      if (result.isConfirmed) {
+        console.log(data);
+        Swal.fire({
+          position: "center",
+          timer: 5000,
+          icon: "success",
+          showConfirmButton: true,
+          title: "Tạo đề thi thành công"
+        });
+        reset();
+      }
+    });
   };
+
+  const handleChangeContest = (event: ChangeEvent<HTMLSelectElement>) => {
+    setContestId(event.target.value);
+  };
+  useEffect(() => {
+    if (contestId)
+      getProblems(contestId).then((data) => {
+        setProblems(data ?? []);
+      });
+  }, [contestId]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={"mt-8 rounded-md bg-gray-100 p-3 shadow-md"}>
@@ -36,11 +75,30 @@ function AddTestcase(props: IProps) {
             "block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
           }
           {...register("contest_id")}
+          onChange={handleChangeContest}
         >
           {contests.map((contest) => {
             return (
               <option key={contest.id} value={contest.id}>
                 {contest.name}
+              </option>
+            );
+          })}
+        </select>
+      </div>
+      <div className={"mb-4 flex flex-col items-start gap-y-2"}>
+        <span className={"text-sm font-semibold"}>Chọn đề thi</span>
+        <select
+          className={
+            "block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+          }
+          {...register("problem_id")}
+          onChange={handleChangeContest}
+        >
+          {problems.map((problem) => {
+            return (
+              <option key={problem.id} value={problem.id}>
+                {problem.name}
               </option>
             );
           })}

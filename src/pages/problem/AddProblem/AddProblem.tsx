@@ -3,6 +3,8 @@ import { IProblem } from "../../../types/problem.type";
 import { IContest } from "../../../types/contest.type";
 import { useEffect, useState } from "react";
 import { getMyContests } from "../../../query/api/contest-service";
+import { insertProblem } from "../../../query/api/problem-service";
+import Swal from "sweetalert2";
 
 type IProps = {
   closeAddForm: () => void;
@@ -22,18 +24,36 @@ function AddProblem(props: IProps) {
   }, []);
 
   const onSubmit: SubmitHandler<IProblem> = (data) => {
-    console.log(data);
-    reset();
+    Swal.fire({
+      title: "Tạo đề thi",
+      text: "Tạo đề thi mới với các thông tin đã nhập?",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Lưu",
+      cancelButtonText: "Hủy",
+      allowOutsideClick: false
+    }).then((result) => {
+      if (result.isConfirmed) {
+        insertProblem(data).then((index) => console.log(index));
+        console.log(data);
+        Swal.fire({
+          position: "center",
+          timer: 5000,
+          icon: "success",
+          showConfirmButton: true,
+          title: "Tạo đề thi thành công"
+        });
+        reset();
+      }
+    });
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={"mt-8 rounded-md bg-gray-100 p-3 shadow-md"}>
       <div className={"mb-4 flex flex-col items-start gap-y-2"}>
-        <label htmlFor={"contest_id"} className={"text-sm font-semibold"}>
-          Chọn cuộc thi
-        </label>
+        <span className={"text-sm font-semibold"}>Chọn cuộc thi</span>
         <select
-          id={"contest_id"}
           className={
             "block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
           }
@@ -49,12 +69,9 @@ function AddProblem(props: IProps) {
         </select>
       </div>
       <div className={"mb-4 flex flex-col items-start gap-y-2"}>
-        <label htmlFor={"name_problem"} className={"text-sm font-semibold"}>
-          Tên bài thi
-        </label>
+        <span className={"text-sm font-semibold"}>Tên bài thi</span>
         <input
           type={"text"}
-          id={"name_problem"}
           className={
             "block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
           }
@@ -65,11 +82,8 @@ function AddProblem(props: IProps) {
         {errors.name && <span className={"text-xs text-red-600"}>{errors.name.message}</span>}
       </div>
       <div className={"mb-4 flex flex-col items-start gap-y-2"}>
-        <label htmlFor={"detail"} className={"text-sm font-semibold"}>
-          Đề thi
-        </label>
+        <span className={"text-sm font-semibold"}>Đề thi</span>
         <textarea
-          id={"detail"}
           placeholder={"Đề thi"}
           rows={10}
           className="block w-full resize-none rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
@@ -79,13 +93,10 @@ function AddProblem(props: IProps) {
         {errors.detail && <span className={"text-xs text-red-600"}>{errors.detail.message}</span>}
       </div>
       <div className={"mb-4 flex flex-col items-start gap-y-2"}>
-        <label htmlFor={"example_input"} className={"text-sm font-semibold"}>
-          Input mẫu
-        </label>
+        <span className={"text-sm font-semibold"}>Input mẫu</span>
         <textarea
           placeholder={"Input mẫu"}
           rows={5}
-          id={"example_input"}
           className="block w-full resize-none rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
           {...register("example_input", { required: "Input mẫu không được bỏ trống" })}
           autoComplete={"off"}
@@ -93,9 +104,7 @@ function AddProblem(props: IProps) {
         {errors.example_input && <span className={"text-xs text-red-600"}>{errors.example_input.message}</span>}
       </div>
       <div className={"mb-4 flex flex-col items-start gap-y-2"}>
-        <label htmlFor={"example_output"} className={"text-sm font-semibold"}>
-          Output mẫu
-        </label>
+        <span className={"text-sm font-semibold"}>Output mẫu</span>
         <textarea
           id={"example_output"}
           placeholder={"Output mẫu"}

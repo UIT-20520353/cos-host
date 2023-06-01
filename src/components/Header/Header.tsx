@@ -13,7 +13,7 @@ function Header() {
     >
       <FaSearch className={"h-8 w-8 cursor-pointer"} />
       <div className={"flex cursor-pointer flex-row items-center"}>
-        <span className={"text-lg font-bold"}>{user.name}</span>
+        <span className={"font-mono text-lg font-bold"}>{user.name}</span>
         <VscAccount className={"ml-5 h-8 w-8"} />
       </div>
     </div>
