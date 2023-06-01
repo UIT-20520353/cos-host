@@ -20,11 +20,11 @@ function DetailContest() {
     document.title = "Cập nhật thông tin cuộc thi";
   }, []);
 
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const [contest, setContest] = useState<IContest>(initialContest);
 
   useEffect(() => {
-    const temp = id.toString().split("-");
+    const temp = id?.toString().split("-");
     const contestId = parseInt(temp[1]);
     getContestById(contestId).then((data) => {
       setContest(data[0] ?? initialContest);
