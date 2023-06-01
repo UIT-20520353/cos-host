@@ -1,6 +1,8 @@
 import { BiTimeFive, GiDuration, MdDateRange, RiTeamFill } from "react-icons/all";
 import { NavLink } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { deleteContest } from "../../query/api/contest-service";
+import Swal from "sweetalert2";
 
 type IProps = {
   name: string;
@@ -10,6 +12,7 @@ type IProps = {
   id: string;
   isShowAction: boolean;
   duration: string;
+  updateContests: () => void;
 };
 
 function OverviewContest(props: IProps) {
@@ -88,8 +91,38 @@ function OverviewContest(props: IProps) {
         setStatus("Đã kết thúc");
       }
     }
-    setDateDisplay(`${day}/${month}/${year}`);
+    setDateDisplay(`${day}/${month + 1}/${year}`);
   }, []);
+
+  const handleDeleteContest = () => {
+    const temp = props.id.split("-");
+    const contestId = parseInt(temp[1]);
+
+    Swal.fire({
+      title: "Xóa cuộc thi",
+      text: "Xóa tất cả thông tin về cuộc thi này?",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Xác nhận",
+      cancelButtonText: "Hủy",
+      allowOutsideClick: false
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteContest(contestId).then((response) => {
+          console.log(response);
+          Swal.fire({
+            position: "center",
+            timer: 5000,
+            icon: "success",
+            showConfirmButton: true,
+            title: "Xóa cuộc thi thành công"
+          });
+          props.updateContests();
+        });
+      }
+    });
+  };
 
   return (
     <li key={props.id} id={props.id} className={"rounded-md border border-gray-200 bg-gray-100 p-3 shadow-md"}>
@@ -121,17 +154,27 @@ function OverviewContest(props: IProps) {
       </div>
       {props.isShowAction && (
         <div className={"mt-4 flex flex-row items-center gap-x-3"}>
-          <NavLink
+          {status !== "Đã kết thúc" && (
+            <NavLink
+              className={
+                "w-32 rounded-lg bg-[#0077b6] px-4 py-2 text-center text-sm font-semibold text-white duration-300 hover:bg-opacity-70"
+              }
+              to={`/manage-contest/${props.id}`}
+            >
+              Cập nhật
+            </NavLink>
+          )}
+          <button
             className={
-              "rounded-lg bg-transparent px-4 py-2 text-sm font-semibold text-[#03045e] duration-300 hover:bg-[#48cae4]"
+              "w-32 rounded-lg bg-[#d00000] px-4 py-2 text-center text-sm font-semibold text-white duration-300 hover:bg-opacity-70"
             }
-            to={`/manage-contest/${props.id}`}
+            onClick={handleDeleteContest}
           >
-            Cập nhật
-          </NavLink>
+            Xóa cuộc thi
+          </button>
           <NavLink
             className={
-              "rounded-lg bg-white px-4 py-2 text-sm font-semibold text-black duration-300 hover:bg-black hover:text-white"
+              "w-32 rounded-lg bg-gray-700 px-4 py-2 text-center text-center text-sm font-semibold text-white duration-300 hover:bg-gray-500 hover:text-white"
             }
             to={`/result-contest/${props.id}`}
           >

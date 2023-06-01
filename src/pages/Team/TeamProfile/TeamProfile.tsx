@@ -1,7 +1,6 @@
 import { useParams } from "react-router-dom";
 import Header from "../../../components/Header";
 import { BiUserCircle } from "react-icons/all";
-import OverviewContest from "../../../components/OverviewContest";
 
 function TeamProfile() {
   const { id } = useParams();
@@ -46,35 +45,35 @@ function TeamProfile() {
         </div>
         <div className={"mt-6 w-full"}>
           <p className={"py-3 text-xl font-semibold"}>Các cuộc thi đã tham gia</p>
-          <ul className={"grid grid-cols-2 gap-5"}>
-            <OverviewContest
-              name={"Test 1"}
-              duration={"30 phút"}
-              amount={25}
-              date={"2023-05-21"}
-              time={"08:00:00"}
-              id={"contest-1-1"}
-              isShowAction={false}
-            />
-            <OverviewContest
-              name={"Test 2"}
-              duration={"30 phút"}
-              amount={25}
-              date={"2023-05-21"}
-              time={"08:00:00"}
-              id={"contest-2-2"}
-              isShowAction={false}
-            />
-            <OverviewContest
-              name={"Test 3"}
-              duration={"30 phút"}
-              amount={25}
-              date={"2023-05-21"}
-              time={"08:00:00"}
-              id={"contest-3-3"}
-              isShowAction={false}
-            />
-          </ul>
+          {/*<ul className={"grid grid-cols-2 gap-5"}>*/}
+          {/*  <OverviewContest*/}
+          {/*    name={"Test 1"}*/}
+          {/*    duration={"30 phút"}*/}
+          {/*    amount={25}*/}
+          {/*    date={"2023-05-21"}*/}
+          {/*    time={"08:00:00"}*/}
+          {/*    id={"contest-1-1"}*/}
+          {/*    isShowAction={false}*/}
+          {/*  />*/}
+          {/*  <OverviewContest*/}
+          {/*    name={"Test 2"}*/}
+          {/*    duration={"30 phút"}*/}
+          {/*    amount={25}*/}
+          {/*    date={"2023-05-21"}*/}
+          {/*    time={"08:00:00"}*/}
+          {/*    id={"contest-2-2"}*/}
+          {/*    isShowAction={false}*/}
+          {/*  />*/}
+          {/*  <OverviewContest*/}
+          {/*    name={"Test 3"}*/}
+          {/*    duration={"30 phút"}*/}
+          {/*    amount={25}*/}
+          {/*    date={"2023-05-21"}*/}
+          {/*    time={"08:00:00"}*/}
+          {/*    id={"contest-3-3"}*/}
+          {/*    isShowAction={false}*/}
+          {/*  />*/}
+          {/*</ul>*/}
         </div>
       </div>
     </div>

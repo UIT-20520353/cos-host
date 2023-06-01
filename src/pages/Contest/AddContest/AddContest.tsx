@@ -3,58 +3,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { IContest } from "../../../types/contest.type";
 import { insertContest } from "../../../query/api/contest-service";
 import Swal from "sweetalert2";
-
-type ITimeContest = {
-  value: string;
-  text: string;
-};
-
-const listTimeContest: ITimeContest[] = [
-  {
-    value: "30 phút",
-    text: "30 phút"
-  },
-  {
-    value: "1 giờ",
-    text: "1 giờ"
-  },
-  {
-    value: "1 giờ 30 phút",
-    text: "1 giờ 30 phút"
-  },
-  {
-    value: "2 giờ",
-    text: "2 giờ"
-  },
-  {
-    value: "2 giờ 30 phút",
-    text: "2 giờ 30 phút"
-  },
-  {
-    value: "3 giờ",
-    text: "3 giờ"
-  },
-  {
-    value: "3 giờ 30 phút",
-    text: "3 giờ 30 phút"
-  },
-  {
-    value: "4 giờ",
-    text: "4 giờ"
-  },
-  {
-    value: "4 giờ 30 phút",
-    text: "4 giờ 30 phút"
-  },
-  {
-    value: "5 giờ",
-    text: "5 giờ"
-  },
-  {
-    value: "5 giờ 30 phút",
-    text: "5 giờ 30 phút"
-  }
-];
+import { listTimeContest } from "../../../types/time.type";
 
 type IProps = {
   closeAddContestForm: () => void;
@@ -98,6 +47,12 @@ function AddContest(props: IProps) {
     });
   };
 
+  const isFutureDate = (inputDate: string): boolean => {
+    const currentDate = new Date();
+    const selectedDate = new Date(inputDate);
+    return selectedDate > currentDate;
+  };
+
   return (
     <div className={"w-full"}>
       <form onSubmit={handleSubmit(onSubmit)} className={""}>
@@ -138,7 +93,10 @@ function AddContest(props: IProps) {
                     className={
                       "inline-block w-full resize-none rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                     }
-                    {...register("date_begin", { required: "Ngày bắt đầu không được bỏ trống" })}
+                    {...register("date_begin", {
+                      required: "Ngày bắt đầu không được bỏ trống",
+                      validate: (value) => isFutureDate(value) || "Ngày bắt đầu không được ở quá khứ  "
+                    })}
                     autoComplete={"off"}
                   />
                   {errors.date_begin && <span className={"text-xs text-red-600"}>{errors.date_begin.message}</span>}

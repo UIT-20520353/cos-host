@@ -11,10 +11,15 @@ function ManageContest() {
   useEffect(() => {
     document.title = "Quản lý cuộc thi";
     getMyContests().then((data) => {
-      console.log(data);
       setMyContests(data ?? []);
     });
   }, []);
+
+  const updateContests = () => {
+    getMyContests().then((data) => {
+      setMyContests(data ?? []);
+    });
+  };
 
   return (
     <div className={"w-full"}>
@@ -35,6 +40,7 @@ function ManageContest() {
                   id={`contest-${contest.id}`}
                   isShowAction={true}
                   duration={contest.duration}
+                  updateContests={updateContests}
                 />
               );
             })}
