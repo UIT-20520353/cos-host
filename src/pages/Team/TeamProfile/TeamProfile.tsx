@@ -49,25 +49,28 @@ function TeamProfile() {
           <ul className={"grid grid-cols-2 gap-5"}>
             <OverviewContest
               name={"Test 1"}
+              duration={"30 phút"}
               amount={25}
-              date={"30/04/2023"}
-              time={"08:00 am"}
+              date={"2023-05-21"}
+              time={"08:00:00"}
               id={"contest-1-1"}
               isShowAction={false}
             />
             <OverviewContest
               name={"Test 2"}
+              duration={"30 phút"}
               amount={25}
-              date={"03/05/2023"}
-              time={"10:00 am"}
+              date={"2023-05-21"}
+              time={"08:00:00"}
               id={"contest-2-2"}
               isShowAction={false}
             />
             <OverviewContest
               name={"Test 3"}
+              duration={"30 phút"}
               amount={25}
-              date={"10/05/2023"}
-              time={"01:00 pm"}
+              date={"2023-05-21"}
+              time={"08:00:00"}
               id={"contest-3-3"}
               isShowAction={false}
             />

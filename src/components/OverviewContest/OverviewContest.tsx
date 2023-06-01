@@ -16,7 +16,10 @@ function OverviewContest(props: IProps) {
   const [status, setStatus] = useState<string>("");
   const [dateDisplay, setDateDisplay] = useState<string>("");
 
-  const getDateAndTime = (date: string, time: string): object => {
+  const getDateAndTime = (
+    date: string,
+    time: string
+  ): { year: number; month: number; day: number; hour: number; minute: number; second: number } => {
     const dateStrings = date.split("-");
     const timeStrings = time.split(":");
     const year = parseInt(dateStrings[0]);
@@ -33,7 +36,7 @@ function OverviewContest(props: IProps) {
     const { year, month, day, hour, minute, second } = getDateAndTime(props.date, props.time);
 
     const time_begin = new Date(year, month, day, hour, minute, second);
-    let time_end: Date;
+    let time_end: Date | undefined = undefined;
 
     switch (props.duration) {
       case "30 phút":
