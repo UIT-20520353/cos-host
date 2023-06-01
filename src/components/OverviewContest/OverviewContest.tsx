@@ -31,50 +31,55 @@ function OverviewContest(props: IProps) {
     return { year, month, day, hour, minute, second };
   };
 
+  const getTimeEnd = ({
+    year,
+    month,
+    day,
+    hour,
+    minute,
+    second
+  }: {
+    year: number;
+    month: number;
+    day: number;
+    hour: number;
+    minute: number;
+    second: number;
+  }) => {
+    switch (props.duration) {
+      case "30 phút":
+        return new Date(year, month, day, hour, minute + 30, second);
+      case "1 giờ":
+        return new Date(year, month, day, hour + 1, minute, second);
+      case "1 giờ 30 phút":
+        return new Date(year, month, day, hour + 1, minute + 30, second);
+      case "2 giờ":
+        return new Date(year, month, day, hour + 2, minute, second);
+      case "2 giờ 30 phút":
+        return new Date(year, month, day, hour + 2, minute + 30, second);
+      case "3 giờ":
+        return new Date(year, month, day, hour + 3, minute, second);
+      case "3 giờ 30 phút":
+        return new Date(year, month, day, hour + 3, minute + 30, second);
+      case "4 giờ":
+        return new Date(year, month, day, hour + 4, minute, second);
+      case "4 giờ 30 phút":
+        return new Date(year, month, day, hour + 4, minute + 30, second);
+      case "5 giờ":
+        return new Date(year, month, day, hour + 5, minute, second);
+      case "5 giờ 30 phút":
+        return new Date(year, month, day, hour + 5, minute + 30, second);
+      default:
+        return;
+    }
+  };
+
   useEffect(() => {
     const current_date = new Date();
     const { year, month, day, hour, minute, second } = getDateAndTime(props.date, props.time);
 
     const time_begin = new Date(year, month, day, hour, minute, second);
-    let time_end: Date | undefined = undefined;
-
-    switch (props.duration) {
-      case "30 phút":
-        time_end = new Date(year, month, day, hour, minute + 30, second);
-        break;
-      case "1 giờ":
-        time_end = new Date(year, month, day, hour + 1, minute, second);
-        break;
-      case "1 giờ 30 phút":
-        time_end = new Date(year, month, day, hour + 1, minute + 30, second);
-        break;
-      case "2 giờ":
-        time_end = new Date(year, month, day, hour + 2, minute, second);
-        break;
-      case "2 giờ 30 phút":
-        time_end = new Date(year, month, day, hour + 2, minute + 30, second);
-        break;
-      case "3 giờ":
-        time_end = new Date(year, month, day, hour + 3, minute, second);
-        break;
-      case "3 giờ 30 phút":
-        time_end = new Date(year, month, day, hour + 3, minute + 30, second);
-        break;
-      case "4 giờ":
-        time_end = new Date(year, month, day, hour + 4, minute, second);
-        break;
-      case "4 giờ 30 phút":
-        time_end = new Date(year, month, day, hour + 4, minute + 30, second);
-        break;
-      case "5 giờ":
-        time_end = new Date(year, month, day, hour + 5, minute, second);
-        break;
-      case "5 giờ 30 phút":
-        time_end = new Date(year, month, day, hour + 5, minute + 30, second);
-        break;
-      default:
-        break;
-    }
+    const time_end = getTimeEnd({ year, month, day, hour, minute, second });
 
     if (time_begin > current_date) setStatus("Chưa bắt đầu");
     else {
