@@ -24,10 +24,9 @@ function DetailContest() {
   const [contest, setContest] = useState<IContest>(initialContest);
 
   useEffect(() => {
-    const temp = id?.toString().split("-");
-    const contestId = parseInt(temp[1]) ?? 0;
+    const temp = id.toString().split("-");
+    const contestId = parseInt(temp[1]);
     getContestById(contestId).then((data) => {
-      console.log(data);
       setContest(data[0] ?? initialContest);
     });
   }, []);
