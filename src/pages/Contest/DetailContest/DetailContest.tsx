@@ -25,10 +25,10 @@ function DetailContest() {
 
   useEffect(() => {
     const temp = id?.toString().split("-");
-    const contestId = parseInt(temp[1]);
+    const contestId = parseInt(temp[1]) ?? 0;
     getContestById(contestId).then((data) => {
       console.log(data);
-      setContest(data[0]);
+      setContest(data[0] ?? initialContest);
     });
   }, []);
 
@@ -51,7 +51,7 @@ function DetailContest() {
                   }
                   placeholder={"Tên cuộc thi"}
                   required={true}
-                  value={contest.name}
+                  defaultValue={contest.name}
                 />
               </div>
               <div className="mb-4">
@@ -59,7 +59,7 @@ function DetailContest() {
                   placeholder={"Mô tả ngắn gọn về cuộc thi"}
                   rows={5}
                   className="block w-full resize-none rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
-                  value={contest.description}
+                  defaultValue={contest.description}
                 />
               </div>
               <div className={"mb-3 flex flex-row items-center justify-between gap-x-6"}>
@@ -71,7 +71,7 @@ function DetailContest() {
                     className={
                       "inline-block w-full resize-none rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                     }
-                    value={contest.date_begin}
+                    defaultValue={contest.date_begin}
                   />
                 </div>
                 <div className={"inline-block flex-1"}>
@@ -82,7 +82,7 @@ function DetailContest() {
                     className={
                       "inline-block w-full resize-none rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                     }
-                    value={contest.time_begin}
+                    defaultValue={contest.time_begin}
                   />
                 </div>
                 <div className={"inline-block flex-1"}>
@@ -92,7 +92,7 @@ function DetailContest() {
                     className={
                       "block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                     }
-                    value={contest.duration}
+                    defaultValue={contest.duration}
                   >
                     {listTimeContest.map((item) => {
                       return (
