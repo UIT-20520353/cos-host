@@ -26,7 +26,7 @@ export const insertProblem = async (problem: IProblem) => {
   }
 };
 
-export async function getProblems(contestId: string) {
+export async function getProblems(contestId: number) {
   try {
     Swal.fire({
       title: "Đang lấy dữ liệu",

@@ -6,19 +6,14 @@ import { IContest } from "../../../types/contest.type";
 // import Swal from "sweetalert2";
 
 function ManageContest() {
-  const [myContests, setMyContests] = useState<IContest[]>([]);
-
+  const [contests, setContests] = useState<IContest[]>([]);
   useEffect(() => {
     document.title = "Quản lý cuộc thi";
-    getMyContests().then((data) => {
-      setMyContests(data ?? []);
-    });
+    getMyContests().then((response) => setContests(response ?? []));
   }, []);
 
-  const updateContests = () => {
-    getMyContests().then((data) => {
-      setMyContests(data ?? []);
-    });
+  const updateContestList = () => {
+    getMyContests().then((response) => setContests(response ?? []));
   };
 
   return (
@@ -28,8 +23,8 @@ function ManageContest() {
       <div className={"mx-12 my-10"}>
         <p className={"text-xl font-semibold"}>Danh sách cuộc thi của bạn</p>
         <ul className={"mt-6 grid grid-cols-2 gap-5"}>
-          {myContests.length !== 0 &&
-            myContests.map((contest) => {
+          {contests.length !== 0 &&
+            contests.map((contest) => {
               return (
                 <OverviewContest
                   name={contest.name}
@@ -40,11 +35,11 @@ function ManageContest() {
                   id={`contest-${contest.id}`}
                   isShowAction={true}
                   duration={contest.duration}
-                  updateContests={updateContests}
+                  updateContestList={updateContestList}
                 />
               );
             })}
-          {myContests.length === 0 && <p className={"text-base font-medium"}>Bạn chưa có cuộc thi</p>}
+          {contests.length === 0 && <p className={"text-base font-medium"}>Bạn chưa có cuộc thi</p>}
         </ul>
       </div>
     </div>

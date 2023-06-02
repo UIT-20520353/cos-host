@@ -12,7 +12,7 @@ type IProps = {
   id: string;
   isShowAction: boolean;
   duration: string;
-  updateContests: () => void;
+  updateContestList: () => void;
 };
 
 function OverviewContest(props: IProps) {
@@ -118,7 +118,7 @@ function OverviewContest(props: IProps) {
             showConfirmButton: true,
             title: "Xóa cuộc thi thành công"
           });
-          props.updateContests();
+          props.updateContestList();
         });
       }
     });

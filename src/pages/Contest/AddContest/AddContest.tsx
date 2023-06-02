@@ -34,15 +34,17 @@ function AddContest(props: IProps) {
     }).then((result) => {
       if (result.isConfirmed) {
         data.host_id = sessionStorage.getItem("id") ?? "";
-        insertContest(data).then((value) => console.log(value));
-        Swal.fire({
-          position: "center",
-          timer: 5000,
-          icon: "success",
-          showConfirmButton: true,
-          title: "Tạo cuộc thi thành công"
+        insertContest(data).then((value) => {
+          console.log(value);
+          Swal.fire({
+            position: "center",
+            timer: 5000,
+            icon: "success",
+            showConfirmButton: true,
+            title: "Tạo cuộc thi thành công"
+          });
+          reset();
         });
-        reset();
       }
     });
   };

@@ -1,5 +1,5 @@
 export type IContest = {
-  id: string;
+  id: number;
   name: string;
   description: string;
   date_begin: string;

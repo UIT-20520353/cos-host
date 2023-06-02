@@ -6,6 +6,7 @@ import { getMyContests } from "../../query/api/contest-service";
 import { IProblem } from "../../types/problem.type";
 import { getProblems } from "../../query/api/problem-service";
 import Swal from "sweetalert2";
+import { insertTestcase } from "../../query/api/textcase-service";
 
 type IProps = {
   closeAddTestcaseForm: () => void;
@@ -16,17 +17,24 @@ function AddTestcase(props: IProps) {
     register,
     handleSubmit,
     formState: { errors },
-    reset
+    reset,
+    setValue
   } = useForm<ITestcase>();
   const [contests, setContests] = useState<IContest[]>([]);
   const [problems, setProblems] = useState<IProblem[]>([]);
-  const [contestId, setContestId] = useState<string>("");
 
   useEffect(() => {
     getMyContests().then((data) => {
       setContests(data ?? []);
-      if (data) {
-        setContestId(data[0].id ?? "");
+      if (data?.length !== 0) {
+        // console.log(data);
+        setValue("contest_id", data[0].id);
+        getProblems(parseInt(data[0].id)).then((problems) => {
+          if (problems?.length !== 0) {
+            setProblems(problems ?? []);
+            setValue("problem_id", problems[0].id);
+          }
+        });
       }
     });
   }, []);
@@ -43,28 +51,38 @@ function AddTestcase(props: IProps) {
       allowOutsideClick: false
     }).then((result) => {
       if (result.isConfirmed) {
-        console.log(data);
-        Swal.fire({
-          position: "center",
-          timer: 5000,
-          icon: "success",
-          showConfirmButton: true,
-          title: "Tạo testcase thành công"
+        insertTestcase(data).then((response) => {
+          console.log("UI ", response);
+          if (response) {
+            Swal.fire({
+              position: "center",
+              timer: 5000,
+              icon: "success",
+              showConfirmButton: true,
+              title: "Tạo testcase thành công",
+              allowOutsideClick: false
+            });
+            reset();
+          } else {
+            Swal.fire({
+              position: "center",
+              timer: 5000,
+              icon: "error",
+              showConfirmButton: true,
+              title: "Xảy ra lỗi khi thêm testcase",
+              allowOutsideClick: false
+            });
+          }
         });
-        reset();
       }
     });
   };
 
   const handleChangeContest = (event: ChangeEvent<HTMLSelectElement>) => {
-    setContestId(event.target.value);
+    getProblems(parseInt(event.target.value)).then((data) => {
+      setProblems(data ?? []);
+    });
   };
-  useEffect(() => {
-    if (contestId)
-      getProblems(contestId).then((data) => {
-        setProblems(data ?? []);
-      });
-  }, [contestId]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={"mt-8 rounded-md bg-gray-100 p-3 shadow-md"}>

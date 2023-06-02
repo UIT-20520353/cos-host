@@ -1,10 +1,10 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { IProblem } from "../../../types/problem.type";
-import { IContest } from "../../../types/contest.type";
-import { useEffect, useState } from "react";
-import { getMyContests } from "../../../query/api/contest-service";
 import { insertProblem } from "../../../query/api/problem-service";
 import Swal from "sweetalert2";
+import { useEffect, useState } from "react";
+import { IContest } from "../../../types/contest.type";
+import { getMyContests } from "../../../query/api/contest-service";
 
 type IProps = {
   closeAddForm: () => void;
@@ -17,10 +17,10 @@ function AddProblem(props: IProps) {
     formState: { errors },
     reset
   } = useForm<IProblem>();
-  const [contests, setContests] = useState<IContest[]>([]);
 
+  const [contests, setContests] = useState<IContest[]>([]);
   useEffect(() => {
-    getMyContests().then((data) => setContests(data ?? []));
+    getMyContests().then((response) => setContests(response ?? []));
   }, []);
 
   const onSubmit: SubmitHandler<IProblem> = (data) => {

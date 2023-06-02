@@ -1,5 +1,5 @@
 export type ITestcase = {
-  id: string;
+  id: number;
   input: string;
   output: string;
   score: bigint;
