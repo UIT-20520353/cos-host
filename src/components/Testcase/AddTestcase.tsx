@@ -26,13 +26,13 @@ function AddTestcase(props: IProps) {
   useEffect(() => {
     getMyContests().then((data) => {
       setContests(data ?? []);
-      if (data?.length !== 0) {
+      if (data?.length !== 0 && data) {
         // console.log(data);
-        setValue("contest_id", data[0].id);
+        setValue("contest_id", parseInt(data[0].id));
         getProblems(parseInt(data[0].id)).then((problems) => {
-          if (problems?.length !== 0) {
+          if (problems?.length !== 0 && problems) {
             setProblems(problems ?? []);
-            setValue("problem_id", problems[0].id);
+            setValue("problem_id", parseInt(problems[0].id));
           }
         });
       }
