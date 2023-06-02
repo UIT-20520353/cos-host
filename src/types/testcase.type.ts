@@ -3,6 +3,6 @@ export type ITestcase = {
   input: string;
   output: string;
   score: bigint;
-  problem_id: string;
-  contest_id: string;
+  problem_id: number;
+  contest_id: number;
 };

@@ -28,11 +28,11 @@ function AddTestcase(props: IProps) {
       setContests(data ?? []);
       if (data?.length !== 0 && data) {
         // console.log(data);
-        setValue("contest_id", data[0].id.toString());
+        setValue("contest_id", data[0].id);
         getProblems(parseInt(data[0].id)).then((problems) => {
           if (problems?.length !== 0 && problems) {
             setProblems(problems ?? []);
-            setValue("problem_id", problems[0].id.toString());
+            setValue("problem_id", problems[0].id);
           }
         });
       }
