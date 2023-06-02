@@ -57,7 +57,7 @@ function AddProblem(props: IProps) {
           className={
             "block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
           }
-          {...register("contest_id")}
+          {...register("contest_id", { required: "Hãy chọn cuộc thi để thêm đề bài" })}
         >
           {contests.map((contest) => {
             return (
@@ -67,6 +67,7 @@ function AddProblem(props: IProps) {
             );
           })}
         </select>
+        {errors.contest_id && <span className={"text-xs text-red-600"}>{errors.contest_id.message}</span>}
       </div>
       <div className={"mb-4 flex flex-col items-start gap-y-2"}>
         <span className={"text-sm font-semibold"}>Tên bài thi</span>

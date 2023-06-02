@@ -1,20 +1,10 @@
 import { useParams } from "react-router-dom";
 import Header from "../../../components/Header";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { listTimeContest } from "../../../types/time.type";
 import { getContestById } from "../../../query/api/contest-service";
 import { IContest } from "../../../types/contest.type";
 import { SubmitHandler, useForm } from "react-hook-form";
-
-const initialContest: IContest = {
-  id: "",
-  name: "",
-  description: "",
-  date_begin: "",
-  time_begin: "",
-  duration: "",
-  host_id: ""
-};
 
 function DetailContest() {
   useEffect(() => {
@@ -25,11 +15,11 @@ function DetailContest() {
     register,
     handleSubmit,
     formState: { errors },
-    reset
+    reset,
+    setValue
   } = useForm<IContest>();
 
   const { id } = useParams<{ id: string }>();
-  const [contest, setContest] = useState<IContest>(initialContest);
 
   useEffect(() => {
     let temp: string[] = [];
@@ -38,7 +28,13 @@ function DetailContest() {
     }
     const contestId = parseInt(temp[1]);
     getContestById(contestId).then((data) => {
-      if (data) setContest(data[0] ?? initialContest);
+      if (data) {
+        setValue("name", data[0].name);
+        setValue("description", data[0].description);
+        setValue("date_begin", data[0].date_begin);
+        setValue("time_begin", data[0].time_begin);
+        setValue("duration", data[0].duration);
+      }
     });
   }, []);
 
@@ -70,7 +66,6 @@ function DetailContest() {
                     "block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                   }
                   placeholder={"Tên cuộc thi"}
-                  defaultValue={contest.name}
                   {...register("name", { required: "Tên cuộc thi không được bỏ trống" })}
                   autoComplete={"off"}
                 />
@@ -81,7 +76,6 @@ function DetailContest() {
                   placeholder={"Mô tả ngắn gọn về cuộc thi"}
                   rows={5}
                   className="block w-full resize-none rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
-                  defaultValue={contest.description}
                   {...register("description")}
                   autoComplete={"off"}
                 />
@@ -95,7 +89,6 @@ function DetailContest() {
                     className={
                       "inline-block w-full resize-none rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                     }
-                    defaultValue={contest.date_begin}
                     {...register("date_begin", {
                       required: "Ngày bắt đầu không được bỏ trống",
                       validate: (value) => isFutureDate(value) || "Ngày bắt đầu không được ở quá khứ  "
@@ -112,7 +105,6 @@ function DetailContest() {
                     className={
                       "inline-block w-full resize-none rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                     }
-                    defaultValue={contest.time_begin}
                     {...register("time_begin", { required: "Giờ bắt đầu không được bỏ trống" })}
                     autoComplete={"off"}
                   />
@@ -125,7 +117,6 @@ function DetailContest() {
                     className={
                       "block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                     }
-                    defaultValue={contest.duration}
                     autoComplete={"off"}
                     {...register("duration", { required: true })}
                   >
@@ -147,7 +138,7 @@ function DetailContest() {
                 }
                 type={"submit"}
               >
-                Lưu
+                Cập nhật
               </button>
               <button
                 className={

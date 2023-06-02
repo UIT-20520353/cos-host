@@ -33,8 +33,8 @@ function AddTestcase(props: IProps) {
 
   const onSubmit: SubmitHandler<ITestcase> = (data) => {
     Swal.fire({
-      title: "Tạo đề thi",
-      text: "Tạo đề thi mới với các thông tin đã nhập?",
+      title: "Tạo testcase",
+      text: "Tạo testcase mới với các thông tin đã nhập?",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
@@ -49,7 +49,7 @@ function AddTestcase(props: IProps) {
           timer: 5000,
           icon: "success",
           showConfirmButton: true,
-          title: "Tạo đề thi thành công"
+          title: "Tạo testcase thành công"
         });
         reset();
       }
@@ -74,7 +74,7 @@ function AddTestcase(props: IProps) {
           className={
             "block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
           }
-          {...register("contest_id")}
+          {...register("contest_id", { required: "Hãy chọn cuộc thi để thêm đề bài" })}
           onChange={handleChangeContest}
         >
           {contests.map((contest) => {
@@ -85,6 +85,7 @@ function AddTestcase(props: IProps) {
             );
           })}
         </select>
+        {errors.contest_id && <span className={"text-xs text-red-600"}>{errors.contest_id.message}</span>}
       </div>
       <div className={"mb-4 flex flex-col items-start gap-y-2"}>
         <span className={"text-sm font-semibold"}>Chọn đề thi</span>
@@ -92,8 +93,7 @@ function AddTestcase(props: IProps) {
           className={
             "block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
           }
-          {...register("problem_id")}
-          onChange={handleChangeContest}
+          {...register("problem_id", { required: "Hãy chọn đề thi để thêm testcase" })}
         >
           {problems.map((problem) => {
             return (
@@ -103,6 +103,7 @@ function AddTestcase(props: IProps) {
             );
           })}
         </select>
+        {errors.problem_id && <span className={"text-xs text-red-600"}>{errors.problem_id.message}</span>}
       </div>
       <div className={"mb-4 flex flex-col items-start gap-y-2"}>
         <span className={"text-sm font-semibold"}>Input</span>
