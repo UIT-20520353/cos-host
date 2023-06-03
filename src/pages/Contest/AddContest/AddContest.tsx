@@ -4,6 +4,7 @@ import { IContest } from "../../../types/contest.type";
 import { insertContest } from "../../../query/api/contest-service";
 import Swal from "sweetalert2";
 import { listTimeContest } from "../../../types/time.type";
+import { isFutureDate } from "../../../utils/ValidateDate/ValidateDate";
 
 type IProps = {
   closeAddContestForm: () => void;
@@ -47,12 +48,6 @@ function AddContest(props: IProps) {
         });
       }
     });
-  };
-
-  const isFutureDate = (inputDate: string): boolean => {
-    const currentDate = new Date();
-    const selectedDate = new Date(inputDate);
-    return selectedDate > currentDate;
   };
 
   return (

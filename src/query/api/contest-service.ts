@@ -85,3 +85,27 @@ export async function getContestById(contestId: number) {
     Swal.close();
   }
 }
+
+export async function updateContestById(contest: IContest) {
+  try {
+    const { data, error } = await supabase
+      .from("contests")
+      .update({
+        name: contest.name,
+        description: contest.description,
+        date_begin: contest.date_begin,
+        time_begin: contest.time_begin,
+        duration: contest.duration
+      })
+      .eq("id", contest.id)
+      .select();
+    if (error) {
+      throw error;
+    } else {
+      return data;
+    }
+  } catch (error) {
+    console.error("Lỗi khi cập nhật thông tin cuộc thi: ", error);
+    Swal.close();
+  }
+}

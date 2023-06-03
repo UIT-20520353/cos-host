@@ -1,11 +1,15 @@
 import Header from "../../../components/Header";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import AddContest from "../AddContest";
 import AddProblem from "../../problem/AddProblem";
 import AddTestcase from "../../../components/Testcase";
 
 function Contest() {
+  useEffect(() => {
+    document.title = "Tạo cuộc thi";
+  }, []);
+
   const [isAddContest, setIsAddContest] = useState<boolean>(false);
   const [isAddProblem, setIsAddProblem] = useState<boolean>(false);
   const [isAddTestcase, setIsAddTestcase] = useState<boolean>(false);
