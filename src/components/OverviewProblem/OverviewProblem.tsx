@@ -5,7 +5,7 @@ import { deleteProblem } from "../../query/api/problem-service";
 type IProps = {
   id: number;
   name: string;
-  contest_id: string;
+  contest_id: number;
   updateProblemList: () => void;
 };
 
