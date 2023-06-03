@@ -15,12 +15,16 @@ function AddProblem(props: IProps) {
     register,
     handleSubmit,
     formState: { errors },
-    reset
+    reset,
+    setValue
   } = useForm<IProblem>();
 
   const [contests, setContests] = useState<IContest[]>([]);
   useEffect(() => {
-    getMyContests().then((response) => setContests(response ?? []));
+    getMyContests().then((response) => {
+      setContests(response ?? []);
+      setValue("contest_id", response[0].id);
+    });
   }, []);
 
   const onSubmit: SubmitHandler<IProblem> = (data) => {

@@ -1,12 +1,15 @@
-import { useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import Header from "../../../components/Header";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { listTimeContest } from "../../../types/time.type";
 import { getContestById, updateContestById } from "../../../query/api/contest-service";
 import { IContest } from "../../../types/contest.type";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { isFutureDate } from "../../../utils/ValidateDate/ValidateDate";
 import Swal from "sweetalert2";
+import { IProblem } from "../../../types/problem.type";
+import { getProblems } from "../../../query/api/problem-service";
+import OverviewProblem from "../../../components/OverviewProblem";
 
 function DetailContest() {
   useEffect(() => {
@@ -19,18 +22,19 @@ function DetailContest() {
     formState: { errors },
     setValue
   } = useForm<IContest>();
+  const [problems, setProblems] = useState<IProblem[]>([]);
 
-  const { id } = useParams<{ id: string }>();
+  const { contestId } = useParams<{ contestId: string }>();
 
   useEffect(() => {
     let temp: string[] = [];
-    if (id) {
-      temp = id.toString().split("-");
+    if (contestId) {
+      temp = contestId.toString().split("-");
     }
-    const contestId = parseInt(temp[1]);
-    getContestById(contestId).then((data) => {
+    const contest_id = parseInt(temp[1]);
+    getContestById(contest_id).then((data) => {
       if (data) {
-        setValue("id", contestId);
+        setValue("id", contest_id);
         setValueForm({
           name: data[0].name,
           description: data[0].description,
@@ -39,6 +43,9 @@ function DetailContest() {
           duration: data[0].duration
         });
       }
+    });
+    getProblems(contest_id).then((response) => {
+      setProblems(response ?? []);
     });
   }, []);
 
@@ -96,6 +103,17 @@ function DetailContest() {
     setValue("duration", duration);
   };
 
+  const updateProblemList = () => {
+    let temp: string[] = [];
+    if (contestId) {
+      temp = contestId.toString().split("-");
+    }
+    const contest_id = parseInt(temp[1]);
+    getProblems(contest_id).then((data) => {
+      setProblems(data ?? []);
+    });
+  };
+
   return (
     <div className={"w-full"}>
       <Header />
@@ -105,7 +123,15 @@ function DetailContest() {
         className={"mx-5 my-8 rounded-md border border-gray-200 bg-gray-100 shadow-md"}
       >
         <div className={"p-3"}>
-          <p className={"p-3 pb-0 text-3xl font-semibold"}>Cập nhật thông tin cuộc thi</p>
+          <div className={"flex flex-row items-center justify-between"}>
+            <p className={"p-3 pb-0 text-3xl font-semibold"}>Cập nhật thông tin cuộc thi</p>
+            <NavLink
+              to={"/manage-contest"}
+              className={"rounded-md px-4 py-2 text-base font-semibold duration-300 hover:bg-gray-300"}
+            >
+              Quay lại
+            </NavLink>
+          </div>
           <div className={"p-4 pb-0"}>
             <p className={"mb-3 text-lg font-medium"}>Thông tin cuộc thi</p>
             <div className="mb-3">
@@ -201,6 +227,33 @@ function DetailContest() {
           </div>
         </div>
       </form>
+      <div className={"mx-5 mb-8"}>
+        <div className={"flex flex-row items-center justify-between"}>
+          <p className={"text-2xl font-semibold"}>Danh sách đề thi</p>
+          <button
+            className={
+              "rounded-md bg-gray-200 px-4 py-2 text-base font-semibold shadow-md duration-200 hover:bg-gray-300"
+            }
+          >
+            Thêm cuộc thi
+          </button>
+        </div>
+        {problems.length ? (
+          <ul className={"mt-5 grid grid-cols-3 gap-3"}>
+            {problems.map((problem) => (
+              <OverviewProblem
+                updateProblemList={updateProblemList}
+                key={problem.id}
+                id={problem.id}
+                name={problem.name}
+                contest_id={problem.contest_id}
+              />
+            ))}
+          </ul>
+        ) : (
+          <p className={"text-base"}>Cuộc thi này chưa có đề thi</p>
+        )}
+      </div>
     </div>
   );
 }

@@ -13,6 +13,7 @@ import TeamProfile from "./pages/Team/TeamProfile";
 import { RootState } from "./store/store";
 import { useEffect } from "react";
 import Contest from "./pages/Contest/Contest";
+import DetailProblem from "./pages/problem/DetailProblem";
 
 function App() {
   const user = useSelector((state: RootState) => state.user);
@@ -32,7 +33,10 @@ function App() {
           <Route path={"add-contest"} element={<Contest />} />
           <Route path={"manage-contest"}>
             <Route index={true} element={<ManageContest />} />
-            <Route path={":id"} element={<DetailContest />} />
+            <Route path={":contestId"}>
+              <Route element={<DetailContest />} index={true} />
+              <Route path={":problemId"} element={<DetailProblem />} />
+            </Route>
           </Route>
           <Route path={"manage-team"}>
             <Route index={true} element={<ManageTeam />} />

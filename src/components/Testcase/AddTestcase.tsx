@@ -52,7 +52,6 @@ function AddTestcase(props: IProps) {
     }).then((result) => {
       if (result.isConfirmed) {
         insertTestcase(data).then((response) => {
-          console.log("UI ", response);
           if (response) {
             Swal.fire({
               position: "center",

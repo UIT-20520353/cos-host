@@ -23,3 +23,16 @@ export async function insertTestcase(testcase: ITestcase) {
     console.error("testcase service: ", error);
   }
 }
+
+export async function deleteTestcases(problemId: number) {
+  try {
+    const { data, error } = await supabase.from("testcases").delete().eq("problem_id", problemId);
+    if (error) {
+      throw error;
+    } else {
+      return data;
+    }
+  } catch (error) {
+    console.error("Lỗi khi xóa testcase: ", error);
+  }
+}

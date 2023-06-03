@@ -31,7 +31,7 @@ export const insertContest = async (contest: IContest) => {
 export async function getMyContests() {
   try {
     Swal.fire({
-      title: "Đang lấy dữ liệu",
+      title: "Đang lấy dữ liệu cuộc thi",
       allowOutsideClick: false,
       showConfirmButton: false,
       didOpen() {
