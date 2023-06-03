@@ -55,20 +55,22 @@ function DetailContest() {
     }).then((result) => {
       if (result.isConfirmed) {
         updateContestById(data).then((response) => {
-          Swal.fire({
-            position: "center",
-            timer: 5000,
-            icon: "success",
-            showConfirmButton: true,
-            title: "Cập nhật cuộc thi thành công"
-          });
-          setValueForm({
-            name: response[0].name,
-            description: response[0].description,
-            date_begin: response[0].date_begin,
-            time_begin: response[0].time_begin,
-            duration: response[0].duration
-          });
+          if (response?.length !== 0 && response) {
+            Swal.fire({
+              position: "center",
+              timer: 5000,
+              icon: "success",
+              showConfirmButton: true,
+              title: "Cập nhật cuộc thi thành công"
+            });
+            setValueForm({
+              name: response[0].name,
+              description: response[0].description,
+              date_begin: response[0].date_begin,
+              time_begin: response[0].time_begin,
+              duration: response[0].duration
+            });
+          }
         });
       }
     });
