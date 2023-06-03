@@ -4,5 +4,5 @@ export type IProblem = {
   detail: string;
   example_input: string;
   example_output: string;
-  contest_id: string;
+  contest_id: number;
 };

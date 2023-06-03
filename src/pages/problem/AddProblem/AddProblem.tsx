@@ -22,8 +22,10 @@ function AddProblem(props: IProps) {
   const [contests, setContests] = useState<IContest[]>([]);
   useEffect(() => {
     getMyContests().then((response) => {
-      setContests(response ?? []);
-      setValue("contest_id", response[0].id);
+      if (response) {
+        setContests(response ?? []);
+        setValue("contest_id", response[0].id);
+      }
     });
   }, []);
 
