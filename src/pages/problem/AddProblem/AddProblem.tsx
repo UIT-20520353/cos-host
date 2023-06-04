@@ -51,6 +51,7 @@ function AddProblem(props: IProps) {
           title: "Tạo đề thi thành công"
         });
         reset();
+        setValue("id", data.id);
       }
     });
   };

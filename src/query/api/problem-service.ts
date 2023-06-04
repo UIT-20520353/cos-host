@@ -2,7 +2,6 @@ import supabase from "./supabase";
 import { IProblem } from "../../types/problem.type";
 import { PostgrestResponse } from "@supabase/supabase-js";
 import Swal from "sweetalert2";
-import { deleteTestcases } from "./textcase-service";
 
 export const insertProblem = async (problem: IProblem) => {
   try {
@@ -77,7 +76,6 @@ export async function getProblemById(problemId: number) {
 
 export async function deleteProblem(problemId: number) {
   try {
-    await deleteTestcases(problemId);
     const { data, error } = await supabase.from("problems").delete().eq("id", problemId);
     if (error) throw error;
     else return data;

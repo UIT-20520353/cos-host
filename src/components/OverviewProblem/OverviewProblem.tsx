@@ -43,7 +43,7 @@ function OverviewProblem(props: IProps) {
       <div className={"flex flex-row items-center gap-x-1"}>
         <NavLink
           className={
-            "rounded-lg bg-[#0077b6] px-4 py-2 text-center text-sm font-semibold text-white duration-300 hover:bg-opacity-70"
+            "w-32 rounded-lg bg-[#0077b6] px-4 py-2 text-center text-sm font-semibold text-white duration-300 hover:bg-opacity-70"
           }
           to={`/manage-contest/contest-${props.contest_id}/problem-${props.id}`}
         >
@@ -51,11 +51,11 @@ function OverviewProblem(props: IProps) {
         </NavLink>
         <button
           className={
-            "rounded-lg bg-[#d00000] px-4 py-2 text-center text-sm font-semibold text-white duration-300 hover:bg-opacity-70"
+            "w-32 rounded-lg bg-[#d00000] px-4 py-2 text-center text-sm font-semibold text-white duration-300 hover:bg-opacity-70"
           }
           onClick={handleDeleteProblem}
         >
-          Xóa cuộc thi
+          Xóa đề thi
         </button>
       </div>
     </li>

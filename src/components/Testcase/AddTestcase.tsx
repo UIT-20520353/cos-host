@@ -17,7 +17,6 @@ function AddTestcase(props: IProps) {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
     setValue
   } = useForm<ITestcase>();
   const [contests, setContests] = useState<IContest[]>([]);
@@ -61,7 +60,11 @@ function AddTestcase(props: IProps) {
               title: "Tạo testcase thành công",
               allowOutsideClick: false
             });
-            reset();
+            // reset();
+            // setValue("id", data.id);
+            // setValue("problem_id", data.problem_id);
+            setValue("input", "");
+            setValue("output", "");
           } else {
             Swal.fire({
               position: "center",
@@ -79,7 +82,10 @@ function AddTestcase(props: IProps) {
 
   const handleChangeContest = (event: ChangeEvent<HTMLSelectElement>) => {
     getProblems(parseInt(event.target.value)).then((data) => {
-      setProblems(data ?? []);
+      if (data) {
+        setProblems(data ?? []);
+        setValue("problem_id", data[0].id);
+      }
     });
   };
 

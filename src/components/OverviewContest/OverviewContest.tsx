@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { deleteContest } from "../../query/api/contest-service";
 import Swal from "sweetalert2";
+import { getDateAndTime, getTimeEnd } from "../../utils/ValidateDate/ValidateDate";
 
 type IProps = {
   name: string;
@@ -19,70 +20,12 @@ function OverviewContest(props: IProps) {
   const [status, setStatus] = useState<string>("");
   const [dateDisplay, setDateDisplay] = useState<string>("");
 
-  const getDateAndTime = (
-    date: string,
-    time: string
-  ): { year: number; month: number; day: number; hour: number; minute: number; second: number } => {
-    const dateStrings = date.split("-");
-    const timeStrings = time.split(":");
-    const year = parseInt(dateStrings[0]);
-    const month = parseInt(dateStrings[1]) - 1;
-    const day = parseInt(dateStrings[2]);
-    const hour = parseInt(timeStrings[0]);
-    const minute = parseInt(timeStrings[1]);
-    const second = parseInt(timeStrings[2]);
-    return { year, month, day, hour, minute, second };
-  };
-
-  const getTimeEnd = ({
-    year,
-    month,
-    day,
-    hour,
-    minute,
-    second
-  }: {
-    year: number;
-    month: number;
-    day: number;
-    hour: number;
-    minute: number;
-    second: number;
-  }) => {
-    switch (props.duration) {
-      case "30 phút":
-        return new Date(year, month, day, hour, minute + 30, second);
-      case "1 giờ":
-        return new Date(year, month, day, hour + 1, minute, second);
-      case "1 giờ 30 phút":
-        return new Date(year, month, day, hour + 1, minute + 30, second);
-      case "2 giờ":
-        return new Date(year, month, day, hour + 2, minute, second);
-      case "2 giờ 30 phút":
-        return new Date(year, month, day, hour + 2, minute + 30, second);
-      case "3 giờ":
-        return new Date(year, month, day, hour + 3, minute, second);
-      case "3 giờ 30 phút":
-        return new Date(year, month, day, hour + 3, minute + 30, second);
-      case "4 giờ":
-        return new Date(year, month, day, hour + 4, minute, second);
-      case "4 giờ 30 phút":
-        return new Date(year, month, day, hour + 4, minute + 30, second);
-      case "5 giờ":
-        return new Date(year, month, day, hour + 5, minute, second);
-      case "5 giờ 30 phút":
-        return new Date(year, month, day, hour + 5, minute + 30, second);
-      default:
-        return new Date();
-    }
-  };
-
   useEffect(() => {
     const current_date = new Date();
     const { year, month, day, hour, minute, second } = getDateAndTime(props.date, props.time);
 
     const time_begin = new Date(year, month, day, hour, minute, second);
-    const time_end = getTimeEnd({ year, month, day, hour, minute, second });
+    const time_end = getTimeEnd({ year, month, day, hour, minute, second, duration: props.duration });
 
     if (time_begin > current_date) setStatus("Chưa bắt đầu");
     else {
@@ -154,7 +97,7 @@ function OverviewContest(props: IProps) {
       </div>
       {props.isShowAction && (
         <div className={"mt-4 flex flex-row items-center gap-x-3"}>
-          {status !== "Đã kết thúc" && (
+          {status !== "Đã kết thúc" && status !== "Đang diễn ra" && (
             <NavLink
               className={
                 "w-32 rounded-lg bg-[#0077b6] px-4 py-2 text-center text-sm font-semibold text-white duration-300 hover:bg-opacity-70"
@@ -164,14 +107,16 @@ function OverviewContest(props: IProps) {
               Cập nhật
             </NavLink>
           )}
-          <button
-            className={
-              "w-32 rounded-lg bg-[#d00000] px-4 py-2 text-center text-sm font-semibold text-white duration-300 hover:bg-opacity-70"
-            }
-            onClick={handleDeleteContest}
-          >
-            Xóa cuộc thi
-          </button>
+          {status !== "Đang diễn ra" && (
+            <button
+              className={
+                "w-32 rounded-lg bg-[#d00000] px-4 py-2 text-center text-sm font-semibold text-white duration-300 hover:bg-opacity-70"
+              }
+              onClick={handleDeleteContest}
+            >
+              Xóa cuộc thi
+            </button>
+          )}
           <NavLink
             className={
               "w-32 rounded-lg bg-gray-700 px-4 py-2 text-center text-center text-sm font-semibold text-white duration-300 hover:bg-gray-500 hover:text-white"

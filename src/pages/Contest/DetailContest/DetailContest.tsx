@@ -1,8 +1,8 @@
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import Header from "../../../components/Header";
 import { useEffect, useState } from "react";
 import { listTimeContest } from "../../../types/time.type";
-import { getContestById, updateContestById } from "../../../query/api/contest-service";
+import { deleteContest, getContestById, updateContestById } from "../../../query/api/contest-service";
 import { IContest } from "../../../types/contest.type";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { isFutureDate } from "../../../utils/ValidateDate/ValidateDate";
@@ -10,6 +10,15 @@ import Swal from "sweetalert2";
 import { IProblem } from "../../../types/problem.type";
 import { getProblems } from "../../../query/api/problem-service";
 import OverviewProblem from "../../../components/OverviewProblem";
+import AddProblemModal from "../../../components/Modal/AddProblemModal";
+
+const getContestId = (contestId: string) => {
+  let temp: string[] = [];
+  if (contestId) {
+    temp = contestId.toString().split("-");
+  }
+  return parseInt(temp[1]);
+};
 
 function DetailContest() {
   useEffect(() => {
@@ -23,15 +32,13 @@ function DetailContest() {
     setValue
   } = useForm<IContest>();
   const [problems, setProblems] = useState<IProblem[]>([]);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   const { contestId } = useParams<{ contestId: string }>();
 
   useEffect(() => {
-    let temp: string[] = [];
-    if (contestId) {
-      temp = contestId.toString().split("-");
-    }
-    const contest_id = parseInt(temp[1]);
+    const contest_id = getContestId(contestId);
     getContestById(contest_id).then((data) => {
       if (data) {
         setValue("id", contest_id);
@@ -82,6 +89,13 @@ function DetailContest() {
       }
     });
   };
+  const openModal = () => {
+    setIsOpen(true);
+  };
+  const closeModal = () => {
+    setIsOpen(false);
+    updateProblemList();
+  };
 
   const setValueForm = ({
     name,
@@ -104,13 +118,38 @@ function DetailContest() {
   };
 
   const updateProblemList = () => {
-    let temp: string[] = [];
-    if (contestId) {
-      temp = contestId.toString().split("-");
-    }
-    const contest_id = parseInt(temp[1]);
+    const contest_id = getContestId(contestId);
     getProblems(contest_id).then((data) => {
       setProblems(data ?? []);
+    });
+  };
+
+  const deleteContestInUI = () => {
+    Swal.fire({
+      title: "Xóa cuộc thi",
+      text: "Xóa tất cả thông tin về cuộc thi này?",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Xác nhận",
+      cancelButtonText: "Hủy",
+      allowOutsideClick: false
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const temp = contestId?.toString().split("-");
+        const contest_id = parseInt(temp[1]);
+        deleteContest(contest_id).then((response) => {
+          console.log(response);
+          Swal.fire({
+            position: "center",
+            timer: 5000,
+            icon: "success",
+            showConfirmButton: true,
+            title: "Xóa cuộc thi thành công"
+          });
+          navigate("/manage-contest", { replace: true });
+        });
+      }
     });
   };
 
@@ -215,14 +254,15 @@ function DetailContest() {
               >
                 Cập nhật
               </button>
-              {/*<button*/}
-              {/*  className={*/}
-              {/*    "w-40 rounded-lg bg-[#d00000] py-3 text-base font-semibold text-white duration-200 hover:opacity-70"*/}
-              {/*  }*/}
-              {/*  type={"button"}*/}
-              {/*>*/}
-              {/*  Hủy*/}
-              {/*</button>*/}
+              <button
+                className={
+                  "w-40 rounded-lg bg-[#d00000] py-3 text-base font-semibold text-white duration-200 hover:opacity-70"
+                }
+                type={"button"}
+                onClick={deleteContestInUI}
+              >
+                Xóa cuộc thi
+              </button>
             </div>
           </div>
         </div>
@@ -234,8 +274,9 @@ function DetailContest() {
             className={
               "rounded-md bg-gray-200 px-4 py-2 text-base font-semibold shadow-md duration-200 hover:bg-gray-300"
             }
+            onClick={openModal}
           >
-            Thêm cuộc thi
+            Thêm đề thi
           </button>
         </div>
         {problems.length ? (
@@ -251,9 +292,10 @@ function DetailContest() {
             ))}
           </ul>
         ) : (
-          <p className={"text-base"}>Cuộc thi này chưa có đề thi</p>
+          <p className={"mt-5 text-base"}>Cuộc thi này chưa có đề thi</p>
         )}
       </div>
+      {isOpen && <AddProblemModal closeModal={closeModal} contestId={getContestId(contestId)} />}
     </div>
   );
 }
