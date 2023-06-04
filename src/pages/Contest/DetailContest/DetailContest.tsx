@@ -12,7 +12,7 @@ import { getProblems } from "../../../query/api/problem-service";
 import OverviewProblem from "../../../components/OverviewProblem";
 import AddProblemModal from "../../../components/Modal/AddProblemModal";
 
-const getContestId = (contestId: string) => {
+const getContestId = (contestId: string | undefined): number => {
   let temp: string[] = [];
   if (contestId) {
     temp = contestId.toString().split("-");
@@ -136,8 +136,7 @@ function DetailContest() {
       allowOutsideClick: false
     }).then((result) => {
       if (result.isConfirmed) {
-        const temp = contestId?.toString().split("-");
-        const contest_id = parseInt(temp[1]);
+        const contest_id = getContestId(contestId);
         deleteContest(contest_id).then((response) => {
           console.log(response);
           Swal.fire({

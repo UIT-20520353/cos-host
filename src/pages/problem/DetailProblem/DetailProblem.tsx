@@ -10,7 +10,7 @@ import { getTestcases } from "../../../query/api/textcase-service";
 import { ITestcase } from "../../../types/testcase.type";
 import AddTestcaseModal from "../../../components/Modal/AddTestcaseModal";
 
-const getProblemId = (id: string): number => {
+const getProblemId = (id: string | undefined): number => {
   let temp: string[] = [];
   if (id) {
     temp = id.toString().split("-");
