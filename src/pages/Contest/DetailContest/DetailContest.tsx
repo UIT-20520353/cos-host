@@ -168,8 +168,9 @@ function DetailContest() {
     });
   };
 
-  const onChangeValue = (value: string) => {
-    if (!value) {
+  const onChangeValue = (value: string | null) => {
+    if (value === null) return;
+    if (value === "") {
       const temp = [...problems];
       setFilterProblems(temp);
       return;
@@ -184,7 +185,7 @@ function DetailContest() {
 
   return (
     <div className={"w-full"}>
-      <Header placeHolder={"Nhập tên đề thi"} onChangeValue={onChangeValue} />
+      <Header placeHolder={"Nhập tên đề thi"} isUsed={true} onChangeValue={onChangeValue} />
 
       <form
         onSubmit={handleSubmit(onSubmit)}

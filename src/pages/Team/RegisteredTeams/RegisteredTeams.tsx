@@ -19,9 +19,13 @@ const members: IMember[] = [
 ];
 
 function RegisteredTeams() {
+  const onChangeValue = (value: string | null) => {
+    if (value === null) return;
+  };
+
   return (
     <div className={"w-full"}>
-      <Header />
+      <Header placeHolder={"Nhập tên đội"} onChangeValue={onChangeValue} isUsed={false} />
 
       <div className={"mx-12 my-10"}>
         <div className={"flex flex-row items-start justify-between"}>

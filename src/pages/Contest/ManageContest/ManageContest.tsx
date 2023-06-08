@@ -53,8 +53,9 @@ function ManageContest() {
     getMyContests().then((response) => setContests(response ?? []));
   };
 
-  const onChangeValue = (value: string) => {
-    if (!value) {
+  const onChangeValue = (value: string | null) => {
+    if (value === null) return;
+    if (value === "") {
       const temp = [...contests];
       setFilterContests(temp);
       return;
@@ -69,7 +70,7 @@ function ManageContest() {
 
   return (
     <div className={"w-full"}>
-      <Header placeHolder={"Nhập tên cuộc thi"} onChangeValue={onChangeValue} />
+      <Header placeHolder={"Nhập tên cuộc thi"} isUsed={true} onChangeValue={onChangeValue} />
 
       <div className={"mx-12 my-10"}>
         <p className={"text-xl font-semibold"}>Danh sách cuộc thi của bạn</p>

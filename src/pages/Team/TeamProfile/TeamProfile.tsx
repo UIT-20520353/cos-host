@@ -5,9 +5,13 @@ import { BiUserCircle } from "react-icons/all";
 function TeamProfile() {
   const { id } = useParams();
 
+  const onChangeValue = (value: string | null) => {
+    if (value === null) return;
+  };
+
   return (
     <div className={"w-full"}>
-      <Header />
+      <Header placeHolder={"Tìm kiếm"} onChangeValue={onChangeValue} isUsed={false} />
 
       <div className={"mx-12 my-10"}>
         <p className={"text-xl font-semibold"}>

@@ -167,13 +167,13 @@ function Contest() {
     });
   };
 
-  const onChangeValue = (value: string) => {
-    return;
+  const onChangeValue = (value: string | null) => {
+    if (!value) return;
   };
 
   return (
     <div className={"w-full"}>
-      <Header placeHolder={"Nhập tên cuộc thi"} onChangeValue={onChangeValue} />
+      <Header placeHolder={"Nhập tên cuộc thi"} isUsed={false} onChangeValue={onChangeValue} />
       <div className={"mx-10 my-8"}>
         <p className={"text-3xl font-semibold"}>Tạo cuộc thi</p>
         <div className={"mt-8 flex w-full flex-row items-center gap-x-3"}>

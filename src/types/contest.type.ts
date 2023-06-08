@@ -5,5 +5,5 @@ export type IContest = {
   date_begin: string;
   time_begin: string;
   duration: string;
-  host_id: string;
+  host_id: number;
 };

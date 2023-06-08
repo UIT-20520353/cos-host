@@ -78,11 +78,13 @@ function Dashboard() {
     document.title = "Trang chủ";
   }, []);
 
-  const onChangeValue = (value: string) => {};
+  const onChangeValue = (value: string | null) => {
+    if (value === null) return;
+  };
 
   return (
     <div className={"w-full"}>
-      <Header placeHolder={"Tìm kiếm"} onChangeValue={onChangeValue} />
+      <Header placeHolder={"Tìm kiếm"} isUsed={false} onChangeValue={onChangeValue} />
 
       <div className={"mx-5 my-8 flex flex-row items-start gap-x-5"}>
         <div className={"flex-1 rounded-md border border-gray-200 bg-gray-100 shadow-md"}>

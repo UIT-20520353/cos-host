@@ -44,9 +44,13 @@ function ManageTeam() {
     // handleFetchData();
   }, []);
 
+  const onChangeValue = (value: string | null) => {
+    if (value === null) return;
+  };
+
   return (
     <div className={"w-full"}>
-      <Header placeHolder={"Nhập tên cuộc thi"} />
+      <Header placeHolder={"Nhập tên cuộc thi"} onChangeValue={onChangeValue} isUsed={false} />
 
       <div className={"mx-12 my-10"}>
         <p className={"text-xl font-semibold"}>Danh sách các cuộc thi có thể phê duyệt</p>

@@ -6,7 +6,8 @@ import { NavLink } from "react-router-dom";
 
 type IProps = {
   placeHolder: string;
-  onChangeValue: (value: string) => void;
+  onChangeValue: (value: string | null) => void;
+  isUsed: boolean;
 };
 
 function Header(props: IProps) {
@@ -16,7 +17,8 @@ function Header(props: IProps) {
 
   const handleOnChange = () => {
     if (!inputSearchRef.current) return;
-    props.onChangeValue(inputSearchRef.current.value);
+    if (props.isUsed) props.onChangeValue(inputSearchRef.current.value);
+    else props.onChangeValue(null);
   };
 
   return (
