@@ -34,7 +34,7 @@ function AddContest(props: IProps) {
       allowOutsideClick: false
     }).then((result) => {
       if (result.isConfirmed) {
-        data.host_id = sessionStorage.getItem("id") ?? "";
+        data.host_id = parseInt(sessionStorage.getItem("id") ?? "-1");
         insertContest(data).then((value) => {
           console.log(value);
           Swal.fire({
