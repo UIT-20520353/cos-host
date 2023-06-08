@@ -32,28 +32,45 @@ function DetailContest() {
     setValue
   } = useForm<IContest>();
   const [problems, setProblems] = useState<IProblem[]>([]);
+  const [filterProblems, setFilterProblems] = useState<IProblem[]>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const { contestId } = useParams<{ contestId: string }>();
 
-  useEffect(() => {
-    const contest_id = getContestId(contestId);
-    getContestById(contest_id).then((data) => {
-      if (data) {
-        setValue("id", contest_id);
-        setValueForm({
-          name: data[0].name,
-          description: data[0].description,
-          date_begin: data[0].date_begin,
-          time_begin: data[0].time_begin,
-          duration: data[0].duration
-        });
+  const handleFetchData = async () => {
+    Swal.fire({
+      title: "Đang lấy dữ liệu",
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      didOpen() {
+        Swal.showLoading();
       }
     });
-    getProblems(contest_id).then((response) => {
-      setProblems(response ?? []);
-    });
+
+    const contest_id = getContestId(contestId);
+    const dataContests = await getContestById(contest_id);
+    if (dataContests) {
+      setValue("id", contest_id);
+      setValueForm({
+        name: dataContests[0].name,
+        description: dataContests[0].description,
+        date_begin: dataContests[0].date_begin,
+        time_begin: dataContests[0].time_begin,
+        duration: dataContests[0].duration
+      });
+    }
+    const dataProblems = await getProblems(contest_id);
+    if (dataProblems) {
+      setProblems(dataProblems ?? []);
+      setFilterProblems(dataProblems ?? []);
+    }
+
+    Swal.close();
+  };
+
+  useEffect(() => {
+    handleFetchData();
   }, []);
 
   const onSubmit: SubmitHandler<IContest> = (data) => {
@@ -117,11 +134,10 @@ function DetailContest() {
     setValue("duration", duration);
   };
 
-  const updateProblemList = () => {
+  const updateProblemList = async () => {
     const contest_id = getContestId(contestId);
-    getProblems(contest_id).then((data) => {
-      setProblems(data ?? []);
-    });
+    const data = await getProblems(contest_id);
+    if (data && data.length !== 0) setProblems(data ?? []);
   };
 
   const deleteContestInUI = () => {
@@ -152,9 +168,23 @@ function DetailContest() {
     });
   };
 
+  const onChangeValue = (value: string) => {
+    if (!value) {
+      const temp = [...problems];
+      setFilterProblems(temp);
+      return;
+    }
+
+    const result = problems.filter((problem) => {
+      const nameProblem = problem.name.toUpperCase();
+      return nameProblem.includes(value.toUpperCase());
+    });
+    setFilterProblems(result);
+  };
+
   return (
     <div className={"w-full"}>
-      <Header />
+      <Header placeHolder={"Nhập tên đề thi"} onChangeValue={onChangeValue} />
 
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -278,9 +308,9 @@ function DetailContest() {
             Thêm đề thi
           </button>
         </div>
-        {problems.length ? (
+        {filterProblems.length ? (
           <ul className={"mt-5 grid grid-cols-3 gap-3"}>
-            {problems.map((problem) => (
+            {filterProblems.map((problem) => (
               <OverviewProblem
                 updateProblemList={updateProblemList}
                 key={problem.id}

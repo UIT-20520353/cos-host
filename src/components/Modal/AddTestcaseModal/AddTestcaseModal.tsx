@@ -34,15 +34,18 @@ function AddTestcaseModal(props: ModalProps) {
       allowOutsideClick: false
     }).then((result) => {
       if (result.isConfirmed) {
-        insertTestcase(data).then((response) => console.log(response));
-        Swal.fire({
-          position: "center",
-          timer: 5000,
-          icon: "success",
-          showConfirmButton: true,
-          title: "Tạo testcase thành công"
+        insertTestcase(data).then((response) => {
+          if (response) {
+            Swal.fire({
+              position: "center",
+              timer: 5000,
+              icon: "success",
+              showConfirmButton: true,
+              title: "Tạo testcase thành công"
+            });
+            props.closeModal();
+          }
         });
-        props.closeModal();
       }
     });
   };

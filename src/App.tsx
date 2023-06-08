@@ -14,6 +14,7 @@ import { RootState } from "./store/store";
 import { useEffect } from "react";
 import Contest from "./pages/Contest/Contest";
 import DetailProblem from "./pages/problem/DetailProblem";
+import ProfilePage from "./pages/ProfilePage";
 
 function App() {
   const user = useSelector((state: RootState) => state.user);
@@ -30,6 +31,7 @@ function App() {
       <Routes>
         <Route path={"/"} element={user.id ? <MainPage /> : <Login />}>
           <Route index={true} element={<Dashboard />} />
+          <Route path={"profile"} element={<ProfilePage />} />
           <Route path={"add-contest"} element={<Contest />} />
           <Route path={"manage-contest"}>
             <Route index={true} element={<ManageContest />} />

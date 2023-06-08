@@ -1,7 +1,6 @@
 import supabase from "./supabase";
 import { IProblem } from "../../types/problem.type";
 import { PostgrestResponse } from "@supabase/supabase-js";
-import Swal from "sweetalert2";
 
 export const insertProblem = async (problem: IProblem) => {
   try {
@@ -28,49 +27,29 @@ export const insertProblem = async (problem: IProblem) => {
 
 export async function getProblems(contestId: number) {
   try {
-    Swal.fire({
-      title: "Đang lấy dữ liệu đề thi",
-      allowOutsideClick: false,
-      showConfirmButton: false,
-      didOpen() {
-        Swal.showLoading();
-      }
-    });
     const { data, error }: PostgrestResponse<IProblem> = await supabase
       .from("problems")
       .select("*")
       .eq("contest_id", contestId)
       .then((response) => response as PostgrestResponse<IProblem>);
-    Swal.close();
     if (error) throw error;
     else return data;
   } catch (error) {
     console.error("Lỗi khi lấy dữ liệu problems: ", error);
-    Swal.close();
   }
 }
 
 export async function getProblemById(problemId: number) {
   try {
-    Swal.fire({
-      title: "Đang lấy dữ liệu đề thi",
-      allowOutsideClick: false,
-      showConfirmButton: false,
-      didOpen() {
-        Swal.showLoading();
-      }
-    });
     const { data, error }: PostgrestResponse<IProblem> = await supabase
       .from("problems")
       .select("*")
       .eq("id", problemId)
       .then((response) => response as PostgrestResponse<IProblem>);
-    Swal.close();
-    if (error) throw error;
+    if (error) console.error("getProblemById: ", error);
     else return data;
   } catch (error) {
-    console.error("Lỗi khi lấy dữ liệu problem bằng id: ", error);
-    Swal.close();
+    console.error("getProblemById: ", error);
   }
 }
 

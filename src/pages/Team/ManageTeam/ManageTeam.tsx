@@ -2,15 +2,51 @@ import { useEffect } from "react";
 import Header from "../../../components/Header";
 import { RiTeamFill } from "react-icons/all";
 import { NavLink } from "react-router-dom";
+// import { ITeam } from "../../../types/team.type";
 
 function ManageTeam() {
+  // const [teams, setTeams] = useState<ITeam[]>([]);
+
+  // const handleFetchData = async () => {
+  //   Swal.fire({
+  //     title: "Đang lấy dữ liệu cuộc thi",
+  //     allowOutsideClick: false,
+  //     showConfirmButton: false,
+  //     didOpen() {
+  //       Swal.showLoading();
+  //     }
+  //   });
+  //
+  //   const dataContests = await getMyContests();
+  //   if (dataContests) {
+  //     setContests(dataContests ?? []);
+  //     setFilterContests(dataContests ?? []);
+  //     const contestIds = dataContests.map((contest) => contest.id);
+  //     const dataTeams = await getTeamListByContestIds(contestIds);
+  //     if (dataContests) setTeams(dataTeams ?? []);
+  //   }
+  //
+  //   Swal.close();
+  // };
+
+  // const getAmount = (contest_id: number): number => {
+  //   let amount = 0;
+  //
+  //   teams.forEach((team) => {
+  //     if (team.contest_id === contest_id) amount++;
+  //   });
+  //
+  //   return amount;
+  // };
+
   useEffect(() => {
     document.title = "Quản lý đội";
+    // handleFetchData();
   }, []);
 
   return (
     <div className={"w-full"}>
-      <Header />
+      <Header placeHolder={"Nhập tên cuộc thi"} />
 
       <div className={"mx-12 my-10"}>
         <p className={"text-xl font-semibold"}>Danh sách các cuộc thi có thể phê duyệt</p>

@@ -6,6 +6,7 @@ import { IAccount } from "../../types/account.type";
 import Swal from "sweetalert2";
 import { getAccountList } from "../../query/api/account-service";
 import { SubmitHandler, useForm } from "react-hook-form";
+import CryptoJS from "crypto-js";
 
 interface FormValues {
   username: string;
@@ -33,8 +34,10 @@ function Login() {
       Swal.fire({ position: "center", title: "Lỗi mạng", timer: 2000, icon: "error", showConfirmButton: true });
       return;
     } else {
+      const hashPassword = CryptoJS.SHA256(data.password).toString();
+      console.log("hash nhap: ", hashPassword);
       login = accounts.find((account) => {
-        if (account.username === data.username && account.password === data.password && account.roles.name === "HOST")
+        if (account.username === data.username && account.password === hashPassword && account.roles.name === "HOST")
           return true;
       });
     }

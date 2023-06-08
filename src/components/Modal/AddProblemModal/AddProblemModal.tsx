@@ -34,16 +34,18 @@ function AddProblemModal(props: ModalProps) {
       allowOutsideClick: false
     }).then((result) => {
       if (result.isConfirmed) {
-        insertProblem(data).then((index) => console.log(index));
-        console.log(data);
-        Swal.fire({
-          position: "center",
-          timer: 5000,
-          icon: "success",
-          showConfirmButton: true,
-          title: "Tạo đề thi thành công"
+        insertProblem(data).then((index) => {
+          if (index) {
+            Swal.fire({
+              position: "center",
+              timer: 5000,
+              icon: "success",
+              showConfirmButton: true,
+              title: "Tạo đề thi thành công"
+            });
+            props.closeModal();
+          }
         });
-        props.closeModal();
       }
     });
   };

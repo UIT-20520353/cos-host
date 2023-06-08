@@ -49,11 +49,10 @@ function DetailProblem() {
       }
     });
   }, []);
-  const updateTestcaseList = () => {
+  const updateTestcaseList = async () => {
     const problem_id = getProblemId(problemId);
-    getTestcases(problem_id).then((data) => {
-      setTestcases(data ?? []);
-    });
+    const data = await getTestcases(problem_id);
+    if (data && data.length !== 0) setTestcases(data ?? []);
   };
 
   const onSubmitProblemForm: SubmitHandler<IProblem> = (data) => {
@@ -113,13 +112,15 @@ function DetailProblem() {
     setIsOpen(true);
   };
   const closeModal = () => {
-    setIsOpen(false);
     updateTestcaseList();
+    setIsOpen(false);
   };
+
+  const onChangeValue = (value: string) => {};
 
   return (
     <div className={"w-full"}>
-      <Header />
+      <Header placeHolder={"Tìm kiếm"} onChangeValue={onChangeValue} />
 
       <form
         onSubmit={handleSubmitProblem(onSubmitProblemForm)}

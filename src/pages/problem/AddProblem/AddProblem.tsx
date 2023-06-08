@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
 import { IContest } from "../../../types/contest.type";
 import { getMyContests } from "../../../query/api/contest-service";
+import { checkStatus } from "../../../utils/ValidateStatus";
 
 type IProps = {
   closeAddForm: () => void;
@@ -24,7 +25,6 @@ function AddProblem(props: IProps) {
     getMyContests().then((response) => {
       if (response) {
         setContests(response ?? []);
-        setValue("contest_id", response[0].id);
       }
     });
   }, []);
@@ -67,11 +67,12 @@ function AddProblem(props: IProps) {
           {...register("contest_id", { required: "Hãy chọn cuộc thi để thêm đề bài" })}
         >
           {contests.map((contest) => {
-            return (
-              <option key={contest.id} value={contest.id}>
-                {contest.name}
-              </option>
-            );
+            if (checkStatus(contest.date_begin, contest.time_begin, contest.duration) === "Chưa bắt đầu")
+              return (
+                <option key={contest.id} value={contest.id}>
+                  {contest.name}
+                </option>
+              );
           })}
         </select>
         {errors.contest_id && <span className={"text-xs text-red-600"}>{errors.contest_id.message}</span>}

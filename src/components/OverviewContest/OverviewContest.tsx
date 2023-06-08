@@ -117,14 +117,16 @@ function OverviewContest(props: IProps) {
               Xóa cuộc thi
             </button>
           )}
-          <NavLink
-            className={
-              "w-32 rounded-lg bg-gray-700 px-4 py-2 text-center text-center text-sm font-semibold text-white duration-300 hover:bg-gray-500 hover:text-white"
-            }
-            to={`/result-contest/${props.id}`}
-          >
-            Kết quả
-          </NavLink>
+          {status != "Chưa bắt đầu" && (
+            <NavLink
+              className={
+                "w-32 rounded-lg bg-gray-700 px-4 py-2 text-center text-center text-sm font-semibold text-white duration-300 hover:bg-gray-500 hover:text-white"
+              }
+              to={`/result-contest/${props.id}`}
+            >
+              Kết quả
+            </NavLink>
+          )}
         </div>
       )}
     </li>

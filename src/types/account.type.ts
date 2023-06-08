@@ -4,7 +4,7 @@ export type IAccount = {
   username: string;
   password: string;
   role_id: string;
-  host_id: string | null;
+  host_id: string;
   roles: IRole;
 };
 

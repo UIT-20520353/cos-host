@@ -1,6 +1,5 @@
 import supabase from "./supabase";
 import { ITestcase } from "../../types/testcase.type";
-import Swal from "sweetalert2";
 import { PostgrestResponse } from "@supabase/supabase-js";
 
 export async function insertTestcase(testcase: ITestcase) {
@@ -17,7 +16,7 @@ export async function insertTestcase(testcase: ITestcase) {
       .select();
 
     if (error) {
-      throw error;
+      console.error("testcase service: ", error);
     } else {
       return data;
     }
@@ -28,25 +27,15 @@ export async function insertTestcase(testcase: ITestcase) {
 
 export async function getTestcases(problemId: number) {
   try {
-    Swal.fire({
-      title: "Đang lấy dữ liệu testcase",
-      allowOutsideClick: false,
-      showConfirmButton: false,
-      didOpen() {
-        Swal.showLoading();
-      }
-    });
     const { data, error }: PostgrestResponse<ITestcase> = await supabase
       .from("testcases")
       .select("*")
       .eq("problem_id", problemId)
       .then((response) => response as PostgrestResponse<ITestcase>);
-    Swal.close();
     if (error) throw error;
     else return data;
   } catch (error) {
     console.error("Lỗi khi lấy dữ liệu testcases: ", error);
-    Swal.close();
   }
 }
 
@@ -67,7 +56,6 @@ export async function updateTestcase(testcase: ITestcase) {
     }
   } catch (error) {
     console.error("Lỗi khi cập nhật thông tin testcase: ", error);
-    Swal.close();
   }
 }
 

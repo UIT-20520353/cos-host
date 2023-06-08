@@ -30,25 +30,15 @@ export const insertContest = async (contest: IContest) => {
 
 export async function getMyContests() {
   try {
-    Swal.fire({
-      title: "Đang lấy dữ liệu cuộc thi",
-      allowOutsideClick: false,
-      showConfirmButton: false,
-      didOpen() {
-        Swal.showLoading();
-      }
-    });
     const { data, error }: PostgrestResponse<IContest> = await supabase
       .from("contests")
       .select("*")
       .eq("host_id", sessionStorage.getItem("id"))
       .then((response) => response as PostgrestResponse<IContest>);
-    Swal.close();
     if (error) throw error;
     else return data;
   } catch (error) {
     console.error("Lỗi khi lấy cuộc thi của tôi:", error);
-    Swal.close();
   }
 }
 
@@ -64,25 +54,15 @@ export async function deleteContest(contestId: number) {
 
 export async function getContestById(contestId: number) {
   try {
-    Swal.fire({
-      title: "Đang lấy dữ liệu",
-      allowOutsideClick: false,
-      showConfirmButton: false,
-      didOpen() {
-        Swal.showLoading();
-      }
-    });
     const { data, error }: PostgrestResponse<IContest> = await supabase
       .from("contests")
       .select("*")
       .eq("id", contestId)
       .then((response) => response as PostgrestResponse<IContest>);
-    Swal.close();
     if (error) throw error;
     else return data;
   } catch (error) {
     console.error("Lỗi khi lấy cuộc thi bằng id: ", error);
-    Swal.close();
   }
 }
 

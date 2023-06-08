@@ -7,6 +7,7 @@ import { IProblem } from "../../types/problem.type";
 import { getProblems } from "../../query/api/problem-service";
 import Swal from "sweetalert2";
 import { insertTestcase } from "../../query/api/textcase-service";
+import { checkStatus } from "../../utils/ValidateStatus";
 
 type IProps = {
   closeAddTestcaseForm: () => void;
@@ -22,20 +23,37 @@ function AddTestcase(props: IProps) {
   const [contests, setContests] = useState<IContest[]>([]);
   const [problems, setProblems] = useState<IProblem[]>([]);
 
-  useEffect(() => {
-    getMyContests().then((data) => {
-      setContests(data ?? []);
-      if (data?.length !== 0 && data) {
-        // console.log(data);
-        setValue("contest_id", data[0].id);
-        getProblems(data[0].id).then((problems) => {
-          if (problems?.length !== 0 && problems) {
-            setProblems(problems ?? []);
-            setValue("problem_id", problems[0].id);
-          }
-        });
+  const handleFetchData = async () => {
+    Swal.fire({
+      title: "Đang lấy dữ liệu cuộc thi",
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      didOpen() {
+        Swal.showLoading();
       }
     });
+
+    const dataContests = await getMyContests();
+    if (dataContests && dataContests.length !== 0) {
+      setContests(dataContests ?? []);
+      for (const contest of dataContests) {
+        if (checkStatus(contest.date_begin, contest.time_begin, contest.duration) === "Chưa bắt đầu") {
+          setValue("contest_id", contest.id);
+          const dataProblems = await getProblems(contest.id);
+          if (dataProblems && dataProblems.length !== 0) {
+            setProblems(dataProblems ?? []);
+            setValue("problem_id", dataProblems[0].id);
+          }
+          break;
+        }
+      }
+    }
+
+    Swal.close();
+  };
+
+  useEffect(() => {
+    handleFetchData();
   }, []);
 
   const onSubmit: SubmitHandler<ITestcase> = (data) => {
@@ -60,9 +78,6 @@ function AddTestcase(props: IProps) {
               title: "Tạo testcase thành công",
               allowOutsideClick: false
             });
-            // reset();
-            // setValue("id", data.id);
-            // setValue("problem_id", data.problem_id);
             setValue("input", "");
             setValue("output", "");
           } else {
@@ -101,11 +116,12 @@ function AddTestcase(props: IProps) {
           onChange={handleChangeContest}
         >
           {contests.map((contest) => {
-            return (
-              <option key={contest.id} value={contest.id}>
-                {contest.name}
-              </option>
-            );
+            if (checkStatus(contest.date_begin, contest.time_begin, contest.duration) === "Chưa bắt đầu")
+              return (
+                <option key={contest.id} value={contest.id}>
+                  {contest.name}
+                </option>
+              );
           })}
         </select>
         {errors.contest_id && <span className={"text-xs text-red-600"}>{errors.contest_id.message}</span>}
