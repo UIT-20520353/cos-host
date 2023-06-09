@@ -22,7 +22,7 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (sessionStorage.getItem("id")) {
+    if (sessionStorage.getItem("id") !== "-1") {
       dispatch(
         userLogin({ id: parseInt(sessionStorage.getItem("id") ?? "-1"), name: sessionStorage.getItem("name") ?? "" })
       );
@@ -32,7 +32,7 @@ function App() {
   return (
     <div className={"w-full"}>
       <Routes>
-        <Route path={"/"} element={user.id ? <MainPage /> : <Login />}>
+        <Route path={"/"} element={user.id !== -1 ? <MainPage /> : <Login />}>
           <Route index={true} element={<Dashboard />} />
           <Route path={"profile"} element={<ProfilePage />} />
           <Route path={"user/:id"} element={<UserPage />} />
