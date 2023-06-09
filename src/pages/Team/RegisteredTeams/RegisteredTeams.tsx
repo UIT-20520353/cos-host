@@ -87,7 +87,6 @@ function RegisteredTeams() {
                   id={team.id}
                   key={`team-${team.id}`}
                   nameTeam={team.name}
-                  members={3}
                 />
               ))}
             </>

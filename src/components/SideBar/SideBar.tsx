@@ -46,7 +46,7 @@ function SideBar(props: IProps) {
     }
   ];
   const handleLogout = () => {
-    dispatch(userLogout({ id: "", name: "" }));
+    dispatch(userLogout({ id: -1, name: "" }));
     sessionStorage.removeItem("id");
     sessionStorage.removeItem("name");
     navigate("/");

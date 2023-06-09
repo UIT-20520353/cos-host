@@ -2,7 +2,7 @@ import { createAction, createReducer } from "@reduxjs/toolkit";
 import { IUser } from "../../types/user.type";
 
 const initialState: IUser = {
-  id: "",
+  id: -1,
   name: ""
 };
 
