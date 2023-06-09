@@ -50,9 +50,9 @@ function Login() {
         icon: "error"
       });
     } else {
-      dispatch(userLogin({ id: parseInt(login.id ?? "-1"), name: login.name }));
+      dispatch(userLogin({ id: login.id, name: login.name }));
       navigate("/");
-      sessionStorage.setItem("id", login.id);
+      sessionStorage.setItem("id", login.id.toString());
       sessionStorage.setItem("name", login.name);
       Swal.fire({
         position: "bottom-end",

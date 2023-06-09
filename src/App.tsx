@@ -22,7 +22,7 @@ function App() {
 
   useEffect(() => {
     if (sessionStorage.getItem("id")) {
-      dispatch(userLogin({ id: sessionStorage.getItem("id") ?? "", name: sessionStorage.getItem("name") ?? "" }));
+      dispatch(userLogin({ id: parseInt(sessionStorage.getItem("id") ?? "-1"), name: sessionStorage.getItem("name") ?? "" }));
     }
   }, []);
 
