@@ -7,6 +7,7 @@ type IProps = {
   name: string;
   contest_id: number;
   updateProblemList: () => void;
+  status: string;
 };
 
 function OverviewProblem(props: IProps) {
@@ -49,14 +50,16 @@ function OverviewProblem(props: IProps) {
         >
           Xem chi tiết
         </NavLink>
-        <button
-          className={
-            "w-32 rounded-lg bg-[#d00000] px-4 py-2 text-center text-sm font-semibold text-white duration-300 hover:bg-opacity-70"
-          }
-          onClick={handleDeleteProblem}
-        >
-          Xóa đề thi
-        </button>
+        {props.status !== "Đang diễn ra" && props.status !== "Đã kết thúc" && (
+          <button
+            className={
+              "w-32 rounded-lg bg-[#d00000] px-4 py-2 text-center text-sm font-semibold text-white duration-300 hover:bg-opacity-70"
+            }
+            onClick={handleDeleteProblem}
+          >
+            Xóa đề thi
+          </button>
+        )}
       </div>
     </li>
   );

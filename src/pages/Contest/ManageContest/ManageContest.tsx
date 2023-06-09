@@ -64,7 +64,6 @@ function ManageContest() {
               return (
                 <OverviewContest
                   name={contest.name}
-                  // amount={getAmount(contest.id)}
                   date={contest.date_begin}
                   time={contest.time_begin}
                   key={`contest-${contest.id}`}

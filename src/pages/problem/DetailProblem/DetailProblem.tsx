@@ -9,6 +9,8 @@ import OverviewTestcase from "../../../components/OverviewTestcase";
 import { getTestcases } from "../../../query/api/textcase-service";
 import { ITestcase } from "../../../types/testcase.type";
 import AddTestcaseModal from "../../../components/Modal/AddTestcaseModal";
+import { getContestById } from "../../../query/api/contest-service";
+import { checkStatus } from "../../../utils/ValidateStatus";
 
 const getProblemId = (id: string | undefined): number => {
   let temp: string[] = [];
@@ -22,6 +24,8 @@ function DetailProblem() {
   const { contestId, problemId } = useParams<{ problemId: string; contestId: string }>();
   const [testcases, setTestcases] = useState<ITestcase[]>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [statusContest, setStatusContest] = useState<string>("");
+
   const {
     register: registerProblem,
     handleSubmit: handleSubmitProblem,
@@ -31,6 +35,12 @@ function DetailProblem() {
 
   useEffect(() => {
     const problem_id = getProblemId(problemId);
+
+    getContestById(getProblemId(contestId)).then((response) => {
+      if (response) {
+        setStatusContest(checkStatus(response[0].date_begin, response[0].time_begin, response[0].duration));
+      }
+    });
     getProblemById(problem_id).then((data) => {
       if (data) {
         setValueProblem("id", problem_id);
@@ -109,6 +119,8 @@ function DetailProblem() {
     setValueProblem("contest_id", contest_id);
   };
   const openModal = () => {
+    if (!(statusContest === "Chưa bắt đầu")) return;
+
     setIsOpen(true);
   };
   const closeModal = () => {
@@ -147,6 +159,7 @@ function DetailProblem() {
             placeholder={"Tên bài thi"}
             autoComplete={"off"}
             {...registerProblem("name", { required: "Tên bài thi không được bỏ trống" })}
+            readOnly={!(statusContest === "Chưa bắt đầu")}
           />
           {errorsProblem.name && <span className={"text-xs text-red-600"}>{errorsProblem.name.message}</span>}
         </div>
@@ -158,6 +171,7 @@ function DetailProblem() {
             className="block w-full resize-none rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
             {...registerProblem("detail", { required: "Đề thi không được bỏ trống" })}
             autoComplete={"off"}
+            readOnly={!(statusContest === "Chưa bắt đầu")}
           />
           {errorsProblem.detail && <span className={"text-xs text-red-600"}>{errorsProblem.detail.message}</span>}
         </div>
@@ -169,6 +183,7 @@ function DetailProblem() {
             className="block w-full resize-none rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
             {...registerProblem("example_input", { required: "Input mẫu không được bỏ trống" })}
             autoComplete={"off"}
+            readOnly={!(statusContest === "Chưa bắt đầu")}
           />
           {errorsProblem.example_input && (
             <span className={"text-xs text-red-600"}>{errorsProblem.example_input.message}</span>
@@ -183,21 +198,24 @@ function DetailProblem() {
             className="block w-full resize-none rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
             {...registerProblem("example_output", { required: "Output mẫu không được bỏ trống" })}
             autoComplete={"off"}
+            readOnly={!(statusContest === "Chưa bắt đầu")}
           />
           {errorsProblem.example_output && (
             <span className={"text-xs text-red-600"}>{errorsProblem.example_output.message}</span>
           )}
         </div>
-        <div>
-          <button
-            className={
-              "w-40 rounded-lg bg-[#023e8a] py-3 text-base font-semibold text-white duration-200 hover:opacity-80"
-            }
-            type={"submit"}
-          >
-            Cập nhật
-          </button>
-        </div>
+        {statusContest === "Chưa bắt đầu" && (
+          <div>
+            <button
+              className={
+                "w-40 rounded-lg bg-[#023e8a] py-3 text-base font-semibold text-white duration-200 hover:opacity-80"
+              }
+              type={"submit"}
+            >
+              Cập nhật
+            </button>
+          </div>
+        )}
       </form>
 
       <div className={"mx-5 my-8"}>
@@ -220,6 +238,7 @@ function DetailProblem() {
                 key={`testcase-${testcase.id}`}
                 name={index}
                 testcase={testcase}
+                statusContest={statusContest}
               />
             ))}
           </ul>

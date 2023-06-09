@@ -9,7 +9,6 @@ import { ITeam } from "../../types/team.type";
 
 type IProps = {
   name: string;
-  // amount: number;
   date: string;
   time: string;
   id: string;
@@ -117,7 +116,7 @@ function OverviewContest(props: IProps) {
       )}
       {props.isShowAction && (
         <div className={"mt-4 flex flex-row items-center gap-x-3"}>
-          {status !== "Đã kết thúc" && status !== "Đang diễn ra" && (
+          {status !== "Đã kết thúc" && status !== "Đang diễn ra" ? (
             <NavLink
               className={
                 "w-32 rounded-lg bg-[#0077b6] px-4 py-2 text-center text-sm font-semibold text-white duration-300 hover:bg-opacity-70"
@@ -125,6 +124,15 @@ function OverviewContest(props: IProps) {
               to={`/manage-contest/${props.id}`}
             >
               Cập nhật
+            </NavLink>
+          ) : (
+            <NavLink
+              className={
+                "w-32 rounded-lg bg-[#0077b6] px-4 py-2 text-center text-sm font-semibold text-white duration-300 hover:bg-opacity-70"
+              }
+              to={`/manage-contest/${props.id}`}
+            >
+              Xem chi tiết
             </NavLink>
           )}
           {status !== "Đang diễn ra" && (
@@ -137,7 +145,7 @@ function OverviewContest(props: IProps) {
               Xóa cuộc thi
             </button>
           )}
-          {status != "Chưa bắt đầu" && (
+          {status !== "Chưa bắt đầu" && (
             <NavLink
               className={
                 "w-32 rounded-lg bg-gray-700 px-4 py-2 text-center text-center text-sm font-semibold text-white duration-300 hover:bg-gray-500 hover:text-white"

@@ -15,6 +15,7 @@ import { useEffect } from "react";
 import Contest from "./pages/Contest/Contest";
 import DetailProblem from "./pages/problem/DetailProblem";
 import ProfilePage from "./pages/ProfilePage";
+import UserPage from "./pages/UserPage";
 
 function App() {
   const user = useSelector((state: RootState) => state.user);
@@ -22,7 +23,9 @@ function App() {
 
   useEffect(() => {
     if (sessionStorage.getItem("id")) {
-      dispatch(userLogin({ id: parseInt(sessionStorage.getItem("id") ?? "-1"), name: sessionStorage.getItem("name") ?? "" }));
+      dispatch(
+        userLogin({ id: parseInt(sessionStorage.getItem("id") ?? "-1"), name: sessionStorage.getItem("name") ?? "" })
+      );
     }
   }, []);
 
@@ -32,6 +35,7 @@ function App() {
         <Route path={"/"} element={user.id ? <MainPage /> : <Login />}>
           <Route index={true} element={<Dashboard />} />
           <Route path={"profile"} element={<ProfilePage />} />
+          <Route path={"user/:id"} element={<UserPage />} />
           <Route path={"add-contest"} element={<Contest />} />
           <Route path={"manage-contest"}>
             <Route index={true} element={<ManageContest />} />

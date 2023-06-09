@@ -91,7 +91,7 @@ function RegisteredTeams() {
               ))}
             </>
           ) : (
-            <p></p>
+            <p>Không có đội đăng ký tham gia</p>
           )}
         </ul>
       </div>

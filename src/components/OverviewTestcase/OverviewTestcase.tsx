@@ -9,6 +9,7 @@ type IProps = {
   name: number;
   testcase: ITestcase;
   updateTestcaseList: () => void;
+  statusContest: string;
 };
 
 function OverviewTestcase(props: IProps) {
@@ -99,6 +100,7 @@ function OverviewTestcase(props: IProps) {
               className="block w-full resize-none rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
               autoComplete={"off"}
               {...register("input", { required: "Input không được bỏ trống" })}
+              readOnly={!(props.statusContest === "Chưa bắt đầu")}
             />
             {errors.input && <span className={"text-xs text-red-600"}>{errors.input.message}</span>}
           </div>
@@ -110,28 +112,31 @@ function OverviewTestcase(props: IProps) {
               className="block w-full resize-none rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
               autoComplete={"off"}
               {...register("output", { required: "Output không được bỏ trống" })}
+              readOnly={!(props.statusContest === "Chưa bắt đầu")}
             />
             {errors.output && <span className={"text-xs text-red-600"}>{errors.output.message}</span>}
           </div>
-          <div className={`flex flex-row items-center gap-x-3 duration-300`}>
-            <button
-              className={
-                "w-40 rounded-lg bg-[#023e8a] py-3 text-base font-semibold text-white duration-200 hover:opacity-80"
-              }
-              type={"submit"}
-            >
-              Cập nhật
-            </button>
-            <button
-              className={
-                "w-40 rounded-lg bg-[#d00000] py-3 text-base font-semibold text-white duration-200 hover:opacity-70"
-              }
-              type={"button"}
-              onClick={handleDelete}
-            >
-              Xóa testcase
-            </button>
-          </div>
+          {props.statusContest === "Chưa bắt đầu" && (
+            <div className={`flex flex-row items-center gap-x-3 duration-300`}>
+              <button
+                className={
+                  "w-40 rounded-lg bg-[#023e8a] py-3 text-base font-semibold text-white duration-200 hover:opacity-80"
+                }
+                type={"submit"}
+              >
+                Cập nhật
+              </button>
+              <button
+                className={
+                  "w-40 rounded-lg bg-[#d00000] py-3 text-base font-semibold text-white duration-200 hover:opacity-70"
+                }
+                type={"button"}
+                onClick={handleDelete}
+              >
+                Xóa testcase
+              </button>
+            </div>
+          )}
         </div>
       </form>
     </li>

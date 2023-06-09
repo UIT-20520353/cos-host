@@ -64,7 +64,7 @@ function ManageTeam() {
           {filteredContests.length !== 0 ? (
             <>
               {filteredContests.map((contest) => {
-                if (checkStatus(contest.date_begin, contest.time_begin, contest.duration) === "Chưa bắt đầu")
+                if (checkStatus(contest.date_begin, contest.time_begin, contest.duration) !== "Đã kết thúc")
                   return (
                     <OverviewContest
                       name={contest.name}

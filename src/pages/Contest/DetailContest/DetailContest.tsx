@@ -11,6 +11,7 @@ import { IProblem } from "../../../types/problem.type";
 import { getProblems } from "../../../query/api/problem-service";
 import OverviewProblem from "../../../components/OverviewProblem";
 import AddProblemModal from "../../../components/Modal/AddProblemModal";
+import { checkStatus } from "../../../utils/ValidateStatus";
 
 const getContestId = (contestId: string | undefined): number => {
   let temp: string[] = [];
@@ -35,7 +36,7 @@ function DetailContest() {
   const [filterProblems, setFilterProblems] = useState<IProblem[]>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const navigate = useNavigate();
-
+  const [status, setStatus] = useState<string>("");
   const { contestId } = useParams<{ contestId: string }>();
 
   const handleFetchData = async () => {
@@ -59,6 +60,7 @@ function DetailContest() {
         time_begin: dataContests[0].time_begin,
         duration: dataContests[0].duration
       });
+      setStatus(checkStatus(dataContests[0].date_begin, dataContests[0].time_begin, dataContests[0].duration));
     }
     const dataProblems = await getProblems(contest_id);
     if (dataProblems) {
@@ -107,6 +109,8 @@ function DetailContest() {
     });
   };
   const openModal = () => {
+    if (!(status === "Chưa bắt đầu")) return;
+
     setIsOpen(true);
   };
   const closeModal = () => {
@@ -211,6 +215,7 @@ function DetailContest() {
                   "block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                 }
                 placeholder={"Tên cuộc thi"}
+                readOnly={!(status === "Chưa bắt đầu")}
                 {...register("name", { required: "Tên cuộc thi không được bỏ trống" })}
                 autoComplete={"off"}
               />
@@ -223,6 +228,7 @@ function DetailContest() {
                 className="block w-full resize-none rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                 {...register("description")}
                 autoComplete={"off"}
+                readOnly={!(status === "Chưa bắt đầu")}
               />
             </div>
             <div className={"mb-3 grid grid-cols-3 gap-x-6"}>
@@ -239,6 +245,7 @@ function DetailContest() {
                     validate: (value) => isFutureDate(value) || "Ngày bắt đầu không được ở quá khứ"
                   })}
                   autoComplete={"off"}
+                  readOnly={!(status === "Chưa bắt đầu")}
                 />
                 {errors.date_begin && <span className={"text-xs text-red-600"}>{errors.date_begin.message}</span>}
               </div>
@@ -252,6 +259,7 @@ function DetailContest() {
                   }
                   {...register("time_begin", { required: "Giờ bắt đầu không được bỏ trống" })}
                   autoComplete={"off"}
+                  readOnly={!(status === "Chưa bắt đầu")}
                 />
                 {errors.time_begin && <span className={"text-xs text-red-600"}>{errors.time_begin.message}</span>}
               </div>
@@ -275,25 +283,28 @@ function DetailContest() {
                 </select>
               </div>
             </div>
-            <div className={"mt-5 flex flex-row items-center gap-x-3"}>
-              <button
-                className={
-                  "w-40 rounded-lg bg-[#023e8a] py-3 text-base font-semibold text-white duration-200 hover:opacity-80"
-                }
-                type={"submit"}
-              >
-                Cập nhật
-              </button>
-              <button
-                className={
-                  "w-40 rounded-lg bg-[#d00000] py-3 text-base font-semibold text-white duration-200 hover:opacity-70"
-                }
-                type={"button"}
-                onClick={deleteContestInUI}
-              >
-                Xóa cuộc thi
-              </button>
-            </div>
+            {status !== "Đang diễn ra" && status !== "Đã kết thúc" && (
+              <div className={"mt-5 flex flex-row items-center gap-x-3"}>
+                <button
+                  className={
+                    "w-40 rounded-lg bg-[#023e8a] py-3 text-base font-semibold text-white duration-200 hover:opacity-80"
+                  }
+                  type={"submit"}
+                >
+                  Cập nhật
+                </button>
+
+                <button
+                  className={
+                    "w-40 rounded-lg bg-[#d00000] py-3 text-base font-semibold text-white duration-200 hover:opacity-70"
+                  }
+                  type={"button"}
+                  onClick={deleteContestInUI}
+                >
+                  Xóa cuộc thi
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </form>
@@ -318,6 +329,7 @@ function DetailContest() {
                 id={problem.id}
                 name={problem.name}
                 contest_id={problem.contest_id}
+                status={status}
               />
             ))}
           </ul>
