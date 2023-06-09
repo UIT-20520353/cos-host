@@ -122,7 +122,9 @@ function ResultContest() {
         <div className={"flex flex-row items-start justify-between"}>
           <p className={"text-xl font-semibold"}>Bảng xếp hạng của cuộc thi {contest.name}</p>
           <NavLink
-            className={"rounded-md bg-gray-300 px-4 py-2 text-sm duration-300 hover:bg-gray-600 hover:text-white"}
+            className={
+              "rounded-md bg-gray-300 px-4 py-2 text-sm shadow-md duration-300 hover:bg-gray-600 hover:text-white"
+            }
             to={"/manage-contest"}
           >
             Quay lại

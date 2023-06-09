@@ -35,7 +35,6 @@ function Login() {
       return;
     } else {
       const hashPassword = CryptoJS.SHA256(data.password).toString();
-      console.log("hash nhap: ", hashPassword);
       login = accounts.find((account) => {
         if (account.username === data.username && account.password === hashPassword && account.roles.name === "HOST")
           return true;

@@ -4,23 +4,39 @@ import { useEffect, useState } from "react";
 import { deleteContest } from "../../query/api/contest-service";
 import Swal from "sweetalert2";
 import { getDateAndTime, getTimeEnd } from "../../utils/ValidateDate/ValidateDate";
+import { getTeamList } from "../../query/api/team-service";
+import { ITeam } from "../../types/team.type";
 
 type IProps = {
   name: string;
-  amount: number;
+  // amount: number;
   date: string;
   time: string;
   id: string;
   isShowAction: boolean;
   duration: string;
   updateContestList: () => void;
+  isOverviewForManageTeam: boolean;
 };
 
 function OverviewContest(props: IProps) {
   const [status, setStatus] = useState<string>("");
   const [dateDisplay, setDateDisplay] = useState<string>("");
+  const [teams, setTeams] = useState<ITeam[]>([]);
+
+  const getIdNumber = (id: string): number => {
+    const temp = id.split("-");
+    return parseInt(temp[1]);
+  };
+
+  const handleFetchData = async () => {
+    const dataTeams = await getTeamList(getIdNumber(props.id));
+    if (dataTeams) setTeams(dataTeams ?? []);
+  };
 
   useEffect(() => {
+    handleFetchData();
+
     const current_date = new Date();
     const { year, month, day, hour, minute, second } = getDateAndTime(props.date, props.time);
 
@@ -81,20 +97,24 @@ function OverviewContest(props: IProps) {
       </span>
       <div className={"mt-4 flex flex-row items-center gap-x-2"}>
         <RiTeamFill className={"inline-block h-5 w-5 opacity-50"} />
-        <span className={"text-sm text-gray-500"}>{props.amount} đội tham gia</span>
+        <span className={"text-sm text-gray-500"}>{teams.length} đội tham gia</span>
       </div>
       <div className={"mt-4 flex flex-row items-center gap-x-2"}>
         <MdDateRange className={"inline-block h-5 w-5 opacity-50"} />
         <span className={"text-sm text-gray-500"}>{dateDisplay}</span>
       </div>
-      <div className={"mt-4 flex flex-row items-center gap-x-2"}>
-        <BiTimeFive className={"inline-block h-5 w-5 opacity-50"} />
-        <span className={"text-sm text-gray-500"}>{props.time}</span>
-      </div>
-      <div className={"mt-4 flex flex-row items-center gap-x-2"}>
-        <GiDuration className={"inline-block h-5 w-5 opacity-50"} />
-        <span className={"text-sm text-gray-500"}>{props.duration}</span>
-      </div>
+      {!props.isOverviewForManageTeam && (
+        <>
+          <div className={"mt-4 flex flex-row items-center gap-x-2"}>
+            <BiTimeFive className={"inline-block h-5 w-5 opacity-50"} />
+            <span className={"text-sm text-gray-500"}>{props.time}</span>
+          </div>
+          <div className={"mt-4 flex flex-row items-center gap-x-2"}>
+            <GiDuration className={"inline-block h-5 w-5 opacity-50"} />
+            <span className={"text-sm text-gray-500"}>{props.duration}</span>
+          </div>
+        </>
+      )}
       {props.isShowAction && (
         <div className={"mt-4 flex flex-row items-center gap-x-3"}>
           {status !== "Đã kết thúc" && status !== "Đang diễn ra" && (
@@ -127,6 +147,18 @@ function OverviewContest(props: IProps) {
               Kết quả
             </NavLink>
           )}
+        </div>
+      )}
+      {props.isOverviewForManageTeam && (
+        <div className={"mt-4"}>
+          <NavLink
+            className={
+              "inline-block w-32 rounded-lg bg-[#0077b6] px-4 py-2 text-center text-sm font-semibold text-white duration-300 hover:bg-opacity-70"
+            }
+            to={`/manage-team/${props.id}`}
+          >
+            Xem chi tiết
+          </NavLink>
         </div>
       )}
     </li>

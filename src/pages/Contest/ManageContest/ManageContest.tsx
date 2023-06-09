@@ -4,23 +4,10 @@ import OverviewContest from "../../../components/OverviewContest";
 import { getMyContests } from "../../../query/api/contest-service";
 import { IContest } from "../../../types/contest.type";
 import Swal from "sweetalert2";
-import { ITeam } from "../../../types/team.type";
-import { getTeamListByContestIds } from "../../../query/api/team-service";
 
 function ManageContest() {
   const [contests, setContests] = useState<IContest[]>([]);
   const [filterContests, setFilterContests] = useState<IContest[]>([]);
-  const [teams, setTeams] = useState<ITeam[]>([]);
-
-  const getAmount = (contest_id: number): number => {
-    let amount = 0;
-
-    teams.forEach((team) => {
-      if (team.contest_id === contest_id) amount++;
-    });
-
-    return amount;
-  };
 
   const handleFetchData = async () => {
     Swal.fire({
@@ -36,9 +23,6 @@ function ManageContest() {
     if (dataContests) {
       setContests(dataContests ?? []);
       setFilterContests(dataContests ?? []);
-      const contestIds = dataContests.map((contest) => contest.id);
-      const dataTeams = await getTeamListByContestIds(contestIds);
-      if (dataContests) setTeams(dataTeams ?? []);
     }
 
     Swal.close();
@@ -80,7 +64,7 @@ function ManageContest() {
               return (
                 <OverviewContest
                   name={contest.name}
-                  amount={getAmount(contest.id)}
+                  // amount={getAmount(contest.id)}
                   date={contest.date_begin}
                   time={contest.time_begin}
                   key={`contest-${contest.id}`}
@@ -88,6 +72,7 @@ function ManageContest() {
                   isShowAction={true}
                   duration={contest.duration}
                   updateContestList={updateContestList}
+                  isOverviewForManageTeam={false}
                 />
               );
             })}

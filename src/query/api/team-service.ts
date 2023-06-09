@@ -52,3 +52,33 @@ export async function getTeamMember(teamIds: number[]) {
     console.error("Lỗi get team member: ", error);
   }
 }
+export async function getTeamMemberByTeamId(teamId: number) {
+  try {
+    const { data, error }: PostgrestResponse<ITeamMemberDetail> = await supabase
+      .from("team_members")
+      .select(`*, accounts("*")`)
+      .eq("team_id", teamId)
+      .then((response) => response as PostgrestResponse<ITeamMemberDetail>);
+    if (error) {
+      console.error("getTeamMemberByTeamId: ", error);
+    } else {
+      return data;
+    }
+  } catch (error) {
+    console.error("getTeamMemberByTeamId: ", error);
+  }
+}
+
+export async function deleteTeamById(teamId: number) {
+  try {
+    const { data, error } = await supabase.from("teams").delete().eq("id", teamId);
+    if (error) {
+      console.error("deleteTeamById: ", error);
+      return false;
+    } else {
+      return data ?? true;
+    }
+  } catch (error) {
+    console.error("deleteTeamById: ", error);
+  }
+}

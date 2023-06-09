@@ -1,113 +1,88 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Header from "../../../components/Header";
-import { RiTeamFill } from "react-icons/all";
-import { NavLink } from "react-router-dom";
-// import { ITeam } from "../../../types/team.type";
+import Swal from "sweetalert2";
+import { IContest } from "../../../types/contest.type";
+import { getMyContests } from "../../../query/api/contest-service";
+import OverviewContest from "../../../components/OverviewContest";
+import { checkStatus } from "../../../utils/ValidateStatus";
 
 function ManageTeam() {
-  // const [teams, setTeams] = useState<ITeam[]>([]);
+  const [contests, setContests] = useState<IContest[]>([]);
+  const [filteredContests, setFilteredContests] = useState<IContest[]>([]);
 
-  // const handleFetchData = async () => {
-  //   Swal.fire({
-  //     title: "Đang lấy dữ liệu cuộc thi",
-  //     allowOutsideClick: false,
-  //     showConfirmButton: false,
-  //     didOpen() {
-  //       Swal.showLoading();
-  //     }
-  //   });
-  //
-  //   const dataContests = await getMyContests();
-  //   if (dataContests) {
-  //     setContests(dataContests ?? []);
-  //     setFilterContests(dataContests ?? []);
-  //     const contestIds = dataContests.map((contest) => contest.id);
-  //     const dataTeams = await getTeamListByContestIds(contestIds);
-  //     if (dataContests) setTeams(dataTeams ?? []);
-  //   }
-  //
-  //   Swal.close();
-  // };
+  const handleFetchData = async () => {
+    Swal.fire({
+      title: "Đang lấy dữ liệu cuộc thi",
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      didOpen() {
+        Swal.showLoading();
+      }
+    });
 
-  // const getAmount = (contest_id: number): number => {
-  //   let amount = 0;
-  //
-  //   teams.forEach((team) => {
-  //     if (team.contest_id === contest_id) amount++;
-  //   });
-  //
-  //   return amount;
-  // };
+    const dataContests = await getMyContests();
+    if (dataContests) {
+      setContests(dataContests ?? []);
+      setFilteredContests(dataContests ?? []);
+    }
+
+    Swal.close();
+  };
 
   useEffect(() => {
     document.title = "Quản lý đội";
-    // handleFetchData();
+    handleFetchData();
   }, []);
 
   const onChangeValue = (value: string | null) => {
     if (value === null) return;
+    if (value === "") {
+      const temp = [...contests];
+      setFilteredContests(temp);
+      return;
+    }
+
+    const result = contests.filter((contest) => {
+      const nameContest = contest.name.toUpperCase();
+      return nameContest.includes(value.toUpperCase());
+    });
+    setFilteredContests(result);
+  };
+
+  const updateContestList = () => {
+    return;
   };
 
   return (
     <div className={"w-full"}>
-      <Header placeHolder={"Nhập tên cuộc thi"} onChangeValue={onChangeValue} isUsed={false} />
+      <Header placeHolder={"Nhập tên cuộc thi"} onChangeValue={onChangeValue} isUsed={true} />
 
       <div className={"mx-12 my-10"}>
         <p className={"text-xl font-semibold"}>Danh sách các cuộc thi có thể phê duyệt</p>
 
         <ul className={"mt-6 grid grid-cols-2 gap-5"}>
-          <li
-            className={
-              "flex flex-row items-start justify-between rounded-md border border-gray-200 bg-gray-100 p-3 shadow-md"
-            }
-          >
-            <div className={"pb-1"}>
-              <p className={"mb-3 truncate text-lg font-medium"}>Beginner Free Contest 51</p>
-              <div className={"mb-4 mt-4 flex flex-row items-center gap-x-2"}>
-                <RiTeamFill className={"inline-block h-5 w-5 opacity-50"} />
-                <span className={"text-sm text-gray-500"}>32 đội tham gia</span>
-              </div>
-              <span className={"rounded-full bg-[#fff2b2] px-4 py-2 text-sm font-semibold text-[#710000]"}>
-                Chưa diễn ra
-              </span>
-            </div>
-            <div className={"mt-2"}>
-              <NavLink
-                className={
-                  "rounded-md bg-neutral-300 px-5 py-2.5 text-sm text-black hover:bg-neutral-400 hover:text-white"
-                }
-                to={"/manage-team/question-1-1"}
-              >
-                Chi tiết
-              </NavLink>
-            </div>
-          </li>
-          <li
-            className={
-              "flex flex-row items-start justify-between rounded-md border border-gray-200 bg-gray-100 p-3 shadow-md"
-            }
-          >
-            <div className={"pb-1"}>
-              <p className={"mb-3 truncate text-lg font-medium"}>Testing round 51</p>
-              <div className={"mb-4 mt-4 flex flex-row items-center gap-x-2"}>
-                <RiTeamFill className={"inline-block h-5 w-5 opacity-50"} />
-                <span className={"text-sm text-gray-500"}>25 đội tham gia</span>
-              </div>
-              <span className={"rounded-full bg-[#fff2b2] px-4 py-2 text-sm font-semibold text-[#710000]"}>
-                Chưa diễn ra
-              </span>
-            </div>
-            <div className={"mt-2"}>
-              <NavLink
-                className={
-                  "rounded-md bg-neutral-300 px-5 py-2.5 text-sm text-black hover:bg-neutral-400 hover:text-white"
-                }
-                to={"/manage-team/question-1-1"}
-              >
-                Chi tiết
-              </NavLink>
-            </div>
-          </li>
+          {filteredContests.length !== 0 ? (
+            <>
+              {filteredContests.map((contest) => {
+                if (checkStatus(contest.date_begin, contest.time_begin, contest.duration) === "Chưa bắt đầu")
+                  return (
+                    <OverviewContest
+                      name={contest.name}
+                      date={contest.date_begin}
+                      time={contest.time_begin}
+                      key={`contest-${contest.id}`}
+                      id={`contest-${contest.id}`}
+                      isShowAction={false}
+                      duration={contest.duration}
+                      updateContestList={updateContestList}
+                      isOverviewForManageTeam={true}
+                    />
+                  );
+              })}
+            </>
+          ) : (
+            <p className={"text-base font-medium"}>Không có cuộc thi để phê duyệt</p>
+          )}
         </ul>
       </div>
     </div>
