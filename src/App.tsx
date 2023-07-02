@@ -1,38 +1,33 @@
 import { Route, Routes } from "react-router-dom";
-import MainPage from "./pages/MainPage";
-import Login from "./pages/Login";
-import { useDispatch, useSelector } from "react-redux";
-import { userLogin } from "./pages/Login/login.reducer";
-import Dashboard from "./pages/Dashboard";
-import ManageContest from "./pages/Contest/ManageContest";
-import DetailContest from "./pages/Contest/DetailContest";
-import ManageTeam from "./pages/Team/ManageTeam";
-import RegisteredTeams from "./pages/Team/RegisteredTeams";
-import ResultContest from "./pages/ResultContest";
-import TeamProfile from "./pages/Team/TeamProfile";
-import { RootState } from "./store/store";
-import { useEffect } from "react";
-import Contest from "./pages/Contest/Contest";
-import DetailProblem from "./pages/problem/DetailProblem";
-import ProfilePage from "./pages/ProfilePage";
-import UserPage from "./pages/UserPage";
+import MainPage from "~/pages/MainPage";
+import Login from "~/pages/Login";
+import Dashboard from "~/pages/Dashboard";
+import ProfilePage from "~/pages/ProfilePage";
+import UserPage from "~/pages/UserPage";
+import Contest from "~/pages/Contest/Contest";
+import DetailProblem from "~/pages/problem/DetailProblem";
+import TeamProfile from "~/pages/Team/TeamProfile";
+import ManageTeam from "~/pages/Team/ManageTeam";
+import DetailContest from "~/pages/Contest/DetailContest";
+import ManageContest from "~/pages/Contest/ManageContest";
+import RegisteredTeams from "~/pages/Team/RegisteredTeams";
+import ResultContest from "~/pages/ResultContest";
+import { ProtectedRoute } from "~/components";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
-  const user = useSelector((state: RootState) => state.user);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (sessionStorage.getItem("id") !== "-1") {
-      dispatch(
-        userLogin({ id: parseInt(sessionStorage.getItem("id") ?? "-1"), name: sessionStorage.getItem("name") ?? "" })
-      );
-    }
-  }, []);
-
   return (
     <div className={"w-full"}>
       <Routes>
-        <Route path={"/"} element={user.id !== -1 ? <MainPage /> : <Login />}>
+        <Route
+          path={"/"}
+          element={
+            <ProtectedRoute>
+              <MainPage />
+            </ProtectedRoute>
+          }
+        >
           <Route index={true} element={<Dashboard />} />
           <Route path={"profile"} element={<ProfilePage />} />
           <Route path={"user/:id"} element={<UserPage />} />
@@ -51,7 +46,9 @@ function App() {
           <Route path={"result-contest/:id"} element={<ResultContest />} />
           <Route path={"team-profile/:id"} element={<TeamProfile />} />
         </Route>
+        <Route path={"/login"} element={<Login />} />
       </Routes>
+      <ToastContainer pauseOnFocusLoss={false} pauseOnHover={false} closeOnClick={false} draggable={false} />
     </div>
   );
 }

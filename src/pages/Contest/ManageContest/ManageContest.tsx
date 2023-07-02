@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import Header from "../../../components/Header";
-import OverviewContest from "../../../components/OverviewContest";
-import { getMyContests } from "../../../query/api/contest-service";
-import { IContest } from "../../../types/contest.type";
+import { getMyContests } from "~/query/api/contest-service";
+import { IContest } from "~/types";
 import Swal from "sweetalert2";
+import { Header, OverviewContest } from "~/components";
 
 function ManageContest() {
   const [contests, setContests] = useState<IContest[]>([]);
@@ -34,7 +33,7 @@ function ManageContest() {
   }, []);
 
   const updateContestList = () => {
-    getMyContests().then((response) => setContests(response ?? []));
+    handleFetchData();
   };
 
   const onChangeValue = (value: string | null) => {

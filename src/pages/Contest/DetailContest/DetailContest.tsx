@@ -1,17 +1,12 @@
 import { NavLink, useNavigate, useParams } from "react-router-dom";
-import Header from "../../../components/Header";
 import { useEffect, useState } from "react";
-import { listTimeContest } from "../../../types/time.type";
-import { deleteContest, getContestById, updateContestById } from "../../../query/api/contest-service";
-import { IContest } from "../../../types/contest.type";
+import { listTimeContest, IContest, IProblem } from "~/types";
+import { deleteContest, getContestById, updateContestById, getProblems } from "~/query";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { isFutureDate } from "../../../utils/ValidateDate/ValidateDate";
+import { isFutureDate, checkStatus } from "~/utils";
 import Swal from "sweetalert2";
-import { IProblem } from "../../../types/problem.type";
-import { getProblems } from "../../../query/api/problem-service";
-import OverviewProblem from "../../../components/OverviewProblem";
-import AddProblemModal from "../../../components/Modal/AddProblemModal";
-import { checkStatus } from "../../../utils/ValidateStatus";
+import { Header, OverviewProblem } from "~/components";
+import AddProblemModal from "~/components/Modal/AddProblemModal";
 
 const getContestId = (contestId: string | undefined): number => {
   let temp: string[] = [];
@@ -115,7 +110,7 @@ function DetailContest() {
   };
   const closeModal = () => {
     setIsOpen(false);
-    updateProblemList();
+    handleFetchData();
   };
 
   const setValueForm = ({
@@ -136,12 +131,6 @@ function DetailContest() {
     setValue("date_begin", date_begin);
     setValue("time_begin", time_begin);
     setValue("duration", duration);
-  };
-
-  const updateProblemList = async () => {
-    const contest_id = getContestId(contestId);
-    const data = await getProblems(contest_id);
-    if (data && data.length !== 0) setProblems(data ?? []);
   };
 
   const deleteContestInUI = () => {
@@ -324,7 +313,7 @@ function DetailContest() {
           <ul className={"mt-5 grid grid-cols-3 gap-3"}>
             {filterProblems.map((problem) => (
               <OverviewProblem
-                updateProblemList={updateProblemList}
+                updateProblemList={handleFetchData}
                 key={problem.id}
                 id={problem.id}
                 name={problem.name}

@@ -1,9 +1,9 @@
-import ModalPortal from "../../ModalPortal";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { ITestcase } from "../../../types/testcase.type";
+import { ITestcase } from "~/types";
 import { useEffect } from "react";
 import Swal from "sweetalert2";
-import { insertTestcase } from "../../../query/api/textcase-service";
+import { insertTestcase } from "~/query/api/textcase-service";
+import ModalPortal from "~/components/ModalPortal";
 
 type ModalProps = {
   problemId: number;

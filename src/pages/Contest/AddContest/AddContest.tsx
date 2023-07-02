@@ -1,10 +1,9 @@
 import { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { IContest } from "../../../types/contest.type";
-import { insertContest } from "../../../query/api/contest-service";
+import { IContest, listTimeContest } from "~/types";
+import { insertContest } from "~/query";
 import Swal from "sweetalert2";
-import { listTimeContest } from "../../../types/time.type";
-import { isFutureDate } from "../../../utils/ValidateDate/ValidateDate";
+import { isFutureDate } from "~/utils";
 
 type IProps = {
   closeAddContestForm: () => void;

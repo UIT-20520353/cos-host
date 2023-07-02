@@ -1,10 +1,10 @@
-import ModalPortal from "../../ModalPortal";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { IAccount, IFormChangePassword } from "../../../types/account.type";
+import { IAccount, IFormChangePassword } from "~/types";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import CryptoJS from "crypto-js";
-import { changePassword, getAccountInfo } from "../../../query/api/account-service";
+import { changePassword, getAccountInfo } from "~/query/api/account-service";
+import ModalPortal from "~/components/ModalPortal";
 
 type ModalProps = {
   closeModal: () => void;

@@ -1,12 +1,9 @@
 import { NavLink, useParams } from "react-router-dom";
-import Header from "../../components/Header";
-import { IContest } from "../../types/contest.type";
+import { IContest } from "~/types";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import { getContestById } from "../../query/api/contest-service";
-import { getTeamList, getTeamMember } from "../../query/api/team-service";
-import { getProblems } from "../../query/api/problem-service";
-import { getAllSubmission } from "../../query/api/submission-service";
+import { getTeamList, getTeamMember, getContestById, getProblems, getAllSubmission } from "~/query";
+import { Header } from "~/components";
 
 type IRanking = {
   id: number;

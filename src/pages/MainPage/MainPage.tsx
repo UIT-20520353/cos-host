@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
-import SideBar from "../../components/SideBar";
+import { SideBar } from "~/components";
 
 function MainPage() {
   const [isOpen, setIsOpen] = useState<boolean>(false);

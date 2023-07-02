@@ -1,8 +1,7 @@
 import { CgProfile } from "react-icons/all";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store/store";
 import { useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
+import { useLocalStorage } from "~/utils";
 
 type IProps = {
   placeHolder: string;
@@ -12,7 +11,7 @@ type IProps = {
 
 function Header(props: IProps) {
   const inputSearchRef = useRef<HTMLInputElement>(null);
-  const user = useSelector((state: RootState) => state.user);
+  const [user, setUser] = useLocalStorage("user", null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const handleOnChange = () => {
@@ -39,7 +38,7 @@ function Header(props: IProps) {
         />
       </div>
       <div className={"flex cursor-pointer flex-row items-center gap-x-4"}>
-        <span className={"font-mono text-lg font-bold"}>{user.name}</span>
+        <span className={"font-mono text-lg font-bold"}>{user?.name}</span>
         <div className={"relative"} onMouseLeave={() => setIsOpen(false)}>
           <button type={"button"} onMouseOver={() => setIsOpen(true)} onFocus={() => setIsOpen(true)}>
             <CgProfile className={"h-10 w-10 cursor-pointer opacity-60 duration-300 hover:opacity-100"} />
@@ -64,4 +63,4 @@ function Header(props: IProps) {
   );
 }
 
-export default Header;
+export { Header };

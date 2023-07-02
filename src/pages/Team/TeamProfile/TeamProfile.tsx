@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
-import Header from "../../../components/Header";
 import { BiUserCircle } from "react-icons/all";
+import { Header } from "~/components";
 
 function TeamProfile() {
   const { id } = useParams();

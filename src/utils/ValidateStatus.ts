@@ -1,4 +1,4 @@
-import { getDateAndTime, getTimeEnd } from "./ValidateDate/ValidateDate";
+import { getDateAndTime, getTimeEnd } from "./ValidateDate";
 
 export function checkStatus(date: string, time: string, duration: string): string {
   const current_date = new Date();

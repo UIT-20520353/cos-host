@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import Swal from "sweetalert2";
-import { deleteProblem } from "../../query/api/problem-service";
+import { deleteProblem } from "../query/api/problem-service";
 
 type IProps = {
   id: number;
@@ -65,4 +65,4 @@ function OverviewProblem(props: IProps) {
   );
 }
 
-export default OverviewProblem;
+export { OverviewProblem };

@@ -1,6 +1,6 @@
 import supabase from "./supabase";
 import { PostgrestResponse } from "@supabase/supabase-js";
-import { IAccount } from "../../types/account.type";
+import { IAccount, ISimpleAccount } from "../../types/account.type";
 import { IHost } from "../../types/host.type";
 
 export const getAccountList = async () => {
@@ -91,5 +91,32 @@ export async function changePassword(id: number, password: string) {
     }
   } catch (error) {
     console.error("changePassword: ", error);
+  }
+}
+
+export async function handleLogin(username: string, password: string): Promise<ISimpleAccount> {
+  const failResult: ISimpleAccount = {
+    id: -1,
+    name: ""
+  };
+
+  try {
+    const { data, error }: PostgrestResponse<ISimpleAccount> = await supabase
+      .rpc("handle_login", {
+        password_login: password,
+        role_login: 2,
+        username_login: username
+      })
+      .then((response) => response as PostgrestResponse<ISimpleAccount>);
+    if (error) {
+      console.error("handleLogin :", error);
+      return failResult;
+    } else {
+      if (data && data.length !== 0) return data[0];
+      else return failResult;
+    }
+  } catch (error) {
+    console.error("handleLogin :", error);
+    return failResult;
   }
 }

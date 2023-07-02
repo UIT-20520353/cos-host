@@ -32,3 +32,8 @@ export type IFormChangePassword = {
   newPassword: string;
   rePassword: string;
 };
+
+export interface ISimpleAccount {
+  id: number;
+  name: string;
+}

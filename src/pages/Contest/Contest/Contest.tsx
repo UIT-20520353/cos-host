@@ -1,9 +1,9 @@
-import Header from "../../../components/Header";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import AddContest from "../AddContest";
-import AddProblem from "../../problem/AddProblem";
-import AddTestcase from "../../../components/Testcase";
+import { Header } from "~/components";
+import AddContest from "~/pages/Contest/AddContest";
+import AddProblem from "~/pages/problem/AddProblem";
+import AddTestcase from "~/components/Testcase";
 
 function Contest() {
   useEffect(() => {

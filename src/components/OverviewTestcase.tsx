@@ -1,9 +1,9 @@
 import { AiFillCaretDown } from "react-icons/all";
 import { useEffect, useState } from "react";
-import { ITestcase } from "../../types/testcase.type";
+import { ITestcase } from "~/types";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Swal from "sweetalert2";
-import { deleteTestcaseById, updateTestcase } from "../../query/api/textcase-service";
+import { deleteTestcaseById, updateTestcase } from "~/query";
 
 type IProps = {
   name: number;
@@ -143,4 +143,4 @@ function OverviewTestcase(props: IProps) {
   );
 }
 
-export default OverviewTestcase;
+export { OverviewTestcase };

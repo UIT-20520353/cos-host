@@ -1,16 +1,12 @@
 import { NavLink, useParams } from "react-router-dom";
-import Header from "../../../components/Header";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { IProblem } from "../../../types/problem.type";
+import { IProblem, ITestcase } from "~/types";
 import { useEffect, useState } from "react";
-import { getProblemById, updateProblem } from "../../../query/api/problem-service";
+import { getProblemById, updateProblem, getTestcases, getContestById } from "~/query";
 import Swal from "sweetalert2";
-import OverviewTestcase from "../../../components/OverviewTestcase";
-import { getTestcases } from "../../../query/api/textcase-service";
-import { ITestcase } from "../../../types/testcase.type";
-import AddTestcaseModal from "../../../components/Modal/AddTestcaseModal";
-import { getContestById } from "../../../query/api/contest-service";
-import { checkStatus } from "../../../utils/ValidateStatus";
+import { checkStatus } from "~/utils";
+import { Header, OverviewTestcase } from "~/components";
+import AddTestcaseModal from "~/components/Modal/AddTestcaseModal";
 
 const getProblemId = (id: string | undefined): number => {
   let temp: string[] = [];

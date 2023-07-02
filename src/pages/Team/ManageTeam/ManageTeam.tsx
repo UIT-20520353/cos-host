@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
-import Header from "../../../components/Header";
 import Swal from "sweetalert2";
-import { IContest } from "../../../types/contest.type";
-import { getMyContests } from "../../../query/api/contest-service";
-import OverviewContest from "../../../components/OverviewContest";
-import { checkStatus } from "../../../utils/ValidateStatus";
+import { IContest } from "~/types";
+import { getMyContests } from "~/query";
+import { checkStatus } from "~/utils";
+import { Header, OverviewContest } from "~/components";
 
 function ManageTeam() {
   const [contests, setContests] = useState<IContest[]>([]);

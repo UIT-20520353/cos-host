@@ -1,9 +1,9 @@
-import ModalPortal from "../../ModalPortal";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { IProblem } from "../../../types/problem.type";
+import { IProblem } from "~/types";
 import Swal from "sweetalert2";
 import { useEffect } from "react";
-import { insertProblem } from "../../../query/api/problem-service";
+import { insertProblem } from "~/query/api/problem-service";
+import ModalPortal from "~/components/ModalPortal";
 
 type ModalProps = {
   contestId: number;

@@ -1,10 +1,10 @@
-import Header from "../../../components/Header";
-import RegisteredTeam from "../../../components/RegisteredTeam";
 import { NavLink, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { ITeam } from "../../../types/team.type";
+import { ITeam } from "~/types";
 import Swal from "sweetalert2";
-import { getTeamList } from "../../../query/api/team-service";
+import { getTeamList } from "~/query";
+import { Header } from "~/components";
+import RegisteredTeam from "~/components/RegisteredTeam";
 
 const getIdNumber = (id: string | undefined): number => {
   if (!id) return -1;

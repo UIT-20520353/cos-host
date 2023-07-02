@@ -1,11 +1,12 @@
-import Header from "../../components/Header";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import { IFormProfile } from "../../types/account.type";
-import { getAccountInfo, getInfoHost, updateAccountInfo } from "../../query/api/account-service";
+import { IFormProfile } from "~/types";
+import { getAccountInfo, getInfoHost, updateAccountInfo } from "~/query";
 import "./styles.css";
 import { SubmitHandler, useForm } from "react-hook-form";
 import ChangePasswordModal from "../../components/Modal/ChangePasswordModal";
+import { Header } from "~/components";
+import { useLocalStorage } from "~/utils";
 
 const isPhoneNumberValid = (phoneNumber: string | null): boolean | string => {
   if (!phoneNumber) return "Vui lòng nhập số điện thoại";
@@ -25,6 +26,7 @@ export const isEmailValid = (value: string | null) => {
 
 function ProfilePage() {
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
+  const [user] = useLocalStorage("user", null);
 
   const {
     register,
@@ -48,8 +50,7 @@ function ProfilePage() {
       }
     });
 
-    const user_id = parseInt(sessionStorage.getItem("id") ?? "-1");
-    const dataAccount = await getAccountInfo(user_id);
+    const dataAccount = await getAccountInfo(user.id);
     if (dataAccount) {
       setValue("name", dataAccount[0].name);
       setValue("email", dataAccount[0].email);

@@ -1,4 +1,4 @@
-import logo from "../../assets/transparent-logo.svg";
+import logo from "~/assets/transparent-logo.svg";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
   RxDashboard,
@@ -8,8 +8,7 @@ import {
   AiOutlineTeam,
   IoIosLogOut
 } from "react-icons/all";
-import { useDispatch } from "react-redux";
-import { userLogout } from "../../pages/Login/login.reducer";
+import { useLocalStorage } from "~/utils";
 
 type IProps = {
   isOpen: boolean;
@@ -20,8 +19,7 @@ const icons = [RxDashboard, IoCreateOutline, MdContentPaste, AiOutlineTeam];
 
 function SideBar(props: IProps) {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-
+  const [, setUser] = useLocalStorage("user", null);
   const { isOpen, toggleMenu } = props;
   const menus: { id: number; title: string; address: string }[] = [
     {
@@ -46,10 +44,8 @@ function SideBar(props: IProps) {
     }
   ];
   const handleLogout = () => {
-    dispatch(userLogout({ id: -1, name: "" }));
-    sessionStorage.removeItem("id");
-    sessionStorage.removeItem("name");
-    navigate("/");
+    setUser(null);
+    navigate("/login", { replace: true });
   };
 
   return (
@@ -100,4 +96,4 @@ function SideBar(props: IProps) {
   );
 }
 
-export default SideBar;
+export { SideBar };

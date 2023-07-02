@@ -1,11 +1,9 @@
 import { SubmitHandler, useForm } from "react-hook-form";
-import { IProblem } from "../../../types/problem.type";
-import { insertProblem } from "../../../query/api/problem-service";
+import { IProblem, IContest } from "~/types";
+import { insertProblem, getMyContests } from "~/query";
 import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
-import { IContest } from "../../../types/contest.type";
-import { getMyContests } from "../../../query/api/contest-service";
-import { checkStatus } from "../../../utils/ValidateStatus";
+import { checkStatus } from "~/utils";
 
 type IProps = {
   closeAddForm: () => void;

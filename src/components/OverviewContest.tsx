@@ -1,11 +1,11 @@
 import { BiTimeFive, GiDuration, MdDateRange, RiTeamFill } from "react-icons/all";
 import { NavLink } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { deleteContest } from "../../query/api/contest-service";
+import { deleteContest } from "../query/api/contest-service";
 import Swal from "sweetalert2";
-import { getDateAndTime, getTimeEnd } from "../../utils/ValidateDate/ValidateDate";
-import { getTeamList } from "../../query/api/team-service";
-import { ITeam } from "../../types/team.type";
+import { getDateAndTime, getTimeEnd } from "../utils/ValidateDate";
+import { getTeamList } from "../query/api/team-service";
+import { ITeam } from "../types/team.type";
 
 type IProps = {
   name: string;
@@ -68,15 +68,16 @@ function OverviewContest(props: IProps) {
     }).then((result) => {
       if (result.isConfirmed) {
         deleteContest(contestId).then((response) => {
-          console.log(response);
-          Swal.fire({
-            position: "center",
-            timer: 5000,
-            icon: "success",
-            showConfirmButton: true,
-            title: "Xóa cuộc thi thành công"
-          });
-          props.updateContestList();
+          if (response) {
+            Swal.fire({
+              position: "center",
+              timer: 5000,
+              icon: "success",
+              showConfirmButton: true,
+              title: "Xóa cuộc thi thành công"
+            });
+            props.updateContestList();
+          }
         });
       }
     });
@@ -173,4 +174,4 @@ function OverviewContest(props: IProps) {
   );
 }
 
-export default OverviewContest;
+export { OverviewContest };

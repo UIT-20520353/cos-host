@@ -1,5 +1,5 @@
 import supabase from "./supabase";
-import { IContest } from "../../types/contest.type";
+import { IContest, IContestDashboard, IContestForRanking } from "../../types/contest.type";
 import Swal from "sweetalert2";
 import { PostgrestResponse } from "@supabase/supabase-js";
 
@@ -42,11 +42,13 @@ export async function getMyContests() {
   }
 }
 
-export async function deleteContest(contestId: number) {
+export async function deleteContest(contestId: number): Promise<boolean | undefined> {
   try {
-    const { data, error } = await supabase.from("contests").delete().eq("id", contestId);
-    if (error) throw error;
-    else return data;
+    const { error } = await supabase.from("contests").delete().eq("id", contestId);
+    if (error) {
+      console.error("deleteContest: ", error);
+      return false;
+    } else return true;
   } catch (error) {
     console.error("Lỗi khi xóa cuộc thi:", error);
   }
@@ -87,5 +89,34 @@ export async function updateContestById(contest: IContest) {
   } catch (error) {
     console.error("Lỗi khi cập nhật thông tin cuộc thi: ", error);
     Swal.close();
+  }
+}
+
+export async function getContestListDashboard() {
+  try {
+    const { data, error }: PostgrestResponse<IContestDashboard> = await supabase
+      .rpc("get_contest_list_for_dashboard")
+      .then((response) => response as PostgrestResponse<IContestDashboard>);
+    if (error) {
+      console.error("getContestListDashboard: ", error);
+    } else {
+      return data;
+    }
+  } catch (error) {
+    console.error("getContestListDashboard: ", error);
+  }
+}
+export async function getContestsForRanking() {
+  try {
+    const { data, error }: PostgrestResponse<IContestForRanking> = await supabase
+      .rpc("get_contests_for_ranking")
+      .then((response) => response as PostgrestResponse<IContestForRanking>);
+    if (error) {
+      console.error("getContestsForRanking: ", error);
+    } else {
+      return data;
+    }
+  } catch (error) {
+    console.error("getContestsForRanking: ", error);
   }
 }

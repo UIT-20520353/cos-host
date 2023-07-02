@@ -1,12 +1,13 @@
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { userLogin } from "./login.reducer";
-import { IAccount } from "../../types/account.type";
-import Swal from "sweetalert2";
-import { getAccountList } from "../../query/api/account-service";
 import { SubmitHandler, useForm } from "react-hook-form";
 import CryptoJS from "crypto-js";
+import { toast } from "react-toastify";
+import { ISimpleAccount } from "~/types";
+import { handleLogin } from "~/query/api/account-service";
+import { useLocalStorage } from "~/utils";
+import { useMutation } from "@tanstack/react-query";
+import { LoadingModal } from "~/components";
+import { useEffect } from "react";
 
 interface FormValues {
   username: string;
@@ -15,107 +16,121 @@ interface FormValues {
 
 function Login() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const [accounts, setAccounts] = useState<IAccount[]>([]);
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors }
-  } = useForm<FormValues>();
+  const [, setUser] = useLocalStorage("user", null);
 
   useEffect(() => {
-    getAccountList().then((data) => setAccounts(data ?? []));
+    document.title = "Đăng nhập";
   }, []);
 
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
-    let login: IAccount | undefined;
-    if (!accounts) {
-      Swal.fire({ position: "center", title: "Lỗi mạng", timer: 2000, icon: "error", showConfirmButton: true });
-      return;
-    } else {
-      const hashPassword = CryptoJS.SHA256(data.password).toString();
-      login = accounts.find((account) => {
-        if (account.username === data.username && account.password === hashPassword && account.roles.name === "HOST")
-          return true;
-      });
-    }
+  const { register, handleSubmit } = useForm<FormValues>();
 
-    if (!login) {
-      Swal.fire({
-        position: "center",
-        title: "Tài khoản hoặc mật khẩu không chính xác",
-        showConfirmButton: true,
-        timer: 2000,
-        icon: "error"
-      });
-    } else {
-      dispatch(userLogin({ id: login.id, name: login.name }));
+  const { mutate: login, isLoading } = useMutation({
+    mutationFn: (body: FormValues) => {
+      const hashPassword = CryptoJS.SHA256(body.password).toString();
+      return handleLogin(body.username, hashPassword);
+    },
+    onSuccess: (data: ISimpleAccount) => {
+      console.log(data);
+      if (data.id === -1) {
+        toast("Tên đăng nhập hoặc mật khẩu không chính xác", {
+          position: "bottom-right",
+          autoClose: 3000,
+          closeOnClick: false,
+          type: "error"
+        });
+        return;
+      }
+      setUser({ id: data.id, name: data.name });
       navigate("/");
-      sessionStorage.setItem("id", login.id.toString());
-      sessionStorage.setItem("name", login.name);
-      Swal.fire({
-        position: "bottom-end",
-        title: "Đăng nhập thành công",
-        showConfirmButton: false,
-        timer: 2000,
-        icon: "success",
-        toast: true
+      toast("Đăng nhập thành công", {
+        position: "bottom-right",
+        autoClose: 3000,
+        closeOnClick: false,
+        type: "success"
       });
     }
-  };
+  });
 
-  const clearStorage = () => {
-    return;
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
+    if (!data.username) {
+      toast("Vui lòng nhập tên đăng nhập", {
+        position: "bottom-right",
+        autoClose: 3000,
+        closeOnClick: false,
+        type: "warning"
+      });
+      return;
+    }
+    if (!data.password) {
+      toast("Vui lòng nhập mật khẩu", {
+        position: "bottom-right",
+        autoClose: 3000,
+        closeOnClick: false,
+        type: "warning"
+      });
+      return;
+    }
+
+    login(data);
   };
 
   return (
     <div className={"flex h-screen w-full items-center justify-center bg-gray-100"}>
       <form
-        className={"grid w-1/2 grid-rows-4 gap-3 rounded-md bg-gray-200 p-3 shadow-md"}
         onSubmit={handleSubmit(onSubmit)}
+        className={"w-1/2 rounded-md bg-[#4F5169] px-8 pb-5 pt-7 text-center text-[#222E3D] shadow-md"}
       >
-        <div className={"flex items-center justify-center"}>
-          <p className={"text-3xl font-semibold"}>Đăng nhập</p>
-        </div>
-        <div className={""}>
-          <span className={"mb-2 block text-sm font-semibold text-gray-900"}>Tên đăng nhập</span>
+        <p className={"text-2xl font-semibold text-white"}>Đăng nhập</p>
+        <div
+          className={
+            "relative mt-4 flex flex-row items-center justify-center gap-x-2 rounded-md bg-[#1f2029] px-4 py-2"
+          }
+        >
+          <svg className={"h-5 w-5 fill-[#ffeba7]"} viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+            <path d="M288 320a224 224 0 1 0 448 0 224 224 0 1 0-448 0zm544 608H160a32 32 0 0 1-32-32v-96a160 160 0 0 1 160-160h448a160 160 0 0 1 160 160v96a32 32 0 0 1-32 32z" />
+          </svg>
           <input
+            id={"user-name"}
+            placeholder={"Tên đăng nhập"}
             className={
-              "block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+              "w-full border-0 bg-transparent py-2 text-[#d3d3d3] outline-none focus:placeholder:opacity-0 focus:placeholder:transition-opacity focus:placeholder:duration-500"
             }
             type="text"
             autoComplete={"off"}
-            {...register("username", { required: "Tên đăng nhập không được bỏ trống" })}
+            {...register("username")}
           />
-          {errors.username && <span className={"text-xs text-red-600"}>{errors.username.message}</span>}
         </div>
-        <div className={""}>
-          <span className={"mb-2 block text-sm font-semibold text-gray-900"}>Mật khẩu</span>
+        <div
+          className={
+            "relative mt-4 flex flex-row items-center justify-center gap-x-2 rounded-md bg-[#1f2029] px-4 py-2"
+          }
+        >
+          <svg className={"h-5 w-5 fill-[#ffeba7]"} viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+            <path d="M80 192V144C80 64.47 144.5 0 224 0C303.5 0 368 64.47 368 144V192H384C419.3 192 448 220.7 448 256V448C448 483.3 419.3 512 384 512H64C28.65 512 0 483.3 0 448V256C0 220.7 28.65 192 64 192H80zM144 192H304V144C304 99.82 268.2 64 224 64C179.8 64 144 99.82 144 144V192z"></path>
+          </svg>
           <input
             id={"password"}
             className={
-              "block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+              "w-full border-0 bg-transparent py-2 text-[#d3d3d3] outline-none focus:placeholder:opacity-0 focus:placeholder:transition-opacity focus:placeholder:duration-500"
             }
             type="password"
             autoComplete={"off"}
-            {...register("password", { required: "Mật khẩu không được bỏ trống" })}
+            placeholder={"Mật khẩu"}
+            {...register("password")}
           />
-          {errors.password && <span className={"text-xs text-red-600"}>{errors.password.message}</span>}
         </div>
-        <div className={"flex flex-col items-start gap-y-3"}>
-          <button className={"w-full rounded-lg bg-[#0077b6] py-3 text-gray-100 hover:bg-[#0096c7] hover:text-white"}>
-            Đăng nhập
-          </button>
+        <div className={"mt-4 flex flex-col items-start"}>
           <button
-            type={"button"}
-            onClick={clearStorage}
-            className={"cursor-pointer text-sm hover:font-bold hover:underline"}
+            className={
+              "w-full rounded-md bg-[#ffeba7] py-3 font-bold uppercase text-[#1f2029] outline-none transition-colors duration-500 hover:bg-[#1f2029] hover:text-[#ffeba7]"
+            }
+            type={"submit"}
           >
-            Quên mật khẩu
+            Đăng nhập
           </button>
         </div>
       </form>
+      {isLoading && <LoadingModal title={"Đang xử lý đăng nhập"} />}
     </div>
   );
 }
