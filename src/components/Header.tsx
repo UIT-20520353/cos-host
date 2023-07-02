@@ -11,7 +11,7 @@ type IProps = {
 
 function Header(props: IProps) {
   const inputSearchRef = useRef<HTMLInputElement>(null);
-  const [user, setUser] = useLocalStorage("user", null);
+  const [user] = useLocalStorage("user", null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const handleOnChange = () => {

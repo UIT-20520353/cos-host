@@ -16,7 +16,7 @@ export const useLocalStorage = (keyName: string, defaultValue: IUser | null) => 
       return defaultValue;
     }
   });
-  const setValue = (newValue) => {
+  const setValue = (newValue: IUser | null) => {
     try {
       window.localStorage.setItem(keyName, JSON.stringify(newValue));
     } catch (err) {

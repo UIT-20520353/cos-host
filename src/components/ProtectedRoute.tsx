@@ -11,7 +11,7 @@ function ProtectedRoute(props: ProtectedRouteProps) {
   if (!user) {
     return <Navigate to={"/login"} />;
   }
-  return props.children;
+  return <>{props.children}</>;
 }
 
 export { ProtectedRoute };
