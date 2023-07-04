@@ -21,4 +21,4 @@ function DetailContestSkeleton() {
   );
 }
 
-export default DetailContestSkeleton;
+export { DetailContestSkeleton };

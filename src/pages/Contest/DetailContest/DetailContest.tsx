@@ -4,8 +4,7 @@ import { getContestById, getProblems } from "~/query";
 import { getIdFromString } from "~/utils";
 import { AddProblemModal, ContestForm, Header, ProblemList } from "~/components";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import DetailContestSkeleton from "~/skeletons/detail-contest-skeleton";
-import { IContest } from "~/types";
+import { DetailContestSkeleton } from "~/skeletons";
 
 function DetailContest() {
   const { contestId } = useParams<{ contestId: string }>();
@@ -19,7 +18,13 @@ function DetailContest() {
     document.title = "Cập nhật thông tin cuộc thi";
   }, []);
 
-  const { data: contest, isLoading: isFetchingContest } = useQuery<IContest>({
+  // const { data: contest, isLoading: isFetchingContest } = useQuery({
+  //   queryKey: ["detail-contest", `contest-${id}`],
+  //   queryFn: () => {
+  //     return getContestById(id);
+  //   }
+  // });
+  const contestResponse = useQuery({
     queryKey: ["detail-contest", `contest-${id}`],
     queryFn: () => {
       return getContestById(id);
@@ -50,12 +55,13 @@ function DetailContest() {
     <div className={"w-full"}>
       <Header placeHolder={"Nhập tên đề thi"} isUsed={true} onChangeValue={onChangeValue} />
 
-      {(isFetchingContest || isFetchingProblems) && <DetailContestSkeleton />}
+      {/*{(isFetchingContest || isFetchingProblems) && <DetailContestSkeleton />}*/}
+      {(contestResponse.isLoading || isFetchingProblems) && <DetailContestSkeleton />}
 
-      {!isFetchingContest && !isFetchingProblems && (
+      {!contestResponse.isLoading && !isFetchingProblems && (
         <>
-          <ContestForm contest={contest} />
-          <ProblemList contest={contest} problems={problems} openModal={openModal} />
+          <ContestForm contest={contestResponse.data} />
+          <ProblemList contest={contestResponse.data} problems={problems} openModal={openModal} />
         </>
       )}
 
