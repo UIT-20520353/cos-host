@@ -1,64 +1,62 @@
 import { BiTimeFive, GiDuration, MdDateRange, RiTeamFill } from "react-icons/all";
 import { NavLink } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { deleteContest } from "../query/api/contest-service";
+import { deleteContest } from "~/query";
 import Swal from "sweetalert2";
-import { getDateAndTime, getTimeEnd } from "../utils/ValidateDate";
-import { getTeamList } from "../query/api/team-service";
-import { ITeam } from "../types/team.type";
+import { getContestStatus } from "~/utils";
+import { IDetailContest } from "~/types";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 
 type IProps = {
-  name: string;
-  date: string;
-  time: string;
+  contest: IDetailContest;
   id: string;
   isShowAction: boolean;
-  duration: string;
   updateContestList: () => void;
   isOverviewForManageTeam: boolean;
 };
 
 function OverviewContest(props: IProps) {
-  const [status, setStatus] = useState<string>("");
   const [dateDisplay, setDateDisplay] = useState<string>("");
-  const [teams, setTeams] = useState<ITeam[]>([]);
-
-  const getIdNumber = (id: string): number => {
-    const temp = id.split("-");
-    return parseInt(temp[1]);
-  };
-
-  const handleFetchData = async () => {
-    const dataTeams = await getTeamList(getIdNumber(props.id));
-    if (dataTeams) setTeams(dataTeams ?? []);
-  };
+  const [status, setStatus] = useState<string>("");
 
   useEffect(() => {
-    handleFetchData();
+    const { status, dateDisplay } = getContestStatus(
+      props.contest.date_begin,
+      props.contest.time_begin,
+      props.contest.duration
+    );
+    setStatus(status);
+    setDateDisplay(dateDisplay);
+  }, [props.contest.date_begin, props.contest.time_begin, props.contest.duration]);
 
-    const current_date = new Date();
-    const { year, month, day, hour, minute, second } = getDateAndTime(props.date, props.time);
-
-    const time_begin = new Date(year, month, day, hour, minute, second);
-    const time_end = getTimeEnd({ year, month, day, hour, minute, second, duration: props.duration });
-
-    if (time_begin > current_date) setStatus("Chưa bắt đầu");
-    else {
-      if (time_begin <= current_date && time_end >= current_date) setStatus("Đang diễn ra");
-      else {
-        setStatus("Đã kết thúc");
+  const { mutate: mutateDelete } = useMutation({
+    mutationFn: (body: number) => {
+      return deleteContest(body);
+    },
+    onSuccess: (response: boolean) => {
+      if (response) {
+        toast("Xóa cuộc thi thành công", {
+          type: "success",
+          position: "bottom-right",
+          autoClose: 3000,
+          closeOnClick: false
+        });
+        props.updateContestList();
+      } else {
+        toast("Xảy ra lỗi khi xóa cuộc thi", {
+          type: "error",
+          position: "bottom-right",
+          autoClose: 3000,
+          closeOnClick: false
+        });
       }
     }
-    setDateDisplay(`${day}/${month + 1}/${year}`);
-  }, []);
+  });
 
   const handleDeleteContest = () => {
-    const temp = props.id.split("-");
-    const contestId = parseInt(temp[1]);
-
     Swal.fire({
-      title: "Xóa cuộc thi",
-      text: "Xóa tất cả thông tin về cuộc thi này?",
+      titleText: `Xóa cuộc thi ${props.contest.name}`,
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
@@ -67,25 +65,14 @@ function OverviewContest(props: IProps) {
       allowOutsideClick: false
     }).then((result) => {
       if (result.isConfirmed) {
-        deleteContest(contestId).then((response) => {
-          if (response) {
-            Swal.fire({
-              position: "center",
-              timer: 5000,
-              icon: "success",
-              showConfirmButton: true,
-              title: "Xóa cuộc thi thành công"
-            });
-            props.updateContestList();
-          }
-        });
+        mutateDelete(props.contest.id);
       }
     });
   };
 
   return (
     <li key={props.id} id={props.id} className={"rounded-md border border-gray-200 bg-gray-100 p-3 shadow-md"}>
-      <p className={"mb-3 truncate text-lg font-semibold"}>{props.name}</p>
+      <p className={"mb-3 truncate text-lg font-semibold"}>{props.contest.name}</p>
       <span
         className={`rounded-full px-4 py-2 text-sm font-semibold ${
           status === "Đang diễn ra" ? "bg-[#b7e4c7] text-[#081c15]" : ""
@@ -97,7 +84,7 @@ function OverviewContest(props: IProps) {
       </span>
       <div className={"mt-4 flex flex-row items-center gap-x-2"}>
         <RiTeamFill className={"inline-block h-5 w-5 opacity-50"} />
-        <span className={"text-sm text-gray-500"}>{teams.length} đội tham gia</span>
+        <span className={"text-sm text-gray-500"}>{props.contest.amount} đội tham gia</span>
       </div>
       <div className={"mt-4 flex flex-row items-center gap-x-2"}>
         <MdDateRange className={"inline-block h-5 w-5 opacity-50"} />
@@ -107,11 +94,11 @@ function OverviewContest(props: IProps) {
         <>
           <div className={"mt-4 flex flex-row items-center gap-x-2"}>
             <BiTimeFive className={"inline-block h-5 w-5 opacity-50"} />
-            <span className={"text-sm text-gray-500"}>{props.time}</span>
+            <span className={"text-sm text-gray-500"}>{props.contest.time_begin}</span>
           </div>
           <div className={"mt-4 flex flex-row items-center gap-x-2"}>
             <GiDuration className={"inline-block h-5 w-5 opacity-50"} />
-            <span className={"text-sm text-gray-500"}>{props.duration}</span>
+            <span className={"text-sm text-gray-500"}>{props.contest.duration}</span>
           </div>
         </>
       )}

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import { Header } from "~/components";
+import { Header, AddTestcase } from "~/components";
 import AddContest from "~/pages/Contest/AddContest";
 import AddProblem from "~/pages/problem/AddProblem";
-import AddTestcase from "~/components/Testcase";
+import { toast } from "react-toastify";
 
 function Contest() {
   useEffect(() => {
@@ -16,35 +16,29 @@ function Contest() {
 
   const handleOpenAddContestForm = () => {
     if (isAddContest) {
-      Swal.fire({
-        position: "center",
-        title: "Không thể tạo hai cuộc thi cùng lúc",
-        allowOutsideClick: false,
-        timer: 5000,
-        showConfirmButton: true,
-        icon: "warning"
+      toast("Không thể tạo hai cuộc thi cùng lúc", {
+        type: "warning",
+        position: "bottom-right",
+        autoClose: 3000,
+        closeOnClick: false
       });
       return;
     }
     if (isAddProblem) {
-      Swal.fire({
-        position: "center",
-        title: "Không thể tạo cuộc thi cùng lúc với tạo đề thi",
-        allowOutsideClick: false,
-        timer: 5000,
-        showConfirmButton: true,
-        icon: "warning"
+      toast("Không thể tạo cuộc thi cùng lúc với tạo đề thi", {
+        type: "warning",
+        position: "bottom-right",
+        autoClose: 3000,
+        closeOnClick: false
       });
       return;
     }
     if (isAddTestcase) {
-      Swal.fire({
-        position: "center",
-        title: "Không thể tạo cuộc thi cùng lúc với tạo testcase",
-        allowOutsideClick: false,
-        timer: 5000,
-        showConfirmButton: true,
-        icon: "warning"
+      toast("Không thể tạo cuộc thi cùng lúc với tạo testcase", {
+        type: "warning",
+        position: "bottom-right",
+        autoClose: 3000,
+        closeOnClick: false
       });
       return;
     }
@@ -53,12 +47,11 @@ function Contest() {
   };
   const handleCloseAddContestForm = () => {
     Swal.fire({
-      title: "Thông tin cuộc thi chưa được lưu",
-      text: "Bạn có chắc muốn đóng form?",
+      title: "Đóng form tạo cuộc thi?",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Đóng form",
+      confirmButtonText: "Xác nhận",
       cancelButtonText: "Hủy",
       allowOutsideClick: false
     }).then((result) => {
@@ -68,35 +61,29 @@ function Contest() {
 
   const handleOpenAddProblemForm = () => {
     if (isAddProblem) {
-      Swal.fire({
-        position: "center",
-        title: "Không thể tạo hai đề thi cùng lúc",
-        allowOutsideClick: false,
-        timer: 5000,
-        showConfirmButton: true,
-        icon: "warning"
+      toast("Không thể tạo hai đề thi cùng lúc", {
+        type: "warning",
+        position: "bottom-right",
+        autoClose: 3000,
+        closeOnClick: false
       });
       return;
     }
     if (isAddContest) {
-      Swal.fire({
-        position: "center",
-        title: "Không thể tạo đề thi cùng lúc với tạo cuộc thi",
-        allowOutsideClick: false,
-        timer: 5000,
-        showConfirmButton: true,
-        icon: "warning"
+      toast("Không thể tạo đề thi cùng lúc với tạo cuộc thi", {
+        type: "warning",
+        position: "bottom-right",
+        autoClose: 3000,
+        closeOnClick: false
       });
       return;
     }
     if (isAddTestcase) {
-      Swal.fire({
-        position: "center",
-        title: "Không thể tạo đề thi cùng lúc với tạo testcase",
-        allowOutsideClick: false,
-        timer: 5000,
-        showConfirmButton: true,
-        icon: "warning"
+      toast("Không thể tạo đề thi cùng lúc với tạo testcase", {
+        type: "warning",
+        position: "bottom-right",
+        autoClose: 3000,
+        closeOnClick: false
       });
       return;
     }
@@ -104,12 +91,11 @@ function Contest() {
   };
   const handleCloseAddProblemForm = () => {
     Swal.fire({
-      title: "Thông tin đề thi chưa được lưu",
-      text: "Bạn có chắc muốn đóng form?",
+      title: "Đóng form tạo đề thi?",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Đóng form",
+      confirmButtonText: "Xác nhận",
       cancelButtonText: "Hủy",
       allowOutsideClick: false
     }).then((result) => {
@@ -118,35 +104,29 @@ function Contest() {
   };
   const handleOpenAddTestcaseForm = () => {
     if (isAddTestcase) {
-      Swal.fire({
-        position: "center",
-        title: "Không thể tạo hai testcase cùng lúc",
-        allowOutsideClick: false,
-        timer: 5000,
-        showConfirmButton: true,
-        icon: "warning"
+      toast("Không thể tạo hai testcase cùng lúc", {
+        type: "warning",
+        position: "bottom-right",
+        autoClose: 3000,
+        closeOnClick: false
       });
       return;
     }
     if (isAddContest) {
-      Swal.fire({
-        position: "center",
-        title: "Không thể tạo testcase cùng lúc với tạo cuộc thi",
-        allowOutsideClick: false,
-        timer: 5000,
-        showConfirmButton: true,
-        icon: "warning"
+      toast("Không thể tạo testcase cùng lúc với tạo cuộc thi", {
+        type: "warning",
+        position: "bottom-right",
+        autoClose: 3000,
+        closeOnClick: false
       });
       return;
     }
     if (isAddProblem) {
-      Swal.fire({
-        position: "center",
-        title: "Không thể tạo testcase cùng lúc với tạo đề thi",
-        allowOutsideClick: false,
-        timer: 5000,
-        showConfirmButton: true,
-        icon: "warning"
+      toast("Không thể tạo testcase cùng lúc với tạo đề thi", {
+        type: "warning",
+        position: "bottom-right",
+        autoClose: 3000,
+        closeOnClick: false
       });
       return;
     }
@@ -154,12 +134,11 @@ function Contest() {
   };
   const handleCloseAddTestcaseForm = () => {
     Swal.fire({
-      title: "Thông tin testcase chưa được lưu",
-      text: "Bạn có chắc muốn đóng form?",
+      title: "Đóng form tạo testcase?",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Đóng form",
+      confirmButtonText: "Xác nhận",
       cancelButtonText: "Hủy",
       allowOutsideClick: false
     }).then((result) => {
@@ -193,18 +172,18 @@ function Contest() {
           >
             Thêm đề thi mới
           </button>
-          <button
-            className={
-              "w-48 rounded-md bg-gray-200 py-3 text-base font-semibold shadow-md duration-200 hover:bg-gray-300"
-            }
-            onClick={handleOpenAddTestcaseForm}
-          >
-            Thêm testcase mới
-          </button>
+          {/*<button*/}
+          {/*  className={*/}
+          {/*    "w-48 rounded-md bg-gray-200 py-3 text-base font-semibold shadow-md duration-200 hover:bg-gray-300"*/}
+          {/*  }*/}
+          {/*  onClick={handleOpenAddTestcaseForm}*/}
+          {/*>*/}
+          {/*  Thêm testcase mới*/}
+          {/*</button>*/}
         </div>
         {isAddContest && <AddContest closeAddContestForm={handleCloseAddContestForm} />}
         {isAddProblem && <AddProblem closeAddForm={handleCloseAddProblemForm} />}
-        {isAddTestcase && <AddTestcase closeAddTestcaseForm={handleCloseAddTestcaseForm} />}
+        {/*{isAddTestcase && <AddTestcase closeAddTestcaseForm={handleCloseAddTestcaseForm} />}*/}
       </div>
     </div>
   );

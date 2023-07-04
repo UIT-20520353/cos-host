@@ -1,4 +1,4 @@
-import ModalPortal from "~/components/ModalPortal";
+import { ModalPortal } from "~/components";
 
 interface LoadingProps {
   title: string;
@@ -6,10 +6,10 @@ interface LoadingProps {
 function LoadingModal({ title }: LoadingProps) {
   return (
     <ModalPortal>
-      <div className={"fixed left-0 top-0 z-30 h-screen w-full bg-black opacity-50"}></div>
+      <div className={"fixed left-0 top-0 z-[300] h-screen w-full bg-black opacity-50"}></div>
       <div
         className={
-          "fixed left-1/2 top-1/2 z-40 flex h-60 max-h-[95%] w-80 -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center gap-y-7 overflow-y-auto rounded-md bg-white p-5"
+          "fixed left-1/2 top-1/2 z-[500] flex h-60 max-h-[95%] w-80 -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center gap-y-7 overflow-y-auto rounded-md bg-white p-5"
         }
       >
         <p className={"text-xl font-medium"}>{title}</p>

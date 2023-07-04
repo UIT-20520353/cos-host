@@ -2,8 +2,10 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { ITestcase } from "~/types";
 import { useEffect } from "react";
 import Swal from "sweetalert2";
-import { insertTestcase } from "~/query/api/textcase-service";
-import ModalPortal from "~/components/ModalPortal";
+import { ModalPortal } from "~/components";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+import { insertTestcase } from "~/query";
 
 type ModalProps = {
   problemId: number;
@@ -22,10 +24,33 @@ function AddTestcaseModal(props: ModalProps) {
     setValue("problem_id", props.problemId);
   }, []);
 
+  const { mutate: mutateAdd } = useMutation({
+    mutationFn: (body: ITestcase) => {
+      return insertTestcase(body);
+    },
+    onSuccess: (response: boolean) => {
+      if (response) {
+        toast("Xóa cuộc thi thành công", {
+          type: "success",
+          position: "bottom-right",
+          autoClose: 3000,
+          closeOnClick: false
+        });
+        props.closeModal();
+      } else {
+        toast("Xảy ra lỗi khi xóa cuộc thi", {
+          type: "error",
+          position: "bottom-right",
+          autoClose: 3000,
+          closeOnClick: false
+        });
+      }
+    }
+  });
+
   const onSubmit: SubmitHandler<ITestcase> = (data) => {
     Swal.fire({
-      title: "Tạo testcase",
-      text: "Xác nhận tạo testcase mới với các thông tin đã nhập?",
+      title: "Tạo testcase mới ?",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
@@ -34,29 +59,18 @@ function AddTestcaseModal(props: ModalProps) {
       allowOutsideClick: false
     }).then((result) => {
       if (result.isConfirmed) {
-        insertTestcase(data).then((response) => {
-          if (response) {
-            Swal.fire({
-              position: "center",
-              timer: 5000,
-              icon: "success",
-              showConfirmButton: true,
-              title: "Tạo testcase thành công"
-            });
-            props.closeModal();
-          }
-        });
+        mutateAdd(data);
       }
     });
   };
 
   return (
     <ModalPortal>
-      <div className={"fixed left-0 top-0 h-screen w-full bg-black opacity-50"}></div>
+      <div className={"fixed left-0 top-0 z-[100] h-screen w-full bg-black opacity-50"}></div>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className={
-          "fixed left-1/2 top-1/2 max-h-[95%] w-3/5 -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-md bg-white p-5"
+          "fixed left-1/2 top-1/2 z-[200] max-h-[95%] w-3/5 -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-md bg-white p-5"
         }
       >
         <p className={"mb-5 text-lg font-semibold"}>Thêm testcase mới</p>
@@ -106,4 +120,4 @@ function AddTestcaseModal(props: ModalProps) {
   );
 }
 
-export default AddTestcaseModal;
+export { AddTestcaseModal };

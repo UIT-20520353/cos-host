@@ -1,6 +1,6 @@
 import { PostgrestResponse } from "@supabase/supabase-js";
 import supabase from "./supabase";
-import { ITeam, ITeamMemberDetail } from "../../types/team.type";
+import { ITeam, ITeamMemberDetail, ITeamRank } from "../../types/team.type";
 
 export async function getTeamListByContestIds(contestId: number[]) {
   try {
@@ -19,7 +19,7 @@ export async function getTeamListByContestIds(contestId: number[]) {
   }
 }
 
-export async function getTeamList(contestId: number) {
+export async function getTeamList(contestId: number): Promise<ITeam[]> {
   try {
     const { data, error }: PostgrestResponse<ITeam> = await supabase
       .from("teams")
@@ -27,12 +27,15 @@ export async function getTeamList(contestId: number) {
       .eq("contest_id", contestId)
       .then((response) => response as PostgrestResponse<ITeam>);
     if (error) {
-      console.error("Lỗi get team list: ", error);
+      console.error("getTeamList: ", error);
+      return [];
     } else {
-      return data;
+      if (data) return data;
+      else return [];
     }
   } catch (error) {
-    console.error("Lỗi get team list: ", error);
+    console.error("getTeamList: ", error);
+    return [];
   }
 }
 
@@ -80,5 +83,23 @@ export async function deleteTeamById(teamId: number) {
     }
   } catch (error) {
     console.error("deleteTeamById: ", error);
+  }
+}
+
+export async function getTeamRanks(contest_id: number): Promise<ITeamRank[]> {
+  try {
+    const { data, error }: PostgrestResponse<ITeamRank> = await supabase
+      .rpc("calculate_team_ranks", { id_query: contest_id })
+      .then((response) => response as PostgrestResponse<ITeamRank>);
+    if (error) {
+      console.error("getTeamRanks: ", error);
+      return [];
+    } else {
+      if (data) return data;
+      else return [];
+    }
+  } catch (error) {
+    console.error("getTeamRanks: ", error);
+    return [];
   }
 }

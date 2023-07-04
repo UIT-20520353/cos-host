@@ -1,9 +1,11 @@
 import { SubmitHandler, useForm } from "react-hook-form";
-import { IProblem } from "~/types";
-import Swal from "sweetalert2";
+import { useMutation } from "@tanstack/react-query";
 import { useEffect } from "react";
-import { insertProblem } from "~/query/api/problem-service";
-import ModalPortal from "~/components/ModalPortal";
+import Swal from "sweetalert2";
+import { IProblem } from "~/types";
+import { insertProblem } from "~/query";
+import { toast } from "react-toastify";
+import { ModalPortal } from "~/components";
 
 type ModalProps = {
   contestId: number;
@@ -22,10 +24,33 @@ function AddProblemModal(props: ModalProps) {
     setValue("contest_id", props.contestId);
   }, []);
 
+  const { mutate: mutateAdd } = useMutation({
+    mutationFn: (body: IProblem) => {
+      return insertProblem(body);
+    },
+    onSuccess: (response: boolean) => {
+      if (response) {
+        toast("Thêm đề thi thành công", {
+          type: "success",
+          position: "bottom-right",
+          autoClose: 3000,
+          closeOnClick: false
+        });
+        props.closeModal();
+      } else {
+        toast("Xảy ra lỗi khi thêm đề thi", {
+          type: "error",
+          position: "bottom-right",
+          autoClose: 3000,
+          closeOnClick: false
+        });
+      }
+    }
+  });
+
   const onSubmit: SubmitHandler<IProblem> = (data) => {
     Swal.fire({
-      title: "Tạo đề thi",
-      text: "Xác nhận tạo đề thi mới với các thông tin đã nhập?",
+      title: "Tạo đề thi mới?",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
@@ -34,29 +59,18 @@ function AddProblemModal(props: ModalProps) {
       allowOutsideClick: false
     }).then((result) => {
       if (result.isConfirmed) {
-        insertProblem(data).then((index) => {
-          if (index) {
-            Swal.fire({
-              position: "center",
-              timer: 5000,
-              icon: "success",
-              showConfirmButton: true,
-              title: "Tạo đề thi thành công"
-            });
-            props.closeModal();
-          }
-        });
+        mutateAdd(data);
       }
     });
   };
 
   return (
     <ModalPortal>
-      <div className={"fixed left-0 top-0 h-screen w-full bg-black opacity-50"}></div>
+      <div className={"fixed left-0 top-0 z-[100] h-screen w-full bg-black opacity-50"}></div>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className={
-          "fixed left-1/2 top-1/2 max-h-[95%] w-3/5 -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-md bg-white p-5"
+          "fixed left-1/2 top-1/2 z-[200] max-h-[95%] w-3/5 -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-md bg-white p-5"
         }
       >
         <p className={"mb-5 text-lg font-semibold"}>Tạo cuộc thi mới</p>
@@ -131,4 +145,4 @@ function AddProblemModal(props: ModalProps) {
   );
 }
 
-export default AddProblemModal;
+export { AddProblemModal };

@@ -16,4 +16,4 @@ function ModalPortal(props: ModalPortalProps) {
   return ReactDOM.createPortal(props.children, modalRoot);
 }
 
-export default ModalPortal;
+export { ModalPortal };

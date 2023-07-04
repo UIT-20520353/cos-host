@@ -8,7 +8,7 @@ import {
   AiOutlineTeam,
   IoIosLogOut
 } from "react-icons/all";
-import { useLocalStorage } from "~/utils";
+import { useSessionStorage } from "~/utils";
 
 type IProps = {
   isOpen: boolean;
@@ -19,7 +19,7 @@ const icons = [RxDashboard, IoCreateOutline, MdContentPaste, AiOutlineTeam];
 
 function SideBar(props: IProps) {
   const navigate = useNavigate();
-  const [, setUser] = useLocalStorage("user", null);
+  const [, setUser] = useSessionStorage("user", null);
   const { isOpen, toggleMenu } = props;
   const menus: { id: number; title: string; address: string }[] = [
     {
@@ -52,7 +52,7 @@ function SideBar(props: IProps) {
     <div
       className={`flex min-h-screen ${
         isOpen ? "w-72" : "w-20"
-      } min-w-20 flex-col items-center bg-[#EAEAEA] duration-300`}
+      } min-w-20 z-40 flex-col items-center bg-[#EAEAEA] duration-300`}
     >
       <div className={"sticky top-0 flex w-full cursor-pointer flex-col items-center py-11"}>
         <img src={logo} alt="Logo web" className={`${isOpen ? "w-48" : "w-14"} duration-300`} />

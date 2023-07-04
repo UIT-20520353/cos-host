@@ -1,9 +1,8 @@
 import supabase from "./supabase";
-import { IContest, IContestDashboard, IContestForRanking } from "../../types/contest.type";
-import Swal from "sweetalert2";
+import { IContest, IContestDashboard, IContestForRanking, IDetailContest } from "~/types";
 import { PostgrestResponse } from "@supabase/supabase-js";
 
-export const insertContest = async (contest: IContest) => {
+export const insertContest = async (contest: IContest): Promise<boolean> => {
   try {
     const { data, error } = await supabase
       .from("contests")
@@ -19,30 +18,60 @@ export const insertContest = async (contest: IContest) => {
       .select();
 
     if (error) {
-      throw error;
+      console.error("insertContest: ", error);
+      return false;
     } else {
-      return data;
+      // await new Promise(resolve => setTimeout(resolve, 3000))
+      return !!data;
     }
   } catch (error) {
-    console.error("Lỗi khi thêm cuộc thi:", error);
+    console.error("insertContest:", error);
+    return false;
   }
 };
 
-export async function getMyContests() {
+export async function getMyContests(id: number, searchText: string): Promise<IDetailContest[]> {
   try {
-    const { data, error }: PostgrestResponse<IContest> = await supabase
-      .from("contests")
-      .select("*")
-      .eq("host_id", sessionStorage.getItem("id"))
-      .then((response) => response as PostgrestResponse<IContest>);
-    if (error) throw error;
-    else return data;
+    const { data, error }: PostgrestResponse<IDetailContest> = await supabase
+      .rpc("get_contest_list", { current_host: id, search_text: searchText })
+      .then((response) => response as PostgrestResponse<IDetailContest>);
+    if (error) {
+      console.error("getMyContests: ", error);
+      return [];
+    } else {
+      if (data) return data;
+      else return [];
+    }
   } catch (error) {
-    console.error("Lỗi khi lấy cuộc thi của tôi:", error);
+    console.error("getMyContests:", error);
+    return [];
   }
 }
 
-export async function deleteContest(contestId: number): Promise<boolean | undefined> {
+export async function getContestsNotStarted(host_id: number): Promise<IContest[]> {
+  try {
+    const { data, error }: PostgrestResponse<IContest> = await supabase
+      .rpc("get_contests_not_started", {
+        current_host: host_id
+      })
+      .then((response) => response as PostgrestResponse<IContest>);
+    if (error) {
+      console.error("getContestsNotStarted: ", error);
+      return [];
+    } else {
+      if (data) {
+        return data;
+      } else {
+        return [];
+      }
+    }
+  } catch (error) {
+    console.error("getContestsNotStarted: ", error);
+    return [];
+  }
+}
+
+export async function deleteContest(contestId: number): Promise<boolean> {
   try {
     const { error } = await supabase.from("contests").delete().eq("id", contestId);
     if (error) {
@@ -50,25 +79,41 @@ export async function deleteContest(contestId: number): Promise<boolean | undefi
       return false;
     } else return true;
   } catch (error) {
-    console.error("Lỗi khi xóa cuộc thi:", error);
+    console.error("deleteContest:", error);
+    return false;
   }
 }
 
-export async function getContestById(contestId: number) {
+export async function getContestById(contestId: number): Promise<IContest> {
+  const failResult: IContest = {
+    id: -1,
+    name: "",
+    description: "",
+    date_begin: "",
+    time_begin: "",
+    duration: "",
+    host_id: -1
+  };
   try {
     const { data, error }: PostgrestResponse<IContest> = await supabase
       .from("contests")
       .select("*")
       .eq("id", contestId)
       .then((response) => response as PostgrestResponse<IContest>);
-    if (error) throw error;
-    else return data;
+    if (error) {
+      console.error("getContestById: ", error);
+      return failResult;
+    } else {
+      if (data && data.length !== 0) return data[0];
+      else return failResult;
+    }
   } catch (error) {
-    console.error("Lỗi khi lấy cuộc thi bằng id: ", error);
+    console.error("getContestById: ", error);
+    return failResult;
   }
 }
 
-export async function updateContestById(contest: IContest) {
+export async function updateContestById(contest: IContest): Promise<boolean> {
   try {
     const { data, error } = await supabase
       .from("contests")
@@ -82,41 +127,51 @@ export async function updateContestById(contest: IContest) {
       .eq("id", contest.id)
       .select();
     if (error) {
-      throw error;
+      console.error("updateContestById: ", error);
+      return false;
     } else {
-      return data;
+      return !!data;
     }
   } catch (error) {
-    console.error("Lỗi khi cập nhật thông tin cuộc thi: ", error);
-    Swal.close();
+    console.error("updateContestById: ", error);
+    return false;
   }
 }
 
-export async function getContestListDashboard() {
+export async function getContestListDashboard(): Promise<IContestDashboard[]> {
   try {
     const { data, error }: PostgrestResponse<IContestDashboard> = await supabase
       .rpc("get_contest_list_for_dashboard")
       .then((response) => response as PostgrestResponse<IContestDashboard>);
     if (error) {
       console.error("getContestListDashboard: ", error);
+      return [];
     } else {
-      return data;
+      // await new Promise(resolve => setTimeout(resolve, 3000))
+      if (data) return data;
+      else return [];
     }
   } catch (error) {
     console.error("getContestListDashboard: ", error);
+    return [];
   }
 }
-export async function getContestsForRanking() {
+export async function getContestsForRanking(): Promise<IContestForRanking[]> {
   try {
     const { data, error }: PostgrestResponse<IContestForRanking> = await supabase
       .rpc("get_contests_for_ranking")
       .then((response) => response as PostgrestResponse<IContestForRanking>);
     if (error) {
       console.error("getContestsForRanking: ", error);
+      return [];
     } else {
-      return data;
+      if (data) {
+        data.sort((a, b) => b.amount - a.amount);
+        return data;
+      } else return [];
     }
   } catch (error) {
     console.error("getContestsForRanking: ", error);
+    return [];
   }
 }

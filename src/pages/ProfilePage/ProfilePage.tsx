@@ -4,9 +4,8 @@ import { IFormProfile } from "~/types";
 import { getAccountInfo, getInfoHost, updateAccountInfo } from "~/query";
 import "./styles.css";
 import { SubmitHandler, useForm } from "react-hook-form";
-import ChangePasswordModal from "../../components/Modal/ChangePasswordModal";
-import { Header } from "~/components";
-import { useLocalStorage } from "~/utils";
+import { ChangePasswordModal, Header } from "~/components";
+import { useSessionStorage } from "~/utils";
 
 const isPhoneNumberValid = (phoneNumber: string | null): boolean | string => {
   if (!phoneNumber) return "Vui lòng nhập số điện thoại";
@@ -26,7 +25,7 @@ export const isEmailValid = (value: string | null) => {
 
 function ProfilePage() {
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
-  const [user] = useLocalStorage("user", null);
+  const [user] = useSessionStorage("user", null);
 
   const {
     register,

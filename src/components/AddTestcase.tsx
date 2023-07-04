@@ -1,24 +1,26 @@
 import { SubmitHandler, useForm } from "react-hook-form";
-import { IProblem } from "~/types";
-import { insertProblem, getContestsNotStarted } from "~/query";
+import { ChangeEvent, useEffect, useState } from "react";
+import { IContest, IProblem, ITestcase } from "~/types";
+import { insertTestcase, getContestsNotStarted, getAllProblems } from "~/query";
 import Swal from "sweetalert2";
 import { useSessionStorage } from "~/utils";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { LoadingModal } from "~/components";
-import { toast } from "react-toastify";
 
 type IProps = {
-  closeAddForm: () => void;
+  closeAddTestcaseForm: () => void;
 };
 
-function AddProblem(props: IProps) {
+function AddTestcase(props: IProps) {
   const [user] = useSessionStorage("user", null);
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset
-  } = useForm<IProblem>();
+    setValue
+  } = useForm<ITestcase>();
+
+  const [problemsOption, setProblemsOption] = useState<IProblem[]>([]);
 
   const { data: contests, isLoading: isFetchingContests } = useQuery({
     queryKey: ["add-problem", "contest-list", `host-${user.id}`],
@@ -26,51 +28,63 @@ function AddProblem(props: IProps) {
       return getContestsNotStarted(user.id);
     }
   });
-
-  const { mutate: mutateAdd } = useMutation({
-    mutationFn: (body: IProblem) => {
-      return insertProblem(body);
-    },
-    onSuccess: (response: boolean) => {
-      if (response) {
-        toast("Thêm đề thi thành công", {
-          type: "success",
-          position: "bottom-right",
-          autoClose: 3000,
-          closeOnClick: false
-        });
-        reset();
-      } else {
-        toast("Xảy ra lỗi khi thêm đề thi", {
-          type: "error",
-          position: "bottom-right",
-          autoClose: 3000,
-          closeOnClick: false
-        });
-      }
-    }
+  const { data: problems, isLoading: isFetchingProblems } = useQuery({
+    queryKey: ["add-problem", "problem-list"],
+    queryFn: getAllProblems
   });
 
-  const onSubmit: SubmitHandler<IProblem> = (data) => {
+  const onSubmit: SubmitHandler<ITestcase> = (data) => {
     Swal.fire({
-      title: "Xác nhận tạo đề thi mới?",
+      title: "Xác nhận tạo testcase mới?",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Xác nhận",
+      confirmButtonText: "Lưu",
       cancelButtonText: "Hủy",
       allowOutsideClick: false
     }).then((result) => {
       if (result.isConfirmed) {
-        mutateAdd(data);
+        insertTestcase(data).then((response) => {
+          if (response) {
+            Swal.fire({
+              position: "center",
+              timer: 5000,
+              icon: "success",
+              showConfirmButton: true,
+              title: "Tạo testcase thành công",
+              allowOutsideClick: false
+            });
+            setValue("input", "");
+            setValue("output", "");
+          } else {
+            Swal.fire({
+              position: "center",
+              timer: 5000,
+              icon: "error",
+              showConfirmButton: true,
+              title: "Xảy ra lỗi khi thêm testcase",
+              allowOutsideClick: false
+            });
+          }
+        });
       }
     });
   };
 
+  const handleChangeContest = (event: ChangeEvent<HTMLSelectElement>) => {
+    // getProblems(parseInt(event.target.value)).then((data) => {
+    //   if (data) {
+    //     setProblems(data ?? []);
+    //     setValue("problem_id", data[0].id);
+    //   }
+    // });
+    console.log(event.target.value);
+  };
+
   return (
     <div>
-      {isFetchingContests && <LoadingModal title={"Đang lấy dữ liệu"} />}
-      {!isFetchingContests && (
+      {(isFetchingContests || isFetchingProblems) && <LoadingModal title={"Đang lấy dữ liệu"} />}
+      {!isFetchingContests && !isFetchingProblems && (
         <form onSubmit={handleSubmit(onSubmit)} className={"mt-8 rounded-md bg-gray-100 p-3 shadow-md"}>
           <div className={"mb-4 flex flex-col items-start gap-y-2"}>
             <span className={"text-sm font-semibold"}>Chọn cuộc thi</span>
@@ -79,6 +93,7 @@ function AddProblem(props: IProps) {
                 "block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
               }
               {...register("contest_id", { required: "Hãy chọn cuộc thi để thêm đề bài" })}
+              onChange={handleChangeContest}
             >
               {contests?.map((contest) => {
                 return (
@@ -91,51 +106,44 @@ function AddProblem(props: IProps) {
             {errors.contest_id && <span className={"text-xs text-red-600"}>{errors.contest_id.message}</span>}
           </div>
           <div className={"mb-4 flex flex-col items-start gap-y-2"}>
-            <span className={"text-sm font-semibold"}>Tên bài thi</span>
-            <input
-              type={"text"}
+            <span className={"text-sm font-semibold"}>Chọn đề thi</span>
+            <select
               className={
                 "block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
               }
-              placeholder={"Tên bài thi"}
-              autoComplete={"off"}
-              {...register("name", { required: "Tên bài thi không được bỏ trống" })}
-            />
-            {errors.name && <span className={"text-xs text-red-600"}>{errors.name.message}</span>}
+              {...register("problem_id", { required: "Hãy chọn đề thi để thêm testcase" })}
+            >
+              {problems?.map((problem) => {
+                return (
+                  <option key={problem.id} value={problem.id}>
+                    {problem.name}
+                  </option>
+                );
+              })}
+            </select>
+            {errors.problem_id && <span className={"text-xs text-red-600"}>{errors.problem_id.message}</span>}
           </div>
           <div className={"mb-4 flex flex-col items-start gap-y-2"}>
-            <span className={"text-sm font-semibold"}>Đề thi</span>
+            <span className={"text-sm font-semibold"}>Input</span>
             <textarea
-              placeholder={"Đề thi"}
+              placeholder={"Input"}
               rows={10}
               className="block w-full resize-none rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
-              {...register("detail", { required: "Đề thi không được bỏ trống" })}
+              {...register("input", { required: "Input không được bỏ trống" })}
               autoComplete={"off"}
             />
-            {errors.detail && <span className={"text-xs text-red-600"}>{errors.detail.message}</span>}
+            {errors.input && <span className={"text-xs text-red-600"}>{errors.input.message}</span>}
           </div>
           <div className={"mb-4 flex flex-col items-start gap-y-2"}>
-            <span className={"text-sm font-semibold"}>Input mẫu</span>
+            <span className={"text-sm font-semibold"}>Output</span>
             <textarea
-              placeholder={"Input mẫu"}
-              rows={5}
+              placeholder={"Output"}
+              rows={10}
               className="block w-full resize-none rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
-              {...register("example_input", { required: "Input mẫu không được bỏ trống" })}
+              {...register("output", { required: "Output không được bỏ trống" })}
               autoComplete={"off"}
             />
-            {errors.example_input && <span className={"text-xs text-red-600"}>{errors.example_input.message}</span>}
-          </div>
-          <div className={"mb-4 flex flex-col items-start gap-y-2"}>
-            <span className={"text-sm font-semibold"}>Output mẫu</span>
-            <textarea
-              id={"example_output"}
-              placeholder={"Output mẫu"}
-              rows={5}
-              className="block w-full resize-none rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
-              {...register("example_output", { required: "Output mẫu không được bỏ trống" })}
-              autoComplete={"off"}
-            />
-            {errors.example_output && <span className={"text-xs text-red-600"}>{errors.example_output.message}</span>}
+            {errors.output && <span className={"text-xs text-red-600"}>{errors.output.message}</span>}
           </div>
           <div className={"flex flex-row items-center gap-x-3"}>
             <button
@@ -144,14 +152,14 @@ function AddProblem(props: IProps) {
                 "w-36 rounded-md bg-[#023e8a] px-4 py-2 text-base font-medium text-white duration-200 hover:opacity-80"
               }
             >
-              Lưu đề thi
+              Lưu testcase
             </button>
             <button
               type={"button"}
               className={
                 "w-36 rounded-md bg-[#d00000] px-4 py-2 text-base font-medium text-white duration-200 hover:opacity-70"
               }
-              onClick={props.closeAddForm}
+              onClick={props.closeAddTestcaseForm}
             >
               Hủy
             </button>
@@ -162,4 +170,4 @@ function AddProblem(props: IProps) {
   );
 }
 
-export default AddProblem;
+export { AddTestcase };

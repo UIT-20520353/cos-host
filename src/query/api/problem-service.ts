@@ -1,8 +1,8 @@
 import supabase from "./supabase";
-import { IProblem } from "../../types/problem.type";
+import { IProblem } from "~/types";
 import { PostgrestResponse } from "@supabase/supabase-js";
 
-export const insertProblem = async (problem: IProblem) => {
+export const insertProblem = async (problem: IProblem): Promise<boolean> => {
   try {
     const { data, error } = await supabase
       .from("problems")
@@ -16,56 +16,81 @@ export const insertProblem = async (problem: IProblem) => {
       .select();
 
     if (error) {
-      throw error;
+      console.error("insertProblem: ", error);
+      return false;
     } else {
-      return data;
+      return !!data;
     }
   } catch (error) {
-    console.error("Lỗi khi thêm bài tập: ", error);
+    console.error("insertProblem: ", error);
+    return false;
   }
 };
 
-export async function getProblems(contestId: number) {
+export async function getProblems(contestId: number): Promise<IProblem[]> {
   try {
     const { data, error }: PostgrestResponse<IProblem> = await supabase
       .from("problems")
       .select("*")
       .eq("contest_id", contestId)
       .then((response) => response as PostgrestResponse<IProblem>);
-    if (error) throw error;
-    else return data;
+    if (error) {
+      console.error("getProblems: ", error);
+      return [];
+    } else {
+      if (data) return data;
+      else return [];
+    }
   } catch (error) {
-    console.error("Lỗi khi lấy dữ liệu problems: ", error);
+    console.error("getProblems: ", error);
+    return [];
   }
 }
 
-export async function getProblemById(problemId: number) {
+export async function getProblemById(problemId: number): Promise<IProblem> {
+  const failResult: IProblem = {
+    id: -1,
+    name: "",
+    detail: "",
+    example_input: "",
+    example_output: "",
+    contest_id: -1
+  };
   try {
     const { data, error }: PostgrestResponse<IProblem> = await supabase
       .from("problems")
       .select("*")
       .eq("id", problemId)
       .then((response) => response as PostgrestResponse<IProblem>);
-    if (error) console.error("getProblemById: ", error);
-    else return data;
+    if (error) {
+      console.error("getProblemById: ", error);
+      return failResult;
+    } else {
+      if (data && data.length !== 0) return data[0];
+      else return failResult;
+    }
   } catch (error) {
     console.error("getProblemById: ", error);
+    return failResult;
   }
 }
 
-export async function deleteProblem(problemId: number) {
+export async function deleteProblem(problemId: number): Promise<boolean> {
   try {
-    const { data, error } = await supabase.from("problems").delete().eq("id", problemId);
-    if (error) throw error;
-    else return data;
+    const { error } = await supabase.from("problems").delete().eq("id", problemId);
+    if (error) {
+      console.error("deleteProblem: ", error);
+      return false;
+    } else return true;
   } catch (error) {
-    console.error("Lỗi khi xóa problem: ", error);
+    console.error("deleteProblem: ", error);
+    return false;
   }
 }
 
-export async function updateProblem(problem: IProblem) {
+export async function updateProblem(problem: IProblem): Promise<boolean> {
   try {
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from("problems")
       .update({
         name: problem.name,
@@ -76,11 +101,48 @@ export async function updateProblem(problem: IProblem) {
       .eq("id", problem.id)
       .select();
     if (error) {
-      throw error;
+      console.error("updateProblem: ", error);
+      return false;
     } else {
-      return data;
+      return true;
     }
   } catch (error) {
-    console.error("Lỗi khi cập nhật thông tin đề thi: ", error);
+    console.error("updateProblem: ", error);
+    return false;
+  }
+}
+
+export async function getAllProblems(): Promise<IProblem[]> {
+  try {
+    const { data, error }: PostgrestResponse<IProblem> = await supabase
+      .from("problems")
+      .select("*")
+      .then((response) => response as PostgrestResponse<IProblem>);
+    if (error) {
+      console.error("getAllProblems: ", error);
+      return [];
+    } else {
+      if (data) return data;
+      else return [];
+    }
+  } catch (error) {
+    console.error("getAllProblems: ", error);
+    return [];
+  }
+}
+
+export async function countProblemByContestId(contest_id: number): Promise<number> {
+  try {
+    const { data, error } = await supabase.from("problems").select("*").eq("contest_id", contest_id);
+    if (error) {
+      console.error("countProblemByContestId: ", error);
+      return 0;
+    } else {
+      if (data && data.length !== 0) return data.length;
+      else return 0;
+    }
+  } catch (error) {
+    console.error("countProblemByContestId: ", error);
+    return 0;
   }
 }

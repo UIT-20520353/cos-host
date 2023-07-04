@@ -20,3 +20,10 @@ type ITemp = {
 };
 
 export type ITeamMemberDetail = ITeamMember & ITemp;
+
+export interface ITeamRank {
+  contest_id: number;
+  team_id: number;
+  team_name: string;
+  total_score: number;
+}

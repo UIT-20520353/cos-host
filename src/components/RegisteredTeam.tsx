@@ -1,7 +1,7 @@
 import { FaUserAlt } from "react-icons/all";
-import { ITeamMemberDetail } from "../types/team.type";
+import { ITeamMemberDetail } from "~/types";
 import { useEffect, useState } from "react";
-import { deleteTeamById, getTeamMemberByTeamId } from "../query/api/team-service";
+import { deleteTeamById, getTeamMemberByTeamId } from "~/query";
 import Swal from "sweetalert2";
 import { NavLink } from "react-router-dom";
 

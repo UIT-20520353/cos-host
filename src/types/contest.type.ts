@@ -1,4 +1,4 @@
-export type IContest = {
+export interface IContest {
   id: number;
   name: string;
   description: string;
@@ -6,7 +6,7 @@ export type IContest = {
   time_begin: string;
   duration: string;
   host_id: number;
-};
+}
 
 export type IContestDashboard = {
   id: number;
@@ -19,5 +19,9 @@ export type IContestDashboard = {
 export type IContestForRanking = {
   id: number;
   name: string;
+  amount: number;
+};
+
+export type IDetailContest = IContest & {
   amount: number;
 };

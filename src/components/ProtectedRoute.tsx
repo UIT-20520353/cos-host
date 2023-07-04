@@ -1,12 +1,12 @@
 import { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
-import { useLocalStorage } from "~/utils";
+import { useSessionStorage } from "~/utils";
 interface ProtectedRouteProps {
   children: ReactNode;
 }
 
 function ProtectedRoute(props: ProtectedRouteProps) {
-  const [user] = useLocalStorage("user", null);
+  const [user] = useSessionStorage("user", null);
 
   if (!user) {
     return <Navigate to={"/login"} />;

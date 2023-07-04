@@ -3,48 +3,65 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { IContest, listTimeContest } from "~/types";
 import { insertContest } from "~/query";
 import Swal from "sweetalert2";
-import { isFutureDate } from "~/utils";
+import { isFutureDate, useSessionStorage } from "~/utils";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+import { LoadingModal } from "~/components";
 
 type IProps = {
   closeAddContestForm: () => void;
 };
 
 function AddContest(props: IProps) {
-  useEffect(() => {
-    document.title = "Tạo cuộc thi";
-  }, []);
-
+  const [user] = useSessionStorage("user", null);
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset
+    reset,
+    setValue
   } = useForm<IContest>();
+  useEffect(() => {
+    document.title = "Tạo cuộc thi";
+    setValue("host_id", user.id);
+  }, []);
+
+  const { mutate: mutateAdd, isLoading } = useMutation({
+    mutationFn: (body: IContest) => {
+      return insertContest(body);
+    },
+    onSuccess: (response: boolean) => {
+      if (response) {
+        toast("Tạo đề thi mới thành công", {
+          type: "success",
+          position: "bottom-right",
+          autoClose: 3000,
+          closeOnClick: false
+        });
+        reset();
+      } else {
+        toast("Xảy ra lỗi khi tạo đề thi mới", {
+          type: "error",
+          position: "bottom-right",
+          autoClose: 3000,
+          closeOnClick: false
+        });
+      }
+    }
+  });
 
   const onSubmit: SubmitHandler<IContest> = (data) => {
     Swal.fire({
-      title: "Tạo cuộc thi",
-      text: "Tạo cuộc thi mới với các thông tin đã nhập?",
+      title: "Xác nhận tạo cuộc thi mới?",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Lưu",
+      confirmButtonText: "Xác nhận",
       cancelButtonText: "Hủy",
       allowOutsideClick: false
     }).then((result) => {
       if (result.isConfirmed) {
-        data.host_id = parseInt(sessionStorage.getItem("id") ?? "-1");
-        insertContest(data).then((value) => {
-          console.log(value);
-          Swal.fire({
-            position: "center",
-            timer: 5000,
-            icon: "success",
-            showConfirmButton: true,
-            title: "Tạo cuộc thi thành công"
-          });
-          reset();
-        });
+        mutateAdd(data);
       }
     });
   };
@@ -153,6 +170,7 @@ function AddContest(props: IProps) {
           </div>
         </div>
       </form>
+      {isLoading && <LoadingModal title={"Đang xử lý"} />}
     </div>
   );
 }

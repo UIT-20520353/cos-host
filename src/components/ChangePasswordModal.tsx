@@ -3,8 +3,8 @@ import { IAccount, IFormChangePassword } from "~/types";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import CryptoJS from "crypto-js";
-import { changePassword, getAccountInfo } from "~/query/api/account-service";
-import ModalPortal from "~/components/ModalPortal";
+import { ModalPortal } from "~/components";
+import { changePassword, getAccountInfo } from "~/query";
 
 type ModalProps = {
   closeModal: () => void;
@@ -165,4 +165,4 @@ function ChangePasswordModal(props: ModalProps) {
   );
 }
 
-export default ChangePasswordModal;
+export { ChangePasswordModal };

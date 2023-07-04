@@ -4,15 +4,18 @@ import { ITestcase } from "~/types";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import { deleteTestcaseById, updateTestcase } from "~/query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 
 type IProps = {
   name: number;
   testcase: ITestcase;
-  updateTestcaseList: () => void;
   statusContest: string;
+  problemId: number;
 };
 
 function OverviewTestcase(props: IProps) {
+  const queryClient = useQueryClient();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const {
     register,
@@ -26,10 +29,57 @@ function OverviewTestcase(props: IProps) {
     setValue("input", props.testcase.input);
     setValue("output", props.testcase.output);
   }, []);
+
+  const { mutate: mutateUpdate } = useMutation({
+    mutationFn: (body: ITestcase) => {
+      return updateTestcase(body);
+    },
+    onSuccess: (response: boolean) => {
+      if (response) {
+        toast("Cập nhật testcase thành công", {
+          type: "success",
+          position: "bottom-right",
+          autoClose: 3000,
+          closeOnClick: false
+        });
+        queryClient.invalidateQueries({ queryKey: ["detail-problem", "testcase-list", `problem-${props.problemId}`] });
+      } else {
+        toast("Xảy ra lỗi khi cập nhật testcase", {
+          type: "error",
+          position: "bottom-right",
+          autoClose: 3000,
+          closeOnClick: false
+        });
+      }
+    }
+  });
+  const { mutate: mutateDelete } = useMutation({
+    mutationFn: (body: number) => {
+      return deleteTestcaseById(body);
+    },
+    onSuccess: (response: boolean) => {
+      if (response) {
+        toast("Xóa testcase thành công", {
+          type: "success",
+          position: "bottom-right",
+          autoClose: 3000,
+          closeOnClick: false
+        });
+        queryClient.invalidateQueries({ queryKey: ["detail-problem", "testcase-list", `problem-${props.problemId}`] });
+      } else {
+        toast("Xảy ra lỗi khi xóa testcase", {
+          type: "error",
+          position: "bottom-right",
+          autoClose: 3000,
+          closeOnClick: false
+        });
+      }
+    }
+  });
+
   const onSubmit: SubmitHandler<ITestcase> = (data) => {
     Swal.fire({
-      title: "Cập nhật thông tin testcase",
-      text: `Xác nhận sẽ cập nhật các thông tin của testcase?`,
+      title: `Cập nhật thông tin testcase ${props.name + 1}`,
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
@@ -38,26 +88,13 @@ function OverviewTestcase(props: IProps) {
       allowOutsideClick: false
     }).then((result) => {
       if (result.isConfirmed) {
-        updateTestcase(data).then((response) => {
-          if (response?.length !== 0 && response) {
-            Swal.fire({
-              position: "center",
-              timer: 5000,
-              icon: "success",
-              showConfirmButton: true,
-              title: "Cập nhật testcase thành công"
-            });
-            setValue("input", data.input);
-            setValue("output", data.output);
-          }
-        });
+        mutateUpdate(data);
       }
     });
   };
   const handleDelete = () => {
     Swal.fire({
-      title: "Xóa testcase",
-      text: `Xóa tất cả thông tin của testcase ${props.name + 1} ?`,
+      title: `Xóa testcase ${props.name + 1}`,
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
@@ -66,17 +103,7 @@ function OverviewTestcase(props: IProps) {
       allowOutsideClick: false
     }).then((result) => {
       if (result.isConfirmed) {
-        deleteTestcaseById(props.testcase.id).then((response) => {
-          console.log(response);
-          Swal.fire({
-            position: "center",
-            timer: 5000,
-            icon: "success",
-            showConfirmButton: true,
-            title: "Xóa testcase thành công"
-          });
-          props.updateTestcaseList();
-        });
+        mutateDelete(props.testcase.id);
       }
     });
   };

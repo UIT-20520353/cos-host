@@ -1,20 +1,45 @@
 import { NavLink } from "react-router-dom";
 import Swal from "sweetalert2";
-import { deleteProblem } from "../query/api/problem-service";
+import { deleteProblem } from "~/query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 
 type IProps = {
   id: number;
   name: string;
   contest_id: number;
-  updateProblemList: () => void;
   status: string;
 };
 
 function OverviewProblem(props: IProps) {
+  const queryClient = useQueryClient();
+  const { mutate: mutateDelete } = useMutation({
+    mutationFn: (body: number) => {
+      return deleteProblem(body);
+    },
+    onSuccess: (response: boolean) => {
+      if (response) {
+        toast("Xóa đề thi thành công", {
+          type: "success",
+          position: "bottom-right",
+          autoClose: 3000,
+          closeOnClick: false
+        });
+        queryClient.invalidateQueries({ queryKey: ["detail-contest", "problem-list", `contest-${props.contest_id}`] });
+      } else {
+        toast("Xảy ra lỗi khi xóa đề thi", {
+          type: "error",
+          position: "bottom-right",
+          autoClose: 3000,
+          closeOnClick: false
+        });
+      }
+    }
+  });
+
   const handleDeleteProblem = () => {
     Swal.fire({
-      title: "Xóa đề thi",
-      text: "Xóa tất cả thông tin về đề thi này?",
+      title: `Xóa đề thi ${props.name}?`,
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
@@ -23,17 +48,7 @@ function OverviewProblem(props: IProps) {
       allowOutsideClick: false
     }).then((result) => {
       if (result.isConfirmed) {
-        deleteProblem(props.id).then((response) => {
-          console.log(response);
-          Swal.fire({
-            position: "center",
-            timer: 5000,
-            icon: "success",
-            showConfirmButton: true,
-            title: "Xóa đề thi thành công"
-          });
-          props.updateProblemList();
-        });
+        mutateDelete(props.id);
       }
     });
   };

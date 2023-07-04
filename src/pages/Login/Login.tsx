@@ -4,7 +4,7 @@ import CryptoJS from "crypto-js";
 import { toast } from "react-toastify";
 import { ISimpleAccount } from "~/types";
 import { handleLogin } from "~/query/api/account-service";
-import { useLocalStorage } from "~/utils";
+import { useSessionStorage } from "~/utils";
 import { useMutation } from "@tanstack/react-query";
 import { LoadingModal } from "~/components";
 import { useEffect } from "react";
@@ -16,7 +16,7 @@ interface FormValues {
 
 function Login() {
   const navigate = useNavigate();
-  const [, setUser] = useLocalStorage("user", null);
+  const [, setUser] = useSessionStorage("user", null);
 
   useEffect(() => {
     document.title = "Đăng nhập";
@@ -30,7 +30,6 @@ function Login() {
       return handleLogin(body.username, hashPassword);
     },
     onSuccess: (data: ISimpleAccount) => {
-      console.log(data);
       if (data.id === -1) {
         toast("Tên đăng nhập hoặc mật khẩu không chính xác", {
           position: "bottom-right",

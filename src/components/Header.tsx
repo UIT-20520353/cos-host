@@ -1,7 +1,8 @@
 import { CgProfile } from "react-icons/all";
 import { useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
-import { useLocalStorage } from "~/utils";
+import { useSessionStorage } from "~/utils";
+import { SubmitHandler, useForm } from "react-hook-form";
 
 type IProps = {
   placeHolder: string;
@@ -10,33 +11,32 @@ type IProps = {
 };
 
 function Header(props: IProps) {
-  const inputSearchRef = useRef<HTMLInputElement>(null);
-  const [user] = useLocalStorage("user", null);
+  const { register, handleSubmit } = useForm<{ searchText: string }>();
+  const [user] = useSessionStorage("user", null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const handleOnChange = () => {
-    if (!inputSearchRef.current) return;
-    if (props.isUsed) props.onChangeValue(inputSearchRef.current.value);
+  const onSubmit: SubmitHandler<{ searchText: string }> = (data) => {
+    if (props.isUsed) props.onChangeValue(data.searchText);
     else props.onChangeValue(null);
   };
 
   return (
     <div
       className={
-        "flex h-16 w-full flex-row items-center justify-between border-b border-gray-200 bg-[#efefef] px-8 shadow-md"
+        "sticky top-0 z-30 flex h-16 w-full flex-row items-center justify-between border-b border-gray-200 bg-[#efefef] px-8 shadow-md"
       }
     >
-      <div>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <input
-          ref={inputSearchRef}
           type="text"
           className={
             "min-h-[50px] w-80 rounded-full border border-solid border-[#5e4dcd] bg-transparent px-4 py-0 text-[15px] text-black focus:border-[#3898EC] focus:outline-none"
           }
-          onChange={handleOnChange}
           placeholder={props.placeHolder}
+          autoComplete={"off"}
+          {...register("searchText")}
         />
-      </div>
+      </form>
       <div className={"flex cursor-pointer flex-row items-center gap-x-4"}>
         <span className={"font-mono text-lg font-bold"}>{user?.name}</span>
         <div className={"relative"} onMouseLeave={() => setIsOpen(false)}>
