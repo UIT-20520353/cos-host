@@ -1,6 +1,6 @@
 import { SubmitHandler, useForm } from "react-hook-form";
-import { ChangeEvent, useEffect, useState } from "react";
-import { IContest, IProblem, ITestcase } from "~/types";
+import { ChangeEvent } from "react";
+import { ITestcase } from "~/types";
 import { insertTestcase, getContestsNotStarted, getAllProblems } from "~/query";
 import Swal from "sweetalert2";
 import { useSessionStorage } from "~/utils";
@@ -19,8 +19,6 @@ function AddTestcase(props: IProps) {
     formState: { errors },
     setValue
   } = useForm<ITestcase>();
-
-  const [problemsOption, setProblemsOption] = useState<IProblem[]>([]);
 
   const { data: contests, isLoading: isFetchingContests } = useQuery({
     queryKey: ["add-problem", "contest-list", `host-${user.id}`],

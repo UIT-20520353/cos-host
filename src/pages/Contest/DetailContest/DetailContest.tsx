@@ -5,6 +5,7 @@ import { getIdFromString } from "~/utils";
 import { AddProblemModal, ContestForm, Header, ProblemList } from "~/components";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import DetailContestSkeleton from "~/skeletons/detail-contest-skeleton";
+import { IContest } from "~/types";
 
 function DetailContest() {
   const { contestId } = useParams<{ contestId: string }>();
@@ -18,7 +19,7 @@ function DetailContest() {
     document.title = "Cập nhật thông tin cuộc thi";
   }, []);
 
-  const { data: contest, isLoading: isFetchingContest } = useQuery({
+  const { data: contest, isLoading: isFetchingContest } = useQuery<IContest>({
     queryKey: ["detail-contest", `contest-${id}`],
     queryFn: () => {
       return getContestById(id);
@@ -54,11 +55,7 @@ function DetailContest() {
       {!isFetchingContest && !isFetchingProblems && (
         <>
           <ContestForm contest={contest} />
-          <ProblemList
-            contest={contest}
-            problems={problems}
-            openModal={openModal}
-          />
+          <ProblemList contest={contest} problems={problems} openModal={openModal} />
         </>
       )}
 

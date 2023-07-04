@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import { Header, AddTestcase } from "~/components";
+import { Header } from "~/components";
 import AddContest from "~/pages/Contest/AddContest";
 import AddProblem from "~/pages/problem/AddProblem";
 import { toast } from "react-toastify";
@@ -12,7 +12,7 @@ function Contest() {
 
   const [isAddContest, setIsAddContest] = useState<boolean>(false);
   const [isAddProblem, setIsAddProblem] = useState<boolean>(false);
-  const [isAddTestcase, setIsAddTestcase] = useState<boolean>(false);
+  // const [isAddTestcase, setIsAddTestcase] = useState<boolean>(false);
 
   const handleOpenAddContestForm = () => {
     if (isAddContest) {
@@ -33,16 +33,6 @@ function Contest() {
       });
       return;
     }
-    if (isAddTestcase) {
-      toast("Không thể tạo cuộc thi cùng lúc với tạo testcase", {
-        type: "warning",
-        position: "bottom-right",
-        autoClose: 3000,
-        closeOnClick: false
-      });
-      return;
-    }
-
     setIsAddContest(true);
   };
   const handleCloseAddContestForm = () => {
@@ -78,15 +68,6 @@ function Contest() {
       });
       return;
     }
-    if (isAddTestcase) {
-      toast("Không thể tạo đề thi cùng lúc với tạo testcase", {
-        type: "warning",
-        position: "bottom-right",
-        autoClose: 3000,
-        closeOnClick: false
-      });
-      return;
-    }
     setIsAddProblem(true);
   };
   const handleCloseAddProblemForm = () => {
@@ -102,49 +83,49 @@ function Contest() {
       if (result.isConfirmed) setIsAddProblem(false);
     });
   };
-  const handleOpenAddTestcaseForm = () => {
-    if (isAddTestcase) {
-      toast("Không thể tạo hai testcase cùng lúc", {
-        type: "warning",
-        position: "bottom-right",
-        autoClose: 3000,
-        closeOnClick: false
-      });
-      return;
-    }
-    if (isAddContest) {
-      toast("Không thể tạo testcase cùng lúc với tạo cuộc thi", {
-        type: "warning",
-        position: "bottom-right",
-        autoClose: 3000,
-        closeOnClick: false
-      });
-      return;
-    }
-    if (isAddProblem) {
-      toast("Không thể tạo testcase cùng lúc với tạo đề thi", {
-        type: "warning",
-        position: "bottom-right",
-        autoClose: 3000,
-        closeOnClick: false
-      });
-      return;
-    }
-    setIsAddTestcase(true);
-  };
-  const handleCloseAddTestcaseForm = () => {
-    Swal.fire({
-      title: "Đóng form tạo testcase?",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Xác nhận",
-      cancelButtonText: "Hủy",
-      allowOutsideClick: false
-    }).then((result) => {
-      if (result.isConfirmed) setIsAddTestcase(false);
-    });
-  };
+  // const handleOpenAddTestcaseForm = () => {
+  //   if (isAddTestcase) {
+  //     toast("Không thể tạo hai testcase cùng lúc", {
+  //       type: "warning",
+  //       position: "bottom-right",
+  //       autoClose: 3000,
+  //       closeOnClick: false
+  //     });
+  //     return;
+  //   }
+  //   if (isAddContest) {
+  //     toast("Không thể tạo testcase cùng lúc với tạo cuộc thi", {
+  //       type: "warning",
+  //       position: "bottom-right",
+  //       autoClose: 3000,
+  //       closeOnClick: false
+  //     });
+  //     return;
+  //   }
+  //   if (isAddProblem) {
+  //     toast("Không thể tạo testcase cùng lúc với tạo đề thi", {
+  //       type: "warning",
+  //       position: "bottom-right",
+  //       autoClose: 3000,
+  //       closeOnClick: false
+  //     });
+  //     return;
+  //   }
+  //   setIsAddTestcase(true);
+  // };
+  // const handleCloseAddTestcaseForm = () => {
+  //   Swal.fire({
+  //     title: "Đóng form tạo testcase?",
+  //     showCancelButton: true,
+  //     confirmButtonColor: "#3085d6",
+  //     cancelButtonColor: "#d33",
+  //     confirmButtonText: "Xác nhận",
+  //     cancelButtonText: "Hủy",
+  //     allowOutsideClick: false
+  //   }).then((result) => {
+  //     if (result.isConfirmed) setIsAddTestcase(false);
+  //   });
+  // };
 
   const onChangeValue = (value: string | null) => {
     if (!value) return;
