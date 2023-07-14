@@ -1,6 +1,7 @@
 import { PostgrestResponse } from "@supabase/supabase-js";
 import supabase from "./supabase";
 import { ITeam, ITeamMemberDetail, ITeamRank } from "../../types/team.type";
+import { IDataRankContest } from "~/query";
 
 export async function getTeamListByContestIds(contestId: number[]) {
   try {
@@ -101,5 +102,17 @@ export async function getTeamRanks(contest_id: number): Promise<ITeamRank[]> {
   } catch (error) {
     console.error("getTeamRanks: ", error);
     return [];
+  }
+}
+
+export async function getRankContest(contestId: number): Promise<IDataRankContest[]> {
+  const { data, error }: PostgrestResponse<IDataRankContest> = await supabase
+    .rpc("get_rank_contest", { contestid: contestId })
+    .then((response) => response as PostgrestResponse<IDataRankContest>);
+  if (error) {
+    throw error;
+  } else {
+    if (data && data.length !== 0) return data;
+    else return [];
   }
 }

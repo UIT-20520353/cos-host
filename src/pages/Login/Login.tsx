@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
 import CryptoJS from "crypto-js";
 import { toast } from "react-toastify";
@@ -16,7 +16,7 @@ interface FormValues {
 
 function Login() {
   const navigate = useNavigate();
-  const [, setUser] = useSessionStorage("user", null);
+  const [, setUser] = useSessionStorage("cos-host", null);
 
   useEffect(() => {
     document.title = "Đăng nhập";
@@ -118,7 +118,7 @@ function Login() {
             {...register("password")}
           />
         </div>
-        <div className={"mt-4 flex flex-col items-start"}>
+        <div className={"mt-4 flex flex-col items-end gap-y-2"}>
           <button
             className={
               "w-full rounded-md bg-[#ffeba7] py-3 font-bold uppercase text-[#1f2029] outline-none transition-colors duration-500 hover:bg-[#1f2029] hover:text-[#ffeba7]"
@@ -127,6 +127,9 @@ function Login() {
           >
             Đăng nhập
           </button>
+          <NavLink to={"/forgot-password"} className={"text-[#ffeba7] hover:underline"}>
+            Quên mật khẩu?
+          </NavLink>
         </div>
       </form>
       {isLoading && <LoadingModal title={"Đang xử lý đăng nhập"} />}

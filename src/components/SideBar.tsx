@@ -19,7 +19,7 @@ const icons = [RxDashboard, IoCreateOutline, MdContentPaste, AiOutlineTeam];
 
 function SideBar(props: IProps) {
   const navigate = useNavigate();
-  const [, setUser] = useSessionStorage("user", null);
+  const [, setUser] = useSessionStorage("cos-host", null);
   const { isOpen, toggleMenu } = props;
   const menus: { id: number; title: string; address: string }[] = [
     {

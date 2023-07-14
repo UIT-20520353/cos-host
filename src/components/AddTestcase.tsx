@@ -12,7 +12,7 @@ type IProps = {
 };
 
 function AddTestcase(props: IProps) {
-  const [user] = useSessionStorage("user", null);
+  const [user] = useSessionStorage("cos-host", null);
   const {
     register,
     handleSubmit,

@@ -65,13 +65,11 @@ function RegisteredTeam(props: IProps) {
 
         <ul>
           {teamMembers.map((member) => (
-            <li id={`member-${member.id}`} key={`member-${member.id}`} className={"group mt-4 cursor-pointer "}>
-              <NavLink to={`/user/${member.account_id}`} className={"flex flex-row items-center gap-x-2"}>
-                <FaUserAlt className={"inline-block h-5 w-5 opacity-50 duration-300 group-hover:opacity-100"} />
-                <span className={"text-sm text-gray-500 duration-300 group-hover:text-black group-hover:underline"}>
-                  {member.accounts.name}
-                </span>
-              </NavLink>
+            <li id={`member-${member.id}`} key={`member-${member.id}`} className={"group mt-4"}>
+              <div className={"flex flex-row items-center gap-x-2"}>
+                <FaUserAlt className={"inline-block h-5 w-5 "} />
+                <span className={"text-sm text-gray-500"}>{member.accounts.name}</span>
+              </div>
             </li>
           ))}
         </ul>

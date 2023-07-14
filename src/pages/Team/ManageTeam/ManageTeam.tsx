@@ -6,7 +6,7 @@ import { useState } from "react";
 import { ManageTeamSkeleton } from "~/skeletons";
 
 function ManageTeam() {
-  const [user] = useSessionStorage("user", null);
+  const [user] = useSessionStorage("cos-host", null);
   const [searchText, setSearchText] = useState<string>("");
 
   const { data: contests, isLoading: isFetchingContests } = useQuery({

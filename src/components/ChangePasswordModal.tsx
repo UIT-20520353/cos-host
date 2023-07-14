@@ -5,12 +5,15 @@ import Swal from "sweetalert2";
 import CryptoJS from "crypto-js";
 import { ModalPortal } from "~/components";
 import { changePassword, getAccountInfo } from "~/query";
+import { useSessionStorage } from "~/utils";
+import { toast } from "react-toastify";
 
 type ModalProps = {
   closeModal: () => void;
 };
 
 function ChangePasswordModal(props: ModalProps) {
+  const [user] = useSessionStorage("cos-host", null);
   const {
     register,
     handleSubmit,
@@ -20,7 +23,7 @@ function ChangePasswordModal(props: ModalProps) {
   const [accounts, setAccounts] = useState<IAccount[]>([]);
 
   useEffect(() => {
-    getAccountInfo(parseInt(sessionStorage.getItem("id") ?? "-1")).then((response) => {
+    getAccountInfo(user.id).then((response) => {
       if (response && response.length !== 0) setAccounts(response ?? []);
     });
   }, []);
@@ -28,20 +31,17 @@ function ChangePasswordModal(props: ModalProps) {
   const onSubmit: SubmitHandler<IFormChangePassword> = (data) => {
     const hashOldPassword = CryptoJS.SHA256(data.oldPassword).toString();
     if (hashOldPassword !== accounts[0].password) {
-      Swal.fire({
-        title: "Thông báo",
-        text: "Mật khẩu cũ không đúng",
-        icon: "error",
-        showConfirmButton: true,
-        confirmButtonText: "Đồng ý",
-        allowOutsideClick: false
+      toast("Mật khẩu cũ không đúng", {
+        type: "error",
+        position: "bottom-right",
+        autoClose: 3000,
+        closeOnClick: false
       });
       return;
     }
 
     Swal.fire({
-      title: "Thông báo",
-      text: "Xác nhận đổi mật khẩu?",
+      title: "Xác nhận đổi mật khẩu?",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
@@ -51,29 +51,21 @@ function ChangePasswordModal(props: ModalProps) {
     }).then((result) => {
       if (result.isConfirmed) {
         const hashNewPassword = CryptoJS.SHA256(data.newPassword).toString();
-        changePassword(parseInt(sessionStorage.getItem("id") ?? "-1"), hashNewPassword).then((response) => {
-          if (response && response.length !== 0) {
-            Swal.fire({
-              position: "center",
-              icon: "success",
-              title: "Thông báo",
-              text: "Đổi mật khẩu hành công",
-              allowOutsideClick: false,
-              showConfirmButton: true,
-              confirmButtonText: "Đồng ý",
-              timer: 4000
+        changePassword(user.id, hashNewPassword).then((response) => {
+          if (response) {
+            toast("Đổi mật khẩu thành công", {
+              type: "success",
+              position: "bottom-right",
+              autoClose: 3000,
+              closeOnClick: false
             });
             props.closeModal();
           } else {
-            Swal.fire({
-              position: "center",
-              icon: "error",
-              title: "Thông báo",
-              text: "Xảy ra lỗi khi đổi mật khẩu",
-              allowOutsideClick: false,
-              showConfirmButton: true,
-              confirmButtonText: "Đồng ý",
-              timer: 4000
+            toast("Xảy ra lỗi mật khẩu thành công", {
+              type: "error",
+              position: "bottom-right",
+              autoClose: 3000,
+              closeOnClick: false
             });
           }
         });

@@ -7,7 +7,7 @@ import { ManageContestSkeleton } from "~/skeletons";
 
 function ManageContest() {
   const queryClient = useQueryClient();
-  const [user] = useSessionStorage("user", null);
+  const [user] = useSessionStorage("cos-host", null);
   const [searchText, setSearchText] = useState<string>("");
 
   const { data: contests, isLoading: isFetchingContests } = useQuery({

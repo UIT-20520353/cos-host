@@ -6,6 +6,7 @@ import "./styles.css";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { ChangePasswordModal, Header } from "~/components";
 import { useSessionStorage } from "~/utils";
+import { toast } from "react-toastify";
 
 const isPhoneNumberValid = (phoneNumber: string | null): boolean | string => {
   if (!phoneNumber) return "Vui lòng nhập số điện thoại";
@@ -25,7 +26,7 @@ export const isEmailValid = (value: string | null) => {
 
 function ProfilePage() {
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
-  const [user] = useSessionStorage("user", null);
+  const [user] = useSessionStorage("cos-host", null);
 
   const {
     register,
@@ -89,25 +90,20 @@ function ProfilePage() {
       allowOutsideClick: false
     }).then((result) => {
       if (result.isConfirmed) {
-        const user_id = parseInt(sessionStorage.getItem("id") ?? "-1");
-        updateAccountInfo(user_id, data.name, data.email, data.address, data.phone).then((response) => {
-          if (response && response.length !== 0) {
-            Swal.fire({
-              position: "center",
-              timer: 5000,
-              icon: "success",
-              showConfirmButton: true,
-              title: "Thông báo",
-              text: "Cập nhật thông tin tài khoản thành công"
+        updateAccountInfo(user.id, data.name, data.email, data.address, data.phone).then((response) => {
+          if (response) {
+            toast("Cập nhật thông tin tài khoản thành công", {
+              type: "success",
+              position: "bottom-right",
+              autoClose: 3000,
+              closeOnClick: false
             });
           } else {
-            Swal.fire({
-              position: "center",
-              timer: 5000,
-              icon: "error",
-              showConfirmButton: true,
-              title: "Thông báo",
-              text: "Xảy ra lỗi khi cập nhật thông tin tài khoản"
+            toast("Xảy ra lỗi khi cập nhật thông tin tài khoản", {
+              type: "error",
+              position: "bottom-right",
+              autoClose: 3000,
+              closeOnClick: false
             });
           }
         });

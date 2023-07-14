@@ -15,11 +15,13 @@ import ResultContest from "~/pages/ResultContest";
 import { ProtectedRoute } from "~/components";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ResetPassword from "~/pages/ResetPassword";
 
 function App() {
   return (
     <div className={"w-full"}>
       <Routes>
+        <Route path={"/forgot-password"} element={<ResetPassword />} />
         <Route
           path={"/"}
           element={

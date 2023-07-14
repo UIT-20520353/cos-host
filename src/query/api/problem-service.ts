@@ -146,3 +146,17 @@ export async function countProblemByContestId(contest_id: number): Promise<numbe
     return 0;
   }
 }
+
+export async function getProblemsByContestId(contest_id: number): Promise<IProblem[]> {
+  const { data, error }: PostgrestResponse<IProblem> = await supabase
+    .from("problems")
+    .select("*")
+    .eq("contest_id", contest_id)
+    .then((response) => response as PostgrestResponse<IProblem>);
+  if (error) {
+    throw error;
+  } else {
+    if (data && data.length !== 0) return data;
+    else return [];
+  }
+}

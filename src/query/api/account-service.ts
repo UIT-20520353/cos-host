@@ -1,7 +1,6 @@
 import supabase from "./supabase";
 import { PostgrestResponse } from "@supabase/supabase-js";
-import { IAccount, ISimpleAccount } from "../../types/account.type";
-import { IHost } from "../../types/host.type";
+import { IAccount, ISimpleAccount, IHost } from "~/types";
 
 export const getAccountList = async () => {
   try {
@@ -53,7 +52,13 @@ export async function getInfoHost(host_id: number) {
   }
 }
 
-export async function updateAccountInfo(id: number, name: string, email: string, address: string, phone: string) {
+export async function updateAccountInfo(
+  id: number,
+  name: string,
+  email: string,
+  address: string,
+  phone: string
+): Promise<boolean> {
   try {
     const { data, error } = await supabase
       .from("accounts")
@@ -66,16 +71,17 @@ export async function updateAccountInfo(id: number, name: string, email: string,
       .eq("id", id)
       .select("*");
     if (error) {
-      console.error("updateAccountInfo:", error);
+      throw error;
     } else {
-      return data;
+      return !!data;
     }
   } catch (error) {
     console.error("updateAccountInfo:", error);
+    return false;
   }
 }
 
-export async function changePassword(id: number, password: string) {
+export async function changePassword(id: number, password: string): Promise<boolean> {
   try {
     const { data, error } = await supabase
       .from("accounts")
@@ -85,12 +91,13 @@ export async function changePassword(id: number, password: string) {
       .eq("id", id)
       .select("*");
     if (error) {
-      console.error("changePassword: ", error);
+      throw error;
     } else {
-      return data;
+      return !!data;
     }
   } catch (error) {
     console.error("changePassword: ", error);
+    return false;
   }
 }
 
@@ -118,5 +125,24 @@ export async function handleLogin(username: string, password: string): Promise<I
   } catch (error) {
     console.error("handleLogin :", error);
     return failResult;
+  }
+}
+
+export async function checkEmail(email: string): Promise<IAccount[] | undefined> {
+  try {
+    const { data, error }: PostgrestResponse<IAccount> = await supabase
+      .from("accounts")
+      .select("*")
+      .eq("email", email)
+      .eq("role_id", 2)
+      .then((res) => res as PostgrestResponse<IAccount>);
+    if (error) {
+      throw error;
+    } else {
+      return data;
+    }
+  } catch (error) {
+    console.error("checkEmail: ", error);
+    return [];
   }
 }

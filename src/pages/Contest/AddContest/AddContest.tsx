@@ -13,7 +13,7 @@ type IProps = {
 };
 
 function AddContest(props: IProps) {
-  const [user] = useSessionStorage("user", null);
+  const [user] = useSessionStorage("cos-host", null);
   const {
     register,
     handleSubmit,

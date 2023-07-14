@@ -98,9 +98,10 @@ function Dashboard() {
                     </tr>
                   </thead>
                   <tbody>
-                    {rankings?.map((ranking, index) => (
-                      <RowItem row={ranking} stt={index} key={`ranking-${ranking.id}`} />
-                    ))}
+                    {rankings?.map((ranking, index) => {
+                      if (index >= 5) return;
+                      return <RowItem row={ranking} stt={index} key={`ranking-${ranking.id}`} />;
+                    })}
                   </tbody>
                 </table>
               </div>

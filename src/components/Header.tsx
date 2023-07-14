@@ -12,7 +12,7 @@ type IProps = {
 
 function Header(props: IProps) {
   const { register, handleSubmit } = useForm<{ searchText: string }>();
-  const [user] = useSessionStorage("user", null);
+  const [user] = useSessionStorage("cos-host", null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const onSubmit: SubmitHandler<{ searchText: string }> = (data) => {

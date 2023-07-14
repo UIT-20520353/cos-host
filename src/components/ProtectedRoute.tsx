@@ -6,7 +6,7 @@ interface ProtectedRouteProps {
 }
 
 function ProtectedRoute(props: ProtectedRouteProps) {
-  const [user] = useSessionStorage("user", null);
+  const [user] = useSessionStorage("cos-host", null);
 
   if (!user) {
     return <Navigate to={"/login"} />;

@@ -18,13 +18,7 @@ function DetailContest() {
     document.title = "Cập nhật thông tin cuộc thi";
   }, []);
 
-  // const { data: contest, isLoading: isFetchingContest } = useQuery({
-  //   queryKey: ["detail-contest", `contest-${id}`],
-  //   queryFn: () => {
-  //     return getContestById(id);
-  //   }
-  // });
-  const contestResponse = useQuery({
+  const { data: contest, isLoading: isFetchingContest } = useQuery({
     queryKey: ["detail-contest", `contest-${id}`],
     queryFn: () => {
       return getContestById(id);
@@ -55,13 +49,12 @@ function DetailContest() {
     <div className={"w-full"}>
       <Header placeHolder={"Nhập tên đề thi"} isUsed={true} onChangeValue={onChangeValue} />
 
-      {/*{(isFetchingContest || isFetchingProblems) && <DetailContestSkeleton />}*/}
-      {(contestResponse.isLoading || isFetchingProblems) && <DetailContestSkeleton />}
+      {(isFetchingContest || isFetchingProblems) && <DetailContestSkeleton />}
 
-      {!contestResponse.isLoading && !isFetchingProblems && (
+      {!isFetchingContest && !isFetchingProblems && (
         <>
-          <ContestForm contest={contestResponse.data} />
-          <ProblemList contest={contestResponse.data} problems={problems} openModal={openModal} />
+          <ContestForm contest={contest} />
+          <ProblemList contest={contest} problems={problems} openModal={openModal} />
         </>
       )}
 
